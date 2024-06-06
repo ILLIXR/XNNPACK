@@ -33,3 +33,7 @@ out/
 ehthumbs.db
 Thumbs.db
 *.swp
+
+cmake-build-debug/
+
+.idea/
