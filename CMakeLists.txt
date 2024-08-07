@@ -1101,6 +1101,26 @@ IF(XNNPACK_BUILD_LIBRARY)
       PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 ENDIF()
 
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+        "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfigVersion.cmake"
+        VERSION 1.0.0
+        COMPATABILITY AnyNewerVersion
+)
+
+configure_file(
+        cmake/tfl-XNNPACKConfig.cmake.in
+        "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfig.cmake"
+        @ONLY
+)
+
+install(
+        FILES "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfigVersion.cmake" "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfig.cmake"
+        DESTINATION lib/cmake/tfl-XNNPACK
+        COMPONENT Devel
+)
+
+
 # ---[ XNNPACK unit tests
 IF(XNNPACK_BUILD_TESTS)
   # ---[ Build google test
