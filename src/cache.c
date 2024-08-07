@@ -7,7 +7,7 @@
 #include <stddef.h> // For size_t.
 #include <stdint.h> // For uint32_t.
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
 #include <xnnpack/cache.h>
 #include <xnnpack/log.h>

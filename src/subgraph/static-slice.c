@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/log.h>
 #include <xnnpack/operator.h>
 #include <xnnpack/subgraph.h>

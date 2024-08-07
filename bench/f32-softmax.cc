@@ -12,7 +12,7 @@
 #endif  // BENCHMARK_INTEL_DNNL
 #include "bench/utils.h"
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/common.h>
 #include <xnnpack/microfnptr.h>
 #include <xnnpack/microparams-init.h>

@@ -227,7 +227,7 @@ def main(args):
 #include <stddef.h>
 #include <stdint.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/aligned-allocator.h>
 #include <xnnpack/common.h>
 #include <xnnpack/microfnptr.h>

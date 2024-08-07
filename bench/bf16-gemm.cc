@@ -15,7 +15,7 @@
 #include "bench/gemm.h"
 #include "bench/utils.h"
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/aligned-allocator.h>
 #include <xnnpack/common.h>
 #include <xnnpack/gemm.h>

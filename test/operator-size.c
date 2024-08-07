@@ -5,7 +5,7 @@
 
 #include <stdlib.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 
 
 // A dummy program that calls every Operators API function in XNNPACK, for size estimation.

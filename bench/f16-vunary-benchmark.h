@@ -6,7 +6,7 @@
 #ifndef __XNNPACK_BENCH_F16_VUNARY_BENCHMARK_H_
 #define __XNNPACK_BENCH_F16_VUNARY_BENCHMARK_H_
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/aligned-allocator.h>
 #include <xnnpack/common.h>
 #include <xnnpack/microfnptr.h>

@@ -6,7 +6,7 @@
 #include "vbinaryc-microkernel-tester.h"
 
 #include <stdint.h>
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/microfnptr.h>
 #include <xnnpack/microparams-init.h>
 #include <xnnpack/microparams.h>

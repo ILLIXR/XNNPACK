@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <math.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/log.h>
 #include <xnnpack/node-type.h>
 #include <xnnpack/params.h>

@@ -10,7 +10,7 @@
 #include <cstddef>
 #include <vector>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/normalization.h>
 
 #include <gtest/gtest.h>

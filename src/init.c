@@ -24,7 +24,7 @@
   #include <intrin.h>
 #endif
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
 #include <xnnpack/common.h>
 #include <xnnpack/config.h>

@@ -6,7 +6,7 @@
 #include "vunary-microkernel-tester.h"
 
 #include <stdint.h>
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/common.h>
 #include <xnnpack/microfnptr.h>
 #include <xnnpack/microparams.h>

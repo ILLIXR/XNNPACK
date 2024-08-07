@@ -15,7 +15,7 @@
 
 #include <fp16/fp16.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
 #include <xnnpack/common.h>
 #include <xnnpack/log.h>

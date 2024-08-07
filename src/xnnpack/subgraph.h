@@ -8,7 +8,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/allocation-type.h>
 #include <xnnpack/cache.h>
 #include <xnnpack/common.h>

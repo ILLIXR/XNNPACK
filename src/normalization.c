@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/math.h>
 
 void xnn_normalize_slice(

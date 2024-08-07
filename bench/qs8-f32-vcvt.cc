@@ -12,7 +12,7 @@
 #include "bench/utils.h"
 #include "bench/vcvt-benchmark.h"
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/common.h>
 #include <xnnpack/microfnptr.h>
 #include <xnnpack/microparams-init.h>

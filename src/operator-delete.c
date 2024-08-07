@@ -8,7 +8,7 @@
 
 #include <stdlib.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
 #include <xnnpack/log.h>
 #include <xnnpack/operator.h>

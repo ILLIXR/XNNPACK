@@ -13,7 +13,7 @@
 #include <random>
 #include <vector>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 
 #include <benchmark/benchmark.h>
 #include <fp16/fp16.h>

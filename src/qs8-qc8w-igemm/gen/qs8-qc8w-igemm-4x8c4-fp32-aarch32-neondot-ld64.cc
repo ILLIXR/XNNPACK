@@ -6,7 +6,7 @@
 
 #include <cassert>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/aarch32-assembler.h>
 #include <xnnpack/igemm.h>
 #include <xnnpack/memory.h>

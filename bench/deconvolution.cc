@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 
 #include <benchmark/benchmark.h>
 #ifdef BENCHMARK_TENSORFLOW_LITE

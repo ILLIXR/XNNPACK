@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
 #include <xnnpack/config.h>
 #include <xnnpack/log.h>

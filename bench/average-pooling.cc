@@ -15,7 +15,7 @@
 #include <random>
 #include <vector>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/aligned-allocator.h>
 #include <xnnpack/common.h>
 

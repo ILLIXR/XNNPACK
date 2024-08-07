@@ -15,7 +15,7 @@
 #include "bench/end2end.h"
 #include "bench/utils.h"
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/config.h>
 #include <xnnpack/dwconv.h>
 #include <xnnpack/microfnptr.h>
