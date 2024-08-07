@@ -242,6 +242,13 @@ IF(NOT XNNPACK_USE_SYSTEM_LIBS)
   ENDIF()
 ENDIF()
 
+foreach(FLAG IN ITEMS CMAKE_ASM_FLAGS CMAKE_ASM_COMPILER_ARG1 CMAKE_C_FLAGS CMAKE_C_COMPILER_ARG1 CMAKE_CXX_FLAGS CMAKE_CXX_COMPILER_ARG1)
+  if(${FLAG})
+    string(REGEX REPLACE "-mcpu=[-a-zA-Z0-9_.^$*+?]*" "" _tmp ${${FLAG}})
+    set(${FLAG} ${_tmp})
+  endif()
+endforeach()
+
 # ---[ XNNPACK library
 INCLUDE(cmake/microkernels.cmake)
 
