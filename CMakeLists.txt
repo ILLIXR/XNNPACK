@@ -1110,9 +1110,9 @@ ENDIF()
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-        "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfigVersion.cmake"
-        VERSION 1.0.0
-        COMPATABILITY AnyNewerVersion
+        ${CMAKE_BINARY_DIR}/tfl-XNNPACKConfigVersion.cmake
+        VERSION 1.1.0
+        COMPATIBILITY SameMajorVersion
 )
 
 configure_file(
