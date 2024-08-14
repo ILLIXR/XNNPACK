@@ -997,30 +997,36 @@ IF(XNNPACK_BUILD_LIBRARY)
 
     TARGET_LINK_LIBRARIES(tfl-XNNPACK PRIVATE fp16)
     INSTALL(TARGETS tfl-XNNPACK
-            EXPORT XNNPACKTargets
+            EXPORT tfl-XNNPACKTargets
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
             PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+    install(
+            EXPORT tfl-XNNPACKTargets
+            FILE tfl-XNNPACKTargets.cmake
+            DESTINATION lib/cmake/tfl-XNNPACK
+            NAMESPACE tfl-XNNPACK::
+    )
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file(
+            ${CMAKE_BINARY_DIR}/tfl-XNNPACKConfigVersion.cmake
+            VERSION 1.1.0
+            COMPATIBILITY SameMajorVersion
+    )
+
+    configure_package_config_file(
+            cmake/tfl-XNNPACKConfig.cmake.in
+            ${CMAKE_BINARY_DIR}/tfl-XNNPACKConfig.cmake
+            INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/tfl-XNNPACK
+    )
+
+    install(
+            FILES "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfigVersion.cmake" "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfig.cmake"
+            DESTINATION lib/cmake/tfl-XNNPACK
+            COMPONENT Devel
+    )
 ENDIF()
-
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-        ${CMAKE_BINARY_DIR}/tfl-XNNPACKConfigVersion.cmake
-        VERSION 1.1.0
-        COMPATIBILITY SameMajorVersion
-)
-
-configure_file(
-        cmake/tfl-XNNPACKConfig.cmake.in
-        "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfig.cmake"
-        @ONLY
-)
-
-install(
-        FILES "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfigVersion.cmake" "${CMAKE_BINARY_DIR}/tfl-XNNPACKConfig.cmake"
-        DESTINATION lib/cmake/tfl-XNNPACK
-        COMPONENT Devel
-)
 
 
 # ---[ XNNPACK unit tests
