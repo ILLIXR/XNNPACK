@@ -22,7 +22,7 @@ SET(CMAKE_C_EXTENSIONS NO)
 SET(CMAKE_CXX_STANDARD 14)
 SET(CMAKE_CXX_STANDARD_REQUIRED YES)
 SET(CMAKE_CXX_EXTENSIONS NO)
-
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # ---[ Options.
 SET(XNNPACK_LIBRARY_TYPE "default" CACHE STRING "Type of library (shared, static, or default) to build")
 SET_PROPERTY(CACHE XNNPACK_LIBRARY_TYPE PROPERTY STRINGS default static shared)
@@ -181,16 +181,6 @@ ENDIF()
 
 # ---[ Download deps
 IF(NOT XNNPACK_USE_SYSTEM_LIBS)
-
-    IF(NOT DEFINED FXDIV_SOURCE_DIR)
-        MESSAGE(STATUS "Downloading FXdiv to ${CMAKE_BINARY_DIR}/FXdiv-source (define FXDIV_SOURCE_DIR to avoid it)")
-        CONFIGURE_FILE(cmake/DownloadFXdiv.cmake "${CMAKE_BINARY_DIR}/FXdiv-download/CMakeLists.txt")
-        EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
-                        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/FXdiv-download")
-        EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}" --build .
-                        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/FXdiv-download")
-        SET(FXDIV_SOURCE_DIR "${CMAKE_BINARY_DIR}/FXdiv-source" CACHE STRING "FXdiv source directory")
-    ENDIF()
 
     IF(XNNPACK_BUILD_TESTS AND NOT DEFINED GOOGLETEST_SOURCE_DIR)
         MESSAGE(STATUS "Downloading Google Test to ${CMAKE_BINARY_DIR}/googletest-source (define GOOGLETEST_SOURCE_DIR to avoid it)")
@@ -975,31 +965,13 @@ IF(XNNPACK_BUILD_LIBRARY)
     TARGET_LINK_LIBRARIES(post-operation PUBLIC pthreadpool::pthreadpool allocator)
 ENDIF()
 
-# ---[ Configure FXdiv
-IF(NOT TARGET fxdiv)
-    IF(NOT XNNPACK_USE_SYSTEM_LIBS)
-        SET(FXDIV_BUILD_TESTS OFF CACHE BOOL "")
-        SET(FXDIV_BUILD_BENCHMARKS OFF CACHE BOOL "")
-        ADD_SUBDIRECTORY(
-                "${FXDIV_SOURCE_DIR}"
-                "${CMAKE_BINARY_DIR}/FXdiv")
-    ELSE()
-        FIND_FILE(FXDIV_HDR fxdiv.h PATH_SUFFIXES include PATHS "${FXDIV_SOURCE_DIR}")
-        IF(NOT FXDIV_HDR)
-            MESSAGE(FATAL_ERROR "Cannot find fxdiv")
-        ENDIF()
-        ADD_LIBRARY(fxdiv STATIC "${FXDIV_HDR}")
-        TARGET_INCLUDE_DIRECTORIES(fxdiv INTERFACE "${FXDIV_SOURCE_DIR}/include")
-        SET_PROPERTY(TARGET fxdiv PROPERTY LINKER_LANGUAGE C)
-    ENDIF()
-ENDIF()
 IF(XNNPACK_BUILD_ALL_MICROKERNELS)
-    TARGET_LINK_LIBRARIES(microkernels-all PRIVATE fxdiv)
+    TARGET_LINK_LIBRARIES(microkernels-all PRIVATE pthreadpool::fxdiv)
 ENDIF()
-TARGET_LINK_LIBRARIES(microkernels-prod PRIVATE fxdiv)
-TARGET_LINK_LIBRARIES(indirection PRIVATE fxdiv)
+TARGET_LINK_LIBRARIES(microkernels-prod PRIVATE pthreadpool::fxdiv)
+TARGET_LINK_LIBRARIES(indirection PRIVATE pthreadpool::fxdiv)
 IF(XNNPACK_BUILD_LIBRARY)
-    TARGET_LINK_LIBRARIES(tfl-XNNPACK PRIVATE fxdiv)
+    TARGET_LINK_LIBRARIES(tfl-XNNPACK PRIVATE pthreadpool::fxdiv)
 ENDIF()
 
 # ---[ Configure FP16
