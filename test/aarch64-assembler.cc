@@ -3,20 +3,18 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aarch64-assembler.h>
-#include <xnnpack/assembler.h>
-#include <xnnpack/common.h>
-#include <xnnpack/memory.h>
-#include <xnnpack/microparams-init.h>
-#include <xnnpack/microparams.h>
-
-#include <cstdint>
+#include <algorithm>
 #include <random>
 
-#include "assembler-helpers.h"
-#include "replicable_random_device.h"
 #include <gtest/gtest.h>
+
+#include <xnnpack/aarch64-assembler.h>
+#include <xnnpack/common.h>
+#include <xnnpack/memory.h>
+#include <xnnpack/microparams.h>
+#include <xnnpack/microparams-init.h>
+#include "assembler-helpers.h"
+
 
 namespace xnnpack {
 namespace aarch64 {
@@ -663,7 +661,8 @@ TEST_P(F32HardswishTest, F32Hardswish) {
   const std::vector<VRegister> accs = GetParam();
   const std::vector<VRegister> tmps = {v16.v4s(), v17.v4s(), v18.v4s(), v19.v4s()};
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  std::mt19937 rng(random_device());
   std::uniform_real_distribution<float> f32dist(-6.0f, 6.0f);
 
   xnn_f32_hswish_params params;

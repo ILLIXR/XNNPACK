@@ -13,6 +13,14 @@
 #include <xnnpack/math.h>
 #include <xnnpack/reduce.h>
 
+static int16_t math_signcompliment_f16(const uint16_t a) {
+  return (a & 0x7FFF) ^ -((int16_t) a < 0);
+}
+
+static uint16_t math_max_f16(const uint16_t a, const uint16_t b) {
+  return math_signcompliment_f16(a) > math_signcompliment_f16(b) ? a : b;
+}
+
 
 void xnn_f16_rmax_ukernel__scalar_u4_acc4(
     size_t batch,
@@ -28,33 +36,32 @@ void xnn_f16_rmax_ukernel__scalar_u4_acc4(
   const uint16_t* i = (const uint16_t*) input;
   uint16_t* o = (uint16_t*) output;
 
-  int16_t vt = math_signcomplement_f16(*i);
-  int16_t vmax0 = vt;
-  int16_t vmax1 = vt;
-  int16_t vmax2 = vt;
-  int16_t vmax3 = vt;
+  uint16_t vmax0 = *i;
+  uint16_t vmax1 = vmax0;
+  uint16_t vmax2 = vmax0;
+  uint16_t vmax3 = vmax0;
   for (; batch >= 4 * sizeof(uint16_t); batch -= 4 * sizeof(uint16_t)) {
-    const int16_t vt0 = math_signcomplement_f16(i[0]);
-    const int16_t vt1 = math_signcomplement_f16(i[1]);
-    const int16_t vt2 = math_signcomplement_f16(i[2]);
-    const int16_t vt3 = math_signcomplement_f16(i[3]);
+    const uint16_t vt0 = i[0];
+    const uint16_t vt1 = i[1];
+    const uint16_t vt2 = i[2];
+    const uint16_t vt3 = i[3];
     i += 4;
 
-    vmax0 = math_max_s16(vmax0, vt0);
-    vmax1 = math_max_s16(vmax1, vt1);
-    vmax2 = math_max_s16(vmax2, vt2);
-    vmax3 = math_max_s16(vmax3, vt3);
+    vmax0 = math_max_f16(vmax0, vt0);
+    vmax1 = math_max_f16(vmax1, vt1);
+    vmax2 = math_max_f16(vmax2, vt2);
+    vmax3 = math_max_f16(vmax3, vt3);
   }
-  vmax0 = math_max_s16(vmax0, vmax1);
-  vmax2 = math_max_s16(vmax2, vmax3);
-  vmax0 = math_max_s16(vmax0, vmax2);
+  vmax0 = math_max_f16(vmax0, vmax1);
+  vmax2 = math_max_f16(vmax2, vmax3);
+  vmax0 = math_max_f16(vmax0, vmax2);
 
   if XNN_UNLIKELY(batch != 0) {
     do {
-      vt = math_signcomplement_f16(*i++);
-      vmax0 = math_max_s16(vmax0, vt);
+      const uint16_t vt = *i++;
+      vmax0 = math_max_f16(vmax0, vt);
       batch -= sizeof(uint16_t);
     } while (batch != 0);
   }
-  o[0] = (uint16_t) math_signcomplement_f16((uint16_t) vmax0);
+  o[0] = vmax0;
 }

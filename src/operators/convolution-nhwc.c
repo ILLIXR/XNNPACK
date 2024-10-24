@@ -7,7 +7,6 @@
 // LICENSE file in the root directory of this source tree.
 
 #include <assert.h>
-#include <inttypes.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -26,20 +25,14 @@
 #include <xnnpack/indirection.h>
 #include <xnnpack/log.h>
 #include <xnnpack/math.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microkernel-type.h>
 #include <xnnpack/microkernel-utils.h>
-#include <xnnpack/microparams-init.h>
-#include <xnnpack/microparams.h>
-#include <xnnpack/operator-type.h>
-#include <xnnpack/operator-utils.h>
 #include <xnnpack/operator.h>
+#include <xnnpack/operator-utils.h>
+#include <xnnpack/operator-type.h>
 #include <xnnpack/pack.h>
 #include <xnnpack/params.h>
 #include <xnnpack/post-operation.h>
-
-#include "pthreadpool.h"
-#include <fp16/fp16.h>
+#include <xnnpack/microparams-init.h>
 
 #ifndef XNN_ENABLE_GEMM_M_SPECIALIZATION
 #error "XNN_ENABLE_GEMM_M_SPECIALIZATION is not defined"
@@ -332,36 +325,18 @@ static enum xnn_status create_gemm_or_igemm(
   const size_t n_stride = round_up(group_output_channels, nr);
   const size_t k_stride = round_up_po2(group_input_channels, kr * sr);
 
-  const uint32_t cache_seed = groups ^ group_input_channels ^ group_output_channels ^ nr ^ kr ^ sr ^ ukernel_type ^ flags;
-
-  if (use_weights_cache(convolution_op)) {
-    struct xnn_weights_cache_look_up_key cache_key;
-    cache_key.seed = cache_seed;
-    cache_key.kernel = kernel;
-    cache_key.bias = bias;
-    convolution_op->packed_weights.offset = xnn_weights_cache_look_up(
-        convolution_op->weights_cache, &cache_key);
-  }
-
-  const bool weights_already_cached = use_weights_cache(convolution_op) &&
-      convolution_op->packed_weights.offset != XNN_CACHE_NOT_FOUND;
-
   const size_t packed_group_weights_size =
       ((kernel_size * k_stride << log2_filter_element_size) + bias_element_size + extra_weights_bytes) * n_stride;
   const size_t aligned_total_weights_size = round_up_po2(packed_group_weights_size * groups, XNN_ALLOCATION_ALIGNMENT);
-  void* weights_ptr = NULL;
-
-  if (!weights_already_cached) {
-    weights_ptr = xnn_get_pointer_to_write_weights(convolution_op, aligned_total_weights_size,
-                                                   packed_weights_padding_byte);
-    if (!weights_already_cached && weights_ptr == NULL) {
-      xnn_log_error( "failed to reserve or allocated %zu bytes for %s operator gemm packed weights",
-          aligned_total_weights_size, xnn_operator_type_to_string(operator_type));
-      goto error;
-    }
-    xnn_log_debug("allocated %zu bytes for packed weights in %s operator", aligned_total_weights_size,
-                  xnn_operator_type_to_string(operator_type));
+  void* weights_ptr = xnn_get_pointer_to_write_weights(
+      convolution_op, aligned_total_weights_size, packed_weights_padding_byte);
+  if (weights_ptr == NULL) {
+    xnn_log_error("failed to reserve or allocated %zu bytes for %s operator gemm packed weights",
+                  aligned_total_weights_size, xnn_operator_type_to_string(operator_type));
+    goto error;
   }
+  xnn_log_debug("allocated %zu bytes for packed weights in %s operator",
+                aligned_total_weights_size, xnn_operator_type_to_string(operator_type));
 
   memcpy(&convolution_op->params, gemm_params, gemm_params_size);
   convolution_op->num_post_operation_params = num_post_operations;
@@ -374,14 +349,13 @@ static enum xnn_status create_gemm_or_igemm(
   } else if (relu_activation && gemm_config->relu.gemm[mr - 1].function[XNN_UARCH_DEFAULT] != NULL) {
     gemm_ukernels = &gemm_config->relu;
   }
+  uint32_t cache_seed = groups ^ group_input_channels ^ group_output_channels ^ nr ^ kr ^ sr ^ ukernel_type;
   switch (ukernel_type) {
     case xnn_microkernel_type_gemm:
-      if(!weights_already_cached) {
-        pack_gemm_goi_w(groups, group_output_channels, group_input_channels,
-                        nr, kr, sr,
-                        kernel, bias, /*scale=*/NULL, weights_ptr, gemm_config->nr * extra_weights_bytes,
-                        packing_params);
-      }
+      pack_gemm_goi_w(
+          groups, group_output_channels, group_input_channels,
+          nr, kr, sr,
+          kernel, bias, /*scale=*/NULL, weights_ptr, gemm_config->nr * extra_weights_bytes, packing_params);
       convolution_op->ukernel.gemm = (struct xnn_ukernel_gemm) {
         .mr = mr,
         .nr = nr,
@@ -402,18 +376,17 @@ static enum xnn_status create_gemm_or_igemm(
 
       break;
     case xnn_microkernel_type_igemm:
-      if(!weights_already_cached) {
-        if (flags & XNN_FLAG_DEPTHWISE_CONVOLUTION) {
-          pack_conv_kgo_w(
-              groups, group_output_channels, kernel_size,
-              nr, kr, sr,
-              kernel, bias, /*scale=*/NULL, weights_ptr, gemm_config->nr * extra_weights_bytes, packing_params);
-        } else {
-          pack_conv_goki_w(
-              groups, group_output_channels, kernel_size, group_input_channels,
-              nr, kr, sr,
-              kernel, bias, /*scale=*/NULL, weights_ptr, gemm_config->nr * extra_weights_bytes, packing_params);
-        }
+      if (flags & XNN_FLAG_DEPTHWISE_CONVOLUTION) {
+        pack_conv_kgo_w(
+            groups, group_output_channels, kernel_size,
+            nr, kr, sr,
+            kernel, bias, /*scale=*/NULL, weights_ptr, gemm_config->nr * extra_weights_bytes, packing_params);
+      } else {
+        cache_seed = ~cache_seed;
+        pack_conv_goki_w(
+            groups, group_output_channels, kernel_size, group_input_channels,
+            nr, kr, sr,
+            kernel, bias, /*scale=*/NULL, weights_ptr, gemm_config->nr * extra_weights_bytes, packing_params);
       }
       convolution_op->ukernel.igemm = (struct xnn_ukernel_igemm) {
         .mr = mr,
@@ -441,43 +414,39 @@ static enum xnn_status create_gemm_or_igemm(
   if (kernel_scale_params != NULL) {
     assert(init_kernel_scale_params != NULL);
 
-    if(!weights_already_cached) {
-      void* group_weights =
-          (void*)((uintptr_t) weights_ptr +
-                  gemm_config->nr * ((kernel_size * k_stride << log2_filter_element_size) + bias_element_size));
-      const size_t weights_stride =
-          (kernel_size * k_stride << log2_filter_element_size) + bias_element_size + extra_weights_bytes;
-      for (uint32_t group = 0; group < groups; group++) {
-        init_kernel_scale_params(
-            group_output_channels, gemm_config->nr, gemm_config->nr,
-            gemm_config->nr * weights_stride, gemm_config->nr * weights_stride, 0,
-            kernel_scale_params, group_weights);
-        kernel_scale_params += group_output_channels;
-        group_weights = (void*) ((uintptr_t) group_weights + n_stride * weights_stride);
-      }
+    void* group_weights =
+        (void*)((uintptr_t) weights_ptr +
+                gemm_config->nr * ((kernel_size * k_stride << log2_filter_element_size) + bias_element_size));
+    const size_t weights_stride =
+        (kernel_size * k_stride << log2_filter_element_size) + bias_element_size + extra_weights_bytes;
+    for (uint32_t group = 0; group < groups; group++) {
+      init_kernel_scale_params(
+          group_output_channels, gemm_config->nr, gemm_config->nr,
+          gemm_config->nr * weights_stride, gemm_config->nr * weights_stride, 0,
+          kernel_scale_params, group_weights);
+      kernel_scale_params += group_output_channels;
+      group_weights = (void*) ((uintptr_t) group_weights + n_stride * weights_stride);
     }
   }
 
   if (scale_params != NULL) {
     assert(init_scale_params != NULL);
 
-    if(!weights_already_cached) {
-      void* group_weights =
-          (void*)((uintptr_t) weights_ptr +
-                  gemm_config->nr * ((kernel_size * k_stride << log2_filter_element_size) + bias_element_size));
-      if (kernel_scale_params != NULL) {
-        group_weights = (void*) ((uintptr_t) group_weights + gemm_config->nr * sizeof(float));
-      }
-      const size_t weights_stride =
-          (kernel_size * k_stride << log2_filter_element_size) + bias_element_size + extra_weights_bytes;
-      for (uint32_t group = 0; group < groups; group++) {
-        init_scale_params(
-            group_output_channels, gemm_config->nr, gemm_config->nr,
-            gemm_config->nr * weights_stride, gemm_config->nr * weights_stride, 0,
-            scale_params, group_weights);
-        scale_params += group_output_channels;
-        group_weights = (void*) ((uintptr_t) group_weights + n_stride * weights_stride);
-      }
+    void* group_weights =
+        (void*)((uintptr_t) weights_ptr +
+                gemm_config->nr * ((kernel_size * k_stride << log2_filter_element_size) + bias_element_size));
+    if (kernel_scale_params != NULL) {
+      group_weights = (void*) ((uintptr_t) group_weights + gemm_config->nr * sizeof(float));
+    }
+    const size_t weights_stride =
+        (kernel_size * k_stride << log2_filter_element_size) + bias_element_size + extra_weights_bytes;
+    for (uint32_t group = 0; group < groups; group++) {
+      init_scale_params(
+          group_output_channels, gemm_config->nr, gemm_config->nr,
+          gemm_config->nr * weights_stride, gemm_config->nr * weights_stride, 0,
+          scale_params, group_weights);
+      scale_params += group_output_channels;
+      group_weights = (void*) ((uintptr_t) group_weights + n_stride * weights_stride);
     }
   }
 
@@ -2162,7 +2131,7 @@ static enum xnn_status reshape_igemm(
   #endif
   if (dynamic_quantization && convolution_op->zero_size > 0) {
     convolution_op->compute[igemm_compute_index].type = xnn_parallelization_type_1d;
-    convolution_op->compute[igemm_compute_index].task_1d = (pthreadpool_task_1d_t) xnn_compute_dq_zero_buffer_igemm;
+    convolution_op->compute[igemm_compute_index].task_1d = (pthreadpool_task_1d_t) xnn_compute_dq_zero_buffer;
     convolution_op->compute[igemm_compute_index].range[0] = batch_size;
     ++igemm_compute_index;
   }

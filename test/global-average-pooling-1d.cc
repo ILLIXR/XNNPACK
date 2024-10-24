@@ -3,19 +3,8 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/common.h>
-#include <xnnpack/node-type.h>
-#include <xnnpack/operator.h>
-#include <xnnpack/requantization.h>
-#include <xnnpack/subgraph.h>
-
 #include <algorithm>
 #include <array>
-#include <cmath>
-#include <cstddef>
-#include <cstdint>
 #include <functional>
 #include <limits>
 #include <memory>
@@ -23,13 +12,22 @@
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+#include <gtest/gtest.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/node-type.h>
+#include <xnnpack/operator.h>
+#include <xnnpack/requantization.h>
+#include <xnnpack/subgraph.h>
 
 template <typename T> class GlobalAveragePooling1DTest : public ::testing::Test {
- protected:
-  GlobalAveragePooling1DTest() {
+protected:
+  GlobalAveragePooling1DTest()
+  {
+    random_device = std::make_unique<std::random_device>();
+    rng = std::mt19937((*random_device)());
     shape_dist = std::uniform_int_distribution<size_t>(2, XNN_MAX_TENSOR_DIMS);
     dim_dist = std::uniform_int_distribution<size_t>(1, 9);
     f32dist = std::uniform_real_distribution<float>();
@@ -68,7 +66,8 @@ template <typename T> class GlobalAveragePooling1DTest : public ::testing::Test 
     return std::accumulate(dims.begin(), dims.end(), size_t(1), std::multiplies<size_t>());
   }
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_int_distribution<size_t> shape_dist;
   std::uniform_int_distribution<size_t> dim_dist;
   std::uniform_real_distribution<float> f32dist;

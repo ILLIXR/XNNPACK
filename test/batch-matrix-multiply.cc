@@ -12,28 +12,28 @@
 
 #include <algorithm>  // For std::generate.
 #include <array>      // For std::array.
-#include <cassert>
 #include <cmath>
 #include <cstddef>  // For size_t.
 #include <cstdint>  // For uint32_t.
-#include <functional>
 #include <iterator>
 #include <limits>
 #include <memory>   // For std::unique_ptr.
 #include <numeric>  // For std::accumulate.
 #include <ostream>
-#include <random>  // For std::uniform_real_distribution.
+#include <random>  // For std::random_device, std::mt19937, std::uniform_real_distribution.
 #include <string>
 #include <vector>  // For std::vector.
 
-#include "replicable_random_device.h"
 #include <gtest/gtest.h>
 #include <fp16/fp16.h>
 
 template <class InputType, class OutputType>
 class BatchMatrixMultiplyTestBase : public ::testing::Test {
  protected:
-  BatchMatrixMultiplyTestBase() {
+  BatchMatrixMultiplyTestBase()
+  {
+    random_device = std::make_unique<std::random_device>();
+    rng = std::mt19937((*random_device)());
     f32dist = std::uniform_real_distribution<float>(0.1f, 1.0f);
     i8dist = std::uniform_int_distribution<int32_t>(
         std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
@@ -89,7 +89,8 @@ class BatchMatrixMultiplyTestBase : public ::testing::Test {
     return std::accumulate(dims.begin(), dims.end(), size_t(1), std::multiplies<size_t>());
   }
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_real_distribution<float> f32dist;
   std::uniform_int_distribution<int32_t> i8dist;
   std::uniform_int_distribution<int32_t> w8dist;
@@ -288,8 +289,7 @@ TEST_F(BatchMatrixMultiplyTestF16, matches_operator_api)
   ASSERT_NE(workspace_size, 0);
   ASSERT_LE(workspace_alignment, XNN_ALLOCATION_ALIGNMENT);
 
-  std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(
-      workspace_size + XNN_EXTRA_BYTES);
+  std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(workspace_size);
   ASSERT_EQ(
     xnn_status_success,
     xnn_setup_batch_matrix_multiply_nc_f16(op, workspace.data(), input1.data(), input2.data(), operator_output.data()));
@@ -338,8 +338,7 @@ TEST_F(BatchMatrixMultiplyTestF16, matches_operator_api)
 
   // Check outputs match.
   for (size_t i = 0; i < operator_output.size(); i++) {
-    ASSERT_EQ(subgraph_output[i], operator_output[i])
-        << " at index " << i << " of " << operator_output.size();
+    ASSERT_EQ(subgraph_output[i], operator_output[i]);
   }
 }
 
@@ -377,8 +376,7 @@ TEST_F(BatchMatrixMultiplyTestF32, matches_operator_api)
   ASSERT_NE(workspace_size, 0);
   ASSERT_LE(workspace_alignment, XNN_ALLOCATION_ALIGNMENT);
 
-  std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(
-      workspace_size + XNN_EXTRA_BYTES);
+  std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(workspace_size);
   ASSERT_EQ(
     xnn_status_success,
     xnn_setup_batch_matrix_multiply_nc_f32(op, workspace.data(), input1.data(), input2.data(), operator_output.data()));
@@ -427,8 +425,7 @@ TEST_F(BatchMatrixMultiplyTestF32, matches_operator_api)
 
   // Check outputs match.
   for (size_t i = 0; i < operator_output.size(); i++) {
-    ASSERT_EQ(subgraph_output[i], operator_output[i])
-        << " at index " << i << " of " << operator_output.size();
+    ASSERT_EQ(subgraph_output[i], operator_output[i]);
   }
 }
 
@@ -466,8 +463,7 @@ TEST_F(BatchMatrixMultiplyTestF32, matches_operator_api_transposed)
   ASSERT_NE(workspace_size, 0);
   ASSERT_LE(workspace_alignment, XNN_ALLOCATION_ALIGNMENT);
 
-  std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(
-      workspace_size + XNN_EXTRA_BYTES);
+  std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(workspace_size);
   ASSERT_EQ(
     xnn_status_success,
     xnn_setup_batch_matrix_multiply_nc_f32(op, workspace.data(), input1.data(), input2.data(), operator_output.data()));
@@ -516,8 +512,7 @@ TEST_F(BatchMatrixMultiplyTestF32, matches_operator_api_transposed)
 
   // Check outputs match.
   for (size_t i = 0; i < operator_output.size(); i++) {
-    ASSERT_EQ(subgraph_output[i], operator_output[i])
-        << " at index " << i << " of " << operator_output.size();
+    ASSERT_EQ(subgraph_output[i], operator_output[i]);
   }
 }
 

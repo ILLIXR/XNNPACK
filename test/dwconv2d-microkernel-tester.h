@@ -8,117 +8,119 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microparams.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/math.h>
+#include <xnnpack/pack.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
+
 
 class DWConv2DMicrokernelTester {
  public:
-  DWConv2DMicrokernelTester& padding_left(uint32_t padding_left) {
+  inline DWConv2DMicrokernelTester& padding_left(uint32_t padding_left) {
     this->padding_left_ = padding_left;
     return *this;
   }
 
-  uint32_t padding_left() const {
+  inline uint32_t padding_left() const {
     return this->padding_left_;
   }
 
-  DWConv2DMicrokernelTester& padding_right(uint32_t padding_right) {
+  inline DWConv2DMicrokernelTester& padding_right(uint32_t padding_right) {
     this->padding_right_ = padding_right;
     return *this;
   }
 
-  uint32_t padding_right() const {
+  inline uint32_t padding_right() const {
     return this->padding_right_;
   }
 
-  DWConv2DMicrokernelTester& padding_top(uint32_t padding_top) {
+  inline DWConv2DMicrokernelTester& padding_top(uint32_t padding_top) {
     this->padding_top_ = padding_top;
     return *this;
   }
 
-  uint32_t padding_top() const {
+  inline uint32_t padding_top() const {
     return this->padding_top_;
   }
 
 
-  DWConv2DMicrokernelTester& padding_bottom(uint32_t padding_bottom) {
+  inline DWConv2DMicrokernelTester& padding_bottom(uint32_t padding_bottom) {
     this->padding_bottom_ = padding_bottom;
     return *this;
   }
-  uint32_t padding_bottom() const {
+  inline uint32_t padding_bottom() const {
     return this->padding_bottom_;
   }
 
-  DWConv2DMicrokernelTester& input_height(uint32_t input_height) {
+  inline DWConv2DMicrokernelTester& input_height(uint32_t input_height) {
     assert(input_height >= 1);
     this->input_height_ = input_height;
     return *this;
   }
 
-  uint32_t input_height() const {
+  inline uint32_t input_height() const {
     return this->input_height_;
   }
 
-  DWConv2DMicrokernelTester& input_width(uint32_t input_width) {
+  inline DWConv2DMicrokernelTester& input_width(uint32_t input_width) {
     assert(input_width >= 1);
     this->input_width_ = input_width;
     return *this;
   }
 
-  uint32_t input_width() const {
+  inline uint32_t input_width() const {
     return this->input_width_;
   }
 
-  DWConv2DMicrokernelTester& subsampling(uint32_t subsampling) {
+  inline DWConv2DMicrokernelTester& subsampling(uint32_t subsampling) {
     assert(subsampling >= 1);
     this->subsampling_ = subsampling;
     return *this;
   }
 
-  uint32_t subsampling() const {
+  inline uint32_t subsampling() const {
     return this->subsampling_;
   }
 
-  DWConv2DMicrokernelTester& kernel_height(uint32_t kernel_height) {
+  inline DWConv2DMicrokernelTester& kernel_height(uint32_t kernel_height) {
     assert(kernel_height != 0);
     this->kernel_height_ = kernel_height;
     return *this;
   }
 
-  uint32_t kernel_height() const {
+  inline uint32_t kernel_height() const {
     return this->kernel_height_;
   }
 
-  DWConv2DMicrokernelTester& kernel_width(uint32_t kernel_width) {
+  inline DWConv2DMicrokernelTester& kernel_width(uint32_t kernel_width) {
     assert(kernel_width != 0);
     this->kernel_width_ = kernel_width;
     return *this;
   }
 
-  uint32_t kernel_width() const {
+  inline uint32_t kernel_width() const {
     return this->kernel_width_;
   }
 
-  uint32_t kernel_size() const {
+  inline uint32_t kernel_size() const {
     return kernel_height() * kernel_width();
   }
 
-  uint32_t output_height() const {
+  inline uint32_t output_height() const {
     const uint32_t padded_input_height = padding_top() + input_height() + padding_bottom();
     if (padded_input_height <= kernel_height()) {
       return 1;
@@ -127,7 +129,7 @@ class DWConv2DMicrokernelTester {
     }
   }
 
-  uint32_t output_width() const {
+  inline uint32_t output_width() const {
     const uint32_t padded_input_width = padding_left() + input_width() + padding_right();
     if (padded_input_width <= kernel_width()) {
       return 1;
@@ -136,35 +138,36 @@ class DWConv2DMicrokernelTester {
     }
   }
 
-  DWConv2DMicrokernelTester& qmin(uint8_t qmin) {
+  inline DWConv2DMicrokernelTester& qmin(uint8_t qmin) {
     this->qmin_ = qmin;
     return *this;
   }
 
-  uint8_t qmin() const {
+  inline uint8_t qmin() const {
     return this->qmin_;
   }
 
-  DWConv2DMicrokernelTester& qmax(uint8_t qmax) {
+  inline DWConv2DMicrokernelTester& qmax(uint8_t qmax) {
     this->qmax_ = qmax;
     return *this;
   }
 
-  uint8_t qmax() const {
+  inline uint8_t qmax() const {
     return this->qmax_;
   }
 
-  DWConv2DMicrokernelTester& iterations(size_t iterations) {
+  inline DWConv2DMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_f32_dwconv2d_chw_ukernel_fn dwconv, xnn_init_f32_chw_params_fn init_params) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<float, AlignedAllocator<float, 64>> input(input_height() * input_width() + 2 * XNN_EXTRA_BYTES);
@@ -233,7 +236,8 @@ class DWConv2DMicrokernelTester {
   }
 
   void Test(xnn_f16_dwconv2d_chw_ukernel_fn dwconv, xnn_init_f16_chw_params_fn init_params) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<uint16_t, AlignedAllocator<uint16_t, 64>> input(input_height() * input_width() + 2 * XNN_EXTRA_BYTES);

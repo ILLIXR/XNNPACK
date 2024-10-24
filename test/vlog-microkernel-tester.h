@@ -5,76 +5,76 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/common.h>
-#include <xnnpack/math.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
-#include <functional>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/math.h>
+#include <xnnpack/microfnptr.h>
+
 
 extern "C" XNN_INTERNAL const uint16_t xnn_table_vlog[129];
 
 class VLogMicrokernelTester {
  public:
-  VLogMicrokernelTester& batch(size_t batch) {
+  inline VLogMicrokernelTester& batch(size_t batch) {
     assert(batch != 0);
     this->batch_ = batch;
     return *this;
   }
 
-  size_t batch() const {
+  inline size_t batch() const {
     return this->batch_;
   }
 
-  VLogMicrokernelTester& input_lshift(uint32_t input_lshift) {
+  inline VLogMicrokernelTester& input_lshift(uint32_t input_lshift) {
     assert(input_lshift < 32);
     this->input_lshift_ = input_lshift;
     return *this;
   }
 
-  uint32_t input_lshift() const {
+  inline uint32_t input_lshift() const {
     return this->input_lshift_;
   }
 
-  VLogMicrokernelTester& output_scale(uint32_t output_scale) {
+  inline VLogMicrokernelTester& output_scale(uint32_t output_scale) {
     this->output_scale_ = output_scale;
     return *this;
   }
 
-  uint32_t output_scale() const {
+  inline uint32_t output_scale() const {
     return this->output_scale_;
   }
 
-  VLogMicrokernelTester& inplace(bool inplace) {
+  inline VLogMicrokernelTester& inplace(bool inplace) {
     this->inplace_ = inplace;
     return *this;
   }
 
-  bool inplace() const {
+  inline bool inplace() const {
     return this->inplace_;
   }
 
-  VLogMicrokernelTester& iterations(size_t iterations) {
+  inline VLogMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_u32_vlog_ukernel_fn vlog) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto i16rng = std::bind(std::uniform_int_distribution<uint16_t>(), std::ref(rng));
     auto i32rng = std::bind(std::uniform_int_distribution<uint32_t>(), std::ref(rng));
 

@@ -5,10 +5,10 @@
 
 #include "vunary-microkernel-tester.h"
 
-#include <stdint.h>
 #include <tfl-xnnpack.h>
 #include <xnnpack/common.h>
 #include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
 #include <xnnpack/microparams.h>
 
 #include <algorithm>
@@ -22,12 +22,6 @@
 #include <random>
 #include <vector>
 
-#include <xnnpack.h>
-#include <xnnpack/common.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microparams.h>
-
-#include "replicable_random_device.h"
 #include <gtest/gtest.h>
 #include <fp16/fp16.h>
 
@@ -39,14 +33,6 @@ void VUnaryMicrokernelTester::Test(xnn_f32_vrelu_ukernel_fn vrelu) const {
   TestFP32(
       vrelu, [](xnn_f32_relu_params*) { return nullptr; },
       [](float x) { return std::max(x, 0.0f); }, TolExact, -1.0f, 1.0f);
-}
-
-void VUnaryMicrokernelTester::Test(
-    xnn_bf16_vabs_ukernel_fn vabs,
-    xnn_init_bf16_abs_params_fn init_params) const {
-  TestBF16(
-      vabs, InitParamsWrapper(init_params), [](float x) { return std::abs(x); },
-      TolExact16, -1.0f, 1.0f);
 }
 
 void VUnaryMicrokernelTester::Test(
@@ -267,17 +253,7 @@ void VUnaryMicrokernelTester::Test(
     xnn_init_f32_sqrt_params_fn init_params) const {
   TestFP32(
       vsqrt, InitParamsWrapper(init_params),
-      [](float x) { return std::sqrt(x); },
-      TolRelative(2.5f * std::numeric_limits<float>::epsilon()), 0.0f, 10.0f);
-}
-
-void VUnaryMicrokernelTester::Test(
-    xnn_f16_vrsqrt_ukernel_fn vrsqrt,
-    xnn_init_f16_rsqrt_params_fn init_params) const {
-  TestFP16(
-      vrsqrt, InitParamsWrapper(init_params),
-      [](float x) { return 1.0f / std::sqrt(x); }, TolMixed(1.0e-4f, 5.0e-3f),
-      1.0e-4f, 10.0f);
+      [](float x) { return std::sqrt(x); }, TolExact, 0.0f, 10.0f);
 }
 
 void VUnaryMicrokernelTester::Test(
@@ -305,8 +281,7 @@ void VUnaryMicrokernelTester::Test(
   TestFP32(
       vtanh, InitParamsWrapper(init_params),
       [](float x) { return std::tanh(x); },
-      TolRelative(5.0f * std::numeric_limits<float>::epsilon()),  // 5 ULP.
-      -10.0f, 10.0f);
+      TolMixed(/*abs_tol=*/5.0e-6f, /*rel_tol=*/1.0e-5f), -10.0f, 10.0f);
 }
 
 void VUnaryMicrokernelTester::Test(
@@ -327,7 +302,8 @@ void VUnaryMicrokernelTester::Test(
 void VUnaryMicrokernelTester::Test(
     xnn_s8_vclamp_ukernel_fn vclamp,
     xnn_init_s8_minmax_params_fn init_params) const {
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   auto i8rng = std::bind(std::uniform_int_distribution<int32_t>(
                              std::numeric_limits<int8_t>::min(),
                              std::numeric_limits<int8_t>::max()),
@@ -373,7 +349,8 @@ void VUnaryMicrokernelTester::Test(
 void VUnaryMicrokernelTester::Test(
     xnn_u8_vclamp_ukernel_fn vclamp,
     xnn_init_u8_minmax_params_fn init_params) const {
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   auto u8rng = std::bind(std::uniform_int_distribution<int32_t>(
                              0, std::numeric_limits<uint8_t>::max()),
                          std::ref(rng));
@@ -416,7 +393,8 @@ void VUnaryMicrokernelTester::Test(
     xnn_u64_u32_vsqrtshift_ukernel_fn vsqrtshift) const {
   ASSERT_FALSE(inplace());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   auto u64rng =
       std::bind(std::uniform_int_distribution<uint64_t>(), std::ref(rng));
 

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
@@ -18,29 +18,30 @@
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
+
 
 class TanhOperatorTester {
  public:
-  TanhOperatorTester& channels(size_t channels) {
+  inline TanhOperatorTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  TanhOperatorTester& input_stride(size_t input_stride) {
+  inline TanhOperatorTester& input_stride(size_t input_stride) {
     assert(input_stride != 0);
     this->input_stride_ = input_stride;
     return *this;
   }
 
-  size_t input_stride() const {
+  inline size_t input_stride() const {
     if (this->input_stride_ == 0) {
       return this->channels_;
     } else {
@@ -49,13 +50,13 @@ class TanhOperatorTester {
     }
   }
 
-  TanhOperatorTester& output_stride(size_t output_stride) {
+  inline TanhOperatorTester& output_stride(size_t output_stride) {
     assert(output_stride != 0);
     this->output_stride_ = output_stride;
     return *this;
   }
 
-  size_t output_stride() const {
+  inline size_t output_stride() const {
     if (this->output_stride_ == 0) {
       return this->channels_;
     } else {
@@ -64,73 +65,74 @@ class TanhOperatorTester {
     }
   }
 
-  TanhOperatorTester& batch_size(size_t batch_size) {
+  inline TanhOperatorTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  TanhOperatorTester& input_scale(float input_scale) {
+  inline TanhOperatorTester& input_scale(float input_scale) {
     assert(input_scale > 0.0f);
     assert(std::isnormal(input_scale));
     this->input_scale_ = input_scale;
     return *this;
   }
 
-  float input_scale() const {
+  inline float input_scale() const {
     return this->input_scale_;
   }
 
-  TanhOperatorTester& input_zero_point(uint8_t input_zero_point) {
+  inline TanhOperatorTester& input_zero_point(uint8_t input_zero_point) {
     this->input_zero_point_ = input_zero_point;
     return *this;
   }
 
-  uint8_t input_zero_point() const {
+  inline uint8_t input_zero_point() const {
     return this->input_zero_point_;
   }
 
-  float output_scale() const {
+  inline float output_scale() const {
     return 1.0f / 128.0f;
   }
 
-  uint8_t output_zero_point() const {
+  inline uint8_t output_zero_point() const {
     return 128;
   }
 
-  TanhOperatorTester& qmin(uint8_t qmin) {
+  inline TanhOperatorTester& qmin(uint8_t qmin) {
     this->qmin_ = qmin;
     return *this;
   }
 
-  uint8_t qmin() const {
+  inline uint8_t qmin() const {
     return this->qmin_;
   }
 
-  TanhOperatorTester& qmax(uint8_t qmax) {
+  inline TanhOperatorTester& qmax(uint8_t qmax) {
     this->qmax_ = qmax;
     return *this;
   }
 
-  uint8_t qmax() const {
+  inline uint8_t qmax() const {
     return this->qmax_;
   }
 
-  TanhOperatorTester& iterations(size_t iterations) {
+  inline TanhOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void TestF16() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-5.0f, 5.0f);
 
     std::vector<uint16_t> input((batch_size() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(uint16_t));
@@ -181,7 +183,8 @@ class TanhOperatorTester {
   }
 
   void TestF32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-10.0f, 10.0f);
 
     std::vector<float> input((batch_size() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(float));
@@ -229,7 +232,8 @@ class TanhOperatorTester {
   }
 
   void TestRunF32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-10.0f, 10.0f);
 
     std::vector<float> input((batch_size() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(float));
@@ -269,7 +273,8 @@ class TanhOperatorTester {
   }
 
   void TestQS8() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto i8rng = std::bind(
       std::uniform_int_distribution<int32_t>(std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max()),
       std::ref(rng));
@@ -325,7 +330,8 @@ class TanhOperatorTester {
   }
 
   void TestQU8() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto u8rng = std::bind(std::uniform_int_distribution<uint32_t>(0, std::numeric_limits<uint8_t>::max()), rng);
 
     std::vector<uint8_t> input((batch_size() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(uint8_t));

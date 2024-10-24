@@ -5,25 +5,23 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
+#include <cmath>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
-#include <limits>
-#include <memory>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+
 
 class DepthToSpaceOperatorTester {
  public:
-  DepthToSpaceOperatorTester& input_size(size_t input_height, size_t input_width) {
+  inline DepthToSpaceOperatorTester& input_size(size_t input_height, size_t input_width) {
     assert(input_height >= 1);
     assert(input_width >= 1);
     this->input_height_ = input_height;
@@ -31,69 +29,69 @@ class DepthToSpaceOperatorTester {
     return *this;
   }
 
-  DepthToSpaceOperatorTester& input_height(size_t input_height) {
+  inline DepthToSpaceOperatorTester& input_height(size_t input_height) {
     assert(input_height >= 1);
     this->input_height_ = input_height;
     return *this;
   }
 
-  size_t input_height() const {
+  inline size_t input_height() const {
     return this->input_height_;
   }
 
-  DepthToSpaceOperatorTester& input_width(size_t input_width) {
+  inline DepthToSpaceOperatorTester& input_width(size_t input_width) {
     assert(input_width >= 1);
     this->input_width_ = input_width;
     return *this;
   }
 
-  size_t input_width() const {
+  inline size_t input_width() const {
     return this->input_width_;
   }
 
-  size_t output_height() const {
+  inline size_t output_height() const {
     return input_height() * block_size();
   }
 
-  size_t output_width() const {
+  inline size_t output_width() const {
     return input_width() * block_size();
   }
 
-  DepthToSpaceOperatorTester& block_size(size_t block_size) {
+  inline DepthToSpaceOperatorTester& block_size(size_t block_size) {
     assert(block_size >= 2);
     this->block_size_ = block_size;
     return *this;
   }
 
-  size_t block_size() const {
+  inline size_t block_size() const {
     return this->block_size_;
   }
 
-  size_t input_channels() const {
+  inline size_t input_channels() const {
     return output_channels() * block_size() * block_size();
   }
 
-  DepthToSpaceOperatorTester& output_channels(size_t output_channels) {
+  inline DepthToSpaceOperatorTester& output_channels(size_t output_channels) {
     assert(output_channels != 0);
     this->output_channels_ = output_channels;
     return *this;
   }
 
-  size_t output_channels() const {
+  inline size_t output_channels() const {
     return this->output_channels_;
   }
 
-  DepthToSpaceOperatorTester& batch_size(size_t batch_size) {
+  inline DepthToSpaceOperatorTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  size_t input_channels_stride() const {
+  inline size_t input_channels_stride() const {
     if (this->input_channels_stride_ == 0) {
       return input_channels();
     } else {
@@ -102,7 +100,7 @@ class DepthToSpaceOperatorTester {
     }
   }
 
-  size_t output_channels_stride() const {
+  inline size_t output_channels_stride() const {
     if (this->output_channels_stride_ == 0) {
       return output_channels();
     } else {
@@ -111,17 +109,18 @@ class DepthToSpaceOperatorTester {
     }
   }
 
-  DepthToSpaceOperatorTester& iterations(size_t iterations) {
+  inline DepthToSpaceOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void TestNHWCxX8() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto i8rng = std::bind(
       std::uniform_int_distribution<int32_t>(std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max()),
       std::ref(rng));
@@ -193,7 +192,8 @@ class DepthToSpaceOperatorTester {
   }
 
   void TestNHWCxX16() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto i16rng = std::bind(std::uniform_int_distribution<int16_t>(), std::ref(rng));
 
     std::vector<int16_t> input(
@@ -263,7 +263,8 @@ class DepthToSpaceOperatorTester {
   }
 
   void TestNHWCxX32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto i32rng = std::bind(std::uniform_int_distribution<int32_t>(), std::ref(rng));
 
     std::vector<int32_t> input(
@@ -333,7 +334,8 @@ class DepthToSpaceOperatorTester {
   }
 
   void TestNCHW2NHWCxX16() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto i16rng = std::bind(std::uniform_int_distribution<int16_t>(), std::ref(rng));
 
     std::vector<int16_t> input(XNN_EXTRA_BYTES / sizeof(int16_t) +
@@ -403,7 +405,8 @@ class DepthToSpaceOperatorTester {
   }
 
   void TestNCHW2NHWCxX32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto i32rng = std::bind(std::uniform_int_distribution<int32_t>(), std::ref(rng));
 
     std::vector<int32_t> input(XNN_EXTRA_BYTES / sizeof(int32_t) +

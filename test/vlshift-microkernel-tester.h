@@ -5,63 +5,63 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
-#include <functional>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/microfnptr.h>
+
 
 class VLShiftMicrokernelTester {
  public:
-  VLShiftMicrokernelTester& batch(size_t batch) {
+  inline VLShiftMicrokernelTester& batch(size_t batch) {
     assert(batch != 0);
     this->batch_ = batch;
     return *this;
   }
 
-  size_t batch() const {
+  inline size_t batch() const {
     return this->batch_;
   }
 
-  VLShiftMicrokernelTester& shift(uint32_t shift) {
+  inline VLShiftMicrokernelTester& shift(uint32_t shift) {
     assert(shift < 32);
     this->shift_ = shift;
     return *this;
   }
 
-  uint32_t shift() const {
+  inline uint32_t shift() const {
     return this->shift_;
   }
 
-  VLShiftMicrokernelTester& inplace(bool inplace) {
+  inline VLShiftMicrokernelTester& inplace(bool inplace) {
     this->inplace_ = inplace;
     return *this;
   }
 
-  bool inplace() const {
+  inline bool inplace() const {
     return this->inplace_;
   }
 
-  VLShiftMicrokernelTester& iterations(size_t iterations) {
+  inline VLShiftMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_i16_vlshift_ukernel_fn vlshift) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto u16rng = std::bind(std::uniform_int_distribution<uint16_t>(), std::ref(rng));
 
     std::vector<uint16_t> input(batch() + XNN_EXTRA_BYTES / sizeof(uint16_t));

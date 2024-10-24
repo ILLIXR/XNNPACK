@@ -5,17 +5,15 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
-#include <memory>
 #include <numeric>
 #include <vector>
+
+#include <tfl-xnnpack.h>
 
 #include <gtest/gtest.h>
 
@@ -37,29 +35,29 @@ inline size_t reference_index(
 
 class TransposeOperatorTester {
  public:
-  TransposeOperatorTester& num_dims(size_t num_dims) {
+  inline TransposeOperatorTester& num_dims(size_t num_dims) {
     assert(num_dims != 0);
     this->num_dims_ = num_dims;
     return *this;
   }
 
-  size_t num_dims() const { return this->num_dims_; }
+  inline size_t num_dims() const { return this->num_dims_; }
 
-  TransposeOperatorTester& shape(std::vector<size_t> shape) {
+  inline TransposeOperatorTester& shape(std::vector<size_t> shape) {
     assert(shape.size() <= XNN_MAX_TENSOR_DIMS);
     this->shape_ = shape;
     return *this;
   }
 
-  const std::vector<size_t>& dims() const { return this->shape_; }
+  inline const std::vector<size_t>& dims() const { return this->shape_; }
 
-  TransposeOperatorTester& perm(std::vector<size_t> perm) {
+  inline TransposeOperatorTester& perm(std::vector<size_t> perm) {
     assert(perm.size() <= XNN_MAX_TENSOR_DIMS);
     this->perm_ = perm;
     return *this;
   }
 
-  const std::vector<size_t>& perm() const { return this->perm_; }
+  inline const std::vector<size_t>& perm() const { return this->perm_; }
 
   void TestX8() const {
     size_t count = std::accumulate(dims().cbegin(), dims().cend(), size_t{1}, std::multiplies<size_t>());

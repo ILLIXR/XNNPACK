@@ -3,26 +3,19 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/node-type.h>
-#include <xnnpack/operator.h>
-#include <xnnpack/subgraph.h>
-
 #include <algorithm>
 #include <array>
-#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <memory>
 #include <random>
 #include <tuple>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include "subgraph-unary-tester.h"
+#include <fp16/fp16.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <fp16/fp16.h>
+
+#include "subgraph-unary-tester.h"
 
 template <typename T> class StaticSliceTest : public UnaryTest<T, T, /*min_dim=*/1> {
 public:

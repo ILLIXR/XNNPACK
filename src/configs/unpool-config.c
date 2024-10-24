@@ -14,8 +14,9 @@
 
 #include <xnnpack/common.h>
 #include <xnnpack/config.h>
-#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
 #include <xnnpack/unpool.h>
+
 
 static struct xnn_unpool_config x32_unpool_config = {0};
 
@@ -40,10 +41,13 @@ static void init_x32_unpool_config(void) {
     x32_unpool_config.unpool = (xnn_unpool_ukernel_fn) xnn_x32_unpool_ukernel__sse2;
   #elif XNN_ARCH_WASMSIMD || XNN_ARCH_WASMRELAXEDSIMD
     x32_unpool_config.unpool = (xnn_unpool_ukernel_fn) xnn_x32_unpool_ukernel__wasmsimd;
-  #else
+  #elif XNN_ARCH_WASM
+    x32_unpool_config.unpool = (xnn_unpool_ukernel_fn) xnn_x32_unpool_ukernel__scalar;
+  #elif XNN_ARCH_RISCV
+    x32_unpool_config.unpool = (xnn_unpool_ukernel_fn) xnn_x32_unpool_ukernel__scalar;
+  #elif XNN_ARCH_PPC64
     x32_unpool_config.unpool = (xnn_unpool_ukernel_fn) xnn_x32_unpool_ukernel__scalar;
   #endif
-
 }
 
 #if XNN_PLATFORM_WINDOWS

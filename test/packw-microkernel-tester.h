@@ -5,93 +5,95 @@
 
 #pragma once
 
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/math.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/pack.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <numeric>
+#include <random>
 #include <vector>
 
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/pack.h>
+#include <xnnpack/packw.h>
 
 class PackWMicrokernelTester {
  public:
 
-  PackWMicrokernelTester& g(size_t g) {
+  inline PackWMicrokernelTester& g(size_t g) {
     this->g_ = g;
     return *this;
   }
 
-  size_t g() const {
+  inline size_t g() const {
     return this->g_;
   }
 
-  PackWMicrokernelTester& nr(size_t nr) {
+  inline PackWMicrokernelTester& nr(size_t nr) {
     this->nr_ = nr;
     return *this;
   }
 
-  size_t nr() const {
+  inline size_t nr() const {
     return this->nr_;
   }
 
-  PackWMicrokernelTester& kr(size_t kr) {
+  inline PackWMicrokernelTester& kr(size_t kr) {
     this->kr_ = kr;
     return *this;
   }
 
-  size_t kr() const {
+  inline size_t kr() const {
     return this->kr_;
   }
 
-  PackWMicrokernelTester& sr(size_t sr) {
+  inline PackWMicrokernelTester& sr(size_t sr) {
     this->sr_ = sr;
     return *this;
   }
 
-  size_t sr() const {
+  inline size_t sr() const {
     return this->sr_;
   }
 
-  PackWMicrokernelTester& n(size_t n) {
+  inline PackWMicrokernelTester& n(size_t n) {
     assert(n != 0);
     this->n_ = n;
     return *this;
   }
 
-  size_t n() const {
+  inline size_t n() const {
     return this->n_;
   }
 
-  size_t packed_k() const {
+  inline size_t packed_k() const {
     return round_up_po2(k(), kr() * sr());
   }
 
-  size_t packed_n() const {
+  inline size_t packed_n() const {
     return round_up(n(), nr());
   }
 
-  PackWMicrokernelTester& k(size_t k) {
+  inline PackWMicrokernelTester& k(size_t k) {
     this->k_ = k;
     return *this;
   }
 
-  size_t k() const {
+  inline size_t k() const {
     return this->k_;
   }
 
-  PackWMicrokernelTester& nullbias(bool nullbias) {
+  inline PackWMicrokernelTester& nullbias(bool nullbias) {
     this->nullbias_ = nullbias;
     return *this;
   }
 
-  bool nullbias() const {
+  inline bool nullbias() const {
     return this->nullbias_;
   }
 

@@ -3,6 +3,20 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
+#include <algorithm>  // For std::generate, std::min.
+#include <array>      // For std::array.
+#include <cmath>      // For std::lrintf.
+#include <cstddef>    // For size_t.
+#include <cstdint>    // For uint32_t.
+#include <functional> // For std::multiplies.
+#include <memory>     // For std::unique_ptr.
+#include <numeric>    // For std::accumulate.
+#include <random>     // For std::random_device, std::mt19937, std::uniform_real_distribution.
+#include <vector>     // For std::vector.
+
+#include <fp16/fp16.h>
+#include <gtest/gtest.h>
+
 #include <tfl-xnnpack.h>
 #include <xnnpack/aligned-allocator.h>
 #include <xnnpack/common.h>
@@ -10,38 +24,28 @@
 #include <xnnpack/operator.h>
 #include <xnnpack/subgraph.h>
 
-#include <algorithm>   // For std::generate, std::min.
-#include <array>       // For std::array.
-#include <cmath>       // For std::lrintf.
-#include <cstddef>     // For size_t.
-#include <cstdint>     // For uint32_t.
-#include <functional>  // For std::multiplies.
-#include <memory>      // For std::unique_ptr.
-#include <numeric>     // For std::accumulate.
-#include <random>      // For std::uniform_real_distribution.
-#include <vector>      // For std::vector.
-
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
-#include <fp16/fp16.h>
 
 namespace xnnpack {
 template <class T> class MeanTestBase : public ::testing::Test {
- protected:
-  MeanTestBase() {
+protected:
+  MeanTestBase()
+  {
+    random_device = std::make_unique<std::random_device>();
+    rng = std::mt19937((*random_device)());
     f32dist = std::uniform_real_distribution<float>(-1.0f, 1.0f);
 
     auto num_input_dim_dist = std::uniform_int_distribution<size_t>(2, XNN_MAX_TENSOR_DIMS);
     const size_t num_input_dims = num_input_dim_dist(rng);
-    auto num_reduction_axes_dist = std::uniform_int_distribution<size_t>(1, num_input_dims);
-    const size_t num_reduction_axes = num_reduction_axes_dist(rng);
 
-    auto axes_dist = std::uniform_int_distribution<size_t>(0, num_input_dims - 1);
-    reduction_axes.resize(num_reduction_axes);
-    std::generate(reduction_axes.begin(), reduction_axes.end(), [&]() { return axes_dist(rng); });
-    std::sort(reduction_axes.begin(), reduction_axes.end());
-    auto end = std::unique(reduction_axes.begin(), reduction_axes.end());
-    reduction_axes.erase(end, reduction_axes.end());
+    auto reduction_axes_seq_start_dist = std::uniform_int_distribution<size_t>(0, num_input_dims - 1);
+    const size_t reduction_axes_seq_start = reduction_axes_seq_start_dist(rng);
+    auto reduction_axes_seq_end_dist = std::uniform_int_distribution<size_t>(reduction_axes_seq_start + 1, num_input_dims);
+    const size_t reduction_axes_seq_end = reduction_axes_seq_end_dist(rng);
+
+    reduction_axes.clear();
+    for (size_t axis = reduction_axes_seq_start; axis < reduction_axes_seq_end; axis++) {
+      reduction_axes.push_back(axis);
+    }
 
     auto shape_dist = std::uniform_int_distribution<size_t>(2, 15);
     input_shape.resize(num_input_dims);
@@ -59,7 +63,8 @@ template <class T> class MeanTestBase : public ::testing::Test {
     subgraph_output = std::vector<T>(num_output_elements);
   }
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_real_distribution<float> f32dist;
 
   std::vector<size_t> reduction_axes;
@@ -180,13 +185,18 @@ TEST_F(MeanTestF16, matches_operator_api)
 
   std::unique_ptr<xnn_operator, decltype(&xnn_delete_operator)> auto_op(op, xnn_delete_operator);
 
+  size_t workspace_size = 0;
+  size_t workspace_alignment = 0;
   ASSERT_EQ(xnn_status_success,
     xnn_reshape_mean_nd_f16(op,
       reduction_axes.size(), reduction_axes.data(),
       input_shape.size(), input_shape.data(),
+      &workspace_size, &workspace_alignment,
       /*threadpool=*/nullptr));
+  ASSERT_LE(workspace_alignment, XNN_ALLOCATION_ALIGNMENT);
 
-  ASSERT_EQ(xnn_status_success, xnn_setup_mean_nd_f16(op, input.data(), operator_output.data()));
+  std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(workspace_size);
+  ASSERT_EQ(xnn_status_success, xnn_setup_mean_nd_f16(op, workspace.data(), input.data(), operator_output.data()));
 
   ASSERT_EQ(xnn_status_success, xnn_run_operator(op, /*threadpool=*/nullptr));
 
@@ -252,13 +262,18 @@ TEST_F(MeanTestF32, matches_operator_api)
 
   std::unique_ptr<xnn_operator, decltype(&xnn_delete_operator)> auto_op(op, xnn_delete_operator);
 
+  size_t workspace_size = 0;
+  size_t workspace_alignment = 0;
   ASSERT_EQ(xnn_status_success,
     xnn_reshape_mean_nd_f32(op,
       reduction_axes.size(), reduction_axes.data(),
       input_shape.size(), input_shape.data(),
+      &workspace_size, &workspace_alignment,
       /*threadpool=*/nullptr));
+  ASSERT_LE(workspace_alignment, XNN_ALLOCATION_ALIGNMENT);
 
-  ASSERT_EQ(xnn_status_success, xnn_setup_mean_nd_f32(op, input.data(), operator_output.data()));
+  std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(workspace_size);
+  ASSERT_EQ(xnn_status_success, xnn_setup_mean_nd_f32(op, workspace.data(), input.data(), operator_output.data()));
 
   ASSERT_EQ(xnn_status_success, xnn_run_operator(op, /*threadpool=*/nullptr));
 

@@ -50,7 +50,7 @@ void xnnpack_prelu_f32(benchmark::State& state, const char* net) {
 
   xnn_operator_t prelu_op = nullptr;
   status = xnn_create_prelu_nc_f32(
-    channels, /*slope_channels=*/channels, /*input_stride=*/channels , /*output_stride=*/channels,
+    channels, channels /* input stride */, channels /* output stride */,
     slope.data(),
     0 /* flags */, nullptr, nullptr, &prelu_op);
   if (status != xnn_status_success) {

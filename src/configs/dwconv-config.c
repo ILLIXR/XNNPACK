@@ -18,9 +18,8 @@
 
 #include <xnnpack/common.h>
 #include <xnnpack/config.h>
-#include <xnnpack/dwconv.h>
-#include <xnnpack/microfnptr.h>
 #include <xnnpack/microparams-init.h>
+#include <xnnpack/dwconv.h>
 
 static struct xnn_dwconv_config f16_dwconv_config[XNN_MAX_F16_DWCONV_UKERNELS] = {0};
 static struct xnn_dwconv_config f32_dwconv_config[XNN_MAX_F32_DWCONV_UKERNELS] = {0};
@@ -648,7 +647,39 @@ static void init_f32_dwconv_config(void) {
       f32_dwconv_config[3].channel_round = 1;
       f32_dwconv_config[3].primary_tile = 25;
     #endif  // XNN_ENABLE_DWCONV_MULTIPASS
-  #else
+  #elif XNN_ARCH_RISCV
+    f32_dwconv_config[0].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_minmax_ukernel_3p1c__scalar_acc2;
+    f32_dwconv_config[0].linear.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_ukernel_3p1c__scalar_acc2;
+    f32_dwconv_config[0].init.f32 = xnn_init_f32_minmax_scalar_params;
+    f32_dwconv_config[0].channel_tile = 1;
+    f32_dwconv_config[0].channel_subtile = 1;
+    f32_dwconv_config[0].channel_round = 1;
+    f32_dwconv_config[0].primary_tile = 3;
+
+    f32_dwconv_config[1].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_minmax_ukernel_4p1c__scalar_acc2;
+    f32_dwconv_config[1].linear.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_ukernel_4p1c__scalar_acc2;
+    f32_dwconv_config[1].init.f32 = xnn_init_f32_minmax_scalar_params;
+    f32_dwconv_config[1].channel_tile = 1;
+    f32_dwconv_config[1].channel_subtile = 1;
+    f32_dwconv_config[1].channel_round = 1;
+    f32_dwconv_config[1].primary_tile = 4;
+
+    f32_dwconv_config[2].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_minmax_ukernel_9p1c__scalar_acc2;
+    f32_dwconv_config[2].linear.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_ukernel_9p1c__scalar_acc2;
+    f32_dwconv_config[2].init.f32 = xnn_init_f32_minmax_scalar_params;
+    f32_dwconv_config[2].channel_tile = 1;
+    f32_dwconv_config[2].channel_subtile = 1;
+    f32_dwconv_config[2].channel_round = 1;
+    f32_dwconv_config[2].primary_tile = 9;
+
+    f32_dwconv_config[3].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_minmax_ukernel_25p1c__scalar_acc2;
+    f32_dwconv_config[3].linear.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_ukernel_25p1c__scalar_acc2;
+    f32_dwconv_config[3].init.f32 = xnn_init_f32_minmax_scalar_params;
+    f32_dwconv_config[3].channel_tile = 1;
+    f32_dwconv_config[3].channel_subtile = 1;
+    f32_dwconv_config[3].channel_round = 1;
+    f32_dwconv_config[3].primary_tile = 25;
+  #elif XNN_ARCH_PPC64
     f32_dwconv_config[0].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_minmax_ukernel_3p1c__scalar_acc2;
     f32_dwconv_config[0].linear.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_f32_dwconv_ukernel_3p1c__scalar_acc2;
     f32_dwconv_config[0].init.f32 = xnn_init_f32_minmax_scalar_params;
@@ -914,7 +945,26 @@ static void init_qs8_qc8w_dwconv_config(void) {
       qs8_qc8w_dwconv_config[2].channel_round = 1;
       qs8_qc8w_dwconv_config[2].primary_tile = 25;
     }
-  #else
+  #elif XNN_ARCH_RISCV
+    qs8_qc8w_dwconv_config[0].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qs8_qc8w_dwconv_minmax_fp32_ukernel_3p2c__scalar_lrintf;
+    qs8_qc8w_dwconv_config[0].init.qs8_qc8w = xnn_init_qs8_qc8w_conv_minmax_fp32_scalar_lrintf_params;
+    qs8_qc8w_dwconv_config[0].channel_tile = 2;
+    qs8_qc8w_dwconv_config[0].channel_subtile = 2;
+    qs8_qc8w_dwconv_config[0].channel_round = 1;
+    qs8_qc8w_dwconv_config[0].primary_tile = 3;
+    qs8_qc8w_dwconv_config[1].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qs8_qc8w_dwconv_minmax_fp32_ukernel_9p2c__scalar_lrintf;
+    qs8_qc8w_dwconv_config[1].init.qs8_qc8w = xnn_init_qs8_qc8w_conv_minmax_fp32_scalar_lrintf_params;
+    qs8_qc8w_dwconv_config[1].channel_tile = 2;
+    qs8_qc8w_dwconv_config[1].channel_subtile = 2;
+    qs8_qc8w_dwconv_config[1].channel_round = 1;
+    qs8_qc8w_dwconv_config[1].primary_tile = 9;
+    qs8_qc8w_dwconv_config[2].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qs8_qc8w_dwconv_minmax_fp32_ukernel_25p2c__scalar_lrintf;
+    qs8_qc8w_dwconv_config[2].init.qs8_qc8w = xnn_init_qs8_qc8w_conv_minmax_fp32_scalar_lrintf_params;
+    qs8_qc8w_dwconv_config[2].channel_tile = 2;
+    qs8_qc8w_dwconv_config[2].channel_subtile = 2;
+    qs8_qc8w_dwconv_config[2].channel_round = 1;
+    qs8_qc8w_dwconv_config[2].primary_tile = 25;
+  #elif XNN_ARCH_PPC64
     qs8_qc8w_dwconv_config[0].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qs8_qc8w_dwconv_minmax_fp32_ukernel_3p2c__scalar_lrintf;
     qs8_qc8w_dwconv_config[0].init.qs8_qc8w = xnn_init_qs8_qc8w_conv_minmax_fp32_scalar_lrintf_params;
     qs8_qc8w_dwconv_config[0].channel_tile = 2;
@@ -1084,7 +1134,20 @@ static void init_qs8_dwconv_config(void) {
       qs8_dwconv_config[1].channel_round = 1;
       qs8_dwconv_config[1].primary_tile = 25;
     }
-  #else
+  #elif XNN_ARCH_RISCV
+    qs8_dwconv_config[0].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qs8_dwconv_minmax_fp32_ukernel_9p2c__scalar_lrintf;
+    qs8_dwconv_config[0].init.qs8 = xnn_init_qs8_conv_minmax_fp32_scalar_lrintf_params;
+    qs8_dwconv_config[0].channel_tile = 2;
+    qs8_dwconv_config[0].channel_subtile = 2;
+    qs8_dwconv_config[0].channel_round = 1;
+    qs8_dwconv_config[0].primary_tile = 9;
+    qs8_dwconv_config[1].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qs8_dwconv_minmax_fp32_ukernel_25p2c__scalar_lrintf;
+    qs8_dwconv_config[1].init.qs8 = xnn_init_qs8_conv_minmax_fp32_scalar_lrintf_params;
+    qs8_dwconv_config[1].channel_tile = 2;
+    qs8_dwconv_config[1].channel_subtile = 2;
+    qs8_dwconv_config[1].channel_round = 1;
+    qs8_dwconv_config[1].primary_tile = 25;
+  #elif XNN_ARCH_PPC64
     qs8_dwconv_config[0].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qs8_dwconv_minmax_fp32_ukernel_9p2c__scalar_lrintf;
     qs8_dwconv_config[0].init.qs8 = xnn_init_qs8_conv_minmax_fp32_scalar_lrintf_params;
     qs8_dwconv_config[0].channel_tile = 2;
@@ -1248,7 +1311,20 @@ static void init_qu8_dwconv_config(void) {
       qu8_dwconv_config[1].channel_round = 1;
       qu8_dwconv_config[1].primary_tile = 25;
     }
-  #else
+  #elif XNN_ARCH_RISCV
+    qu8_dwconv_config[0].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qu8_dwconv_minmax_fp32_ukernel_9p2c__scalar_lrintf;
+    qu8_dwconv_config[0].init.qu8 = xnn_init_qu8_conv_minmax_fp32_scalar_lrintf_params;
+    qu8_dwconv_config[0].channel_tile = 2;
+    qu8_dwconv_config[0].channel_subtile = 2;
+    qu8_dwconv_config[0].channel_round = 1;
+    qu8_dwconv_config[0].primary_tile = 9;
+    qu8_dwconv_config[1].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qu8_dwconv_minmax_fp32_ukernel_25p2c__scalar_lrintf;
+    qu8_dwconv_config[1].init.qu8 = xnn_init_qu8_conv_minmax_fp32_scalar_lrintf_params;
+    qu8_dwconv_config[1].channel_tile = 2;
+    qu8_dwconv_config[1].channel_subtile = 2;
+    qu8_dwconv_config[1].channel_round = 1;
+    qu8_dwconv_config[1].primary_tile = 25;
+  #elif XNN_ARCH_PPC64
     qu8_dwconv_config[0].minmax.unipass = (xnn_dwconv_unipass_ukernel_fn) xnn_qu8_dwconv_minmax_fp32_ukernel_9p2c__scalar_lrintf;
     qu8_dwconv_config[0].init.qu8 = xnn_init_qu8_conv_minmax_fp32_scalar_lrintf_params;
     qu8_dwconv_config[0].channel_tile = 2;

@@ -4,21 +4,19 @@
 // LICENSE file in the root directory of this source tree.
 
 #include <assert.h>
-#include <inttypes.h>
+#include <math.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 
 #include <tfl-xnnpack.h>
 #include <xnnpack/log.h>
-#include <xnnpack/node-type.h>
-#include <xnnpack/operator-type.h>
 #include <xnnpack/operator.h>
+#include <xnnpack/params.h>
 #include <xnnpack/reshape-helpers.h>
-#include <xnnpack/subgraph-validation.h>
 #include <xnnpack/subgraph.h>
+#include <xnnpack/subgraph-validation.h>
 
-#include "pthreadpool.h"
 
 static enum xnn_status create_squared_difference_operator(
   const struct xnn_node* node,

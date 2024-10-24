@@ -5,11 +5,9 @@
 
 #include "convolution-test-helpers.h"
 
-#include <xnnpack/microparams.h>
-
 #include <algorithm>
-#include <cstddef>
 #include <cstdint>
+#include <cstddef>
 #include <vector>
 
 namespace xnnpack {

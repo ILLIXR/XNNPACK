@@ -463,7 +463,7 @@ def parse_prologue(input_file: str, lines: List[str], arch: str, minmax: bool,
       if minmax:
         prologue.append(f'#include <limits>')
       prologue.append('')
-      prologue.append('#include <tfl-xnnpack.h>')
+      prologue.append('#include <xnnpack.h>')
       prologue.append(f'#include <xnnpack/{arch}-assembler.h>')
       if kernel_type == GEMM:
         prologue.append('#include <xnnpack/gemm.h>')

@@ -5,13 +5,7 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
-#include <xnnpack/params.h>
-
-#include <cstddef>
-#include <cstring>
-
 #include <gmock/gmock.h>
 
 namespace xnnpack {

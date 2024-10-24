@@ -5,22 +5,24 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
-#include <memory>
+#include <functional>
 #include <numeric>
+#include <random>
 #include <vector>
 
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+
 
 class SpaceToDepthOperatorTester {
  public:
-  SpaceToDepthOperatorTester& input_size(size_t input_height, size_t input_width) {
+  inline SpaceToDepthOperatorTester& input_size(size_t input_height, size_t input_width) {
     assert(input_height >= 1);
     assert(input_width >= 1);
     this->input_height_ = input_height;
@@ -28,71 +30,71 @@ class SpaceToDepthOperatorTester {
     return *this;
   }
 
-  SpaceToDepthOperatorTester& input_height(size_t input_height) {
+  inline SpaceToDepthOperatorTester& input_height(size_t input_height) {
     assert(input_height >= 1);
     this->input_height_ = input_height;
     return *this;
   }
 
-  size_t input_height() const {
+  inline size_t input_height() const {
     return this->input_height_;
   }
 
-  SpaceToDepthOperatorTester& input_width(size_t input_width) {
+  inline SpaceToDepthOperatorTester& input_width(size_t input_width) {
     assert(input_width >= 1);
     this->input_width_ = input_width;
     return *this;
   }
 
-  size_t input_width() const {
+  inline size_t input_width() const {
     return this->input_width_;
   }
 
-  size_t output_height() const {
+  inline size_t output_height() const {
     assert(input_height() % block_size() == 0);
     return input_height() / block_size();
   }
 
-  size_t output_width() const {
+  inline size_t output_width() const {
     assert(input_width() % block_size() == 0);
     return input_width() / block_size();
   }
 
-  SpaceToDepthOperatorTester& block_size(size_t block_size) {
+  inline SpaceToDepthOperatorTester& block_size(size_t block_size) {
     assert(block_size >= 2);
     this->block_size_ = block_size;
     return *this;
   }
 
-  size_t block_size() const {
+  inline size_t block_size() const {
     return this->block_size_;
   }
 
-  SpaceToDepthOperatorTester& input_channels(size_t input_channels) {
+  inline SpaceToDepthOperatorTester& input_channels(size_t input_channels) {
     assert(input_channels != 0);
     this->input_channels_ = input_channels;
     return *this;
   }
 
-  size_t input_channels() const {
+  inline size_t input_channels() const {
     return this->input_channels_;
   }
 
-  size_t output_channels() const {
+  inline size_t output_channels() const {
     return input_channels() * block_size() * block_size();
   }
 
-  SpaceToDepthOperatorTester& batch_size(size_t batch_size) {
+  inline SpaceToDepthOperatorTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  size_t input_channels_stride() const {
+  inline size_t input_channels_stride() const {
     if (this->input_channels_stride_ == 0) {
       return input_channels();
     } else {
@@ -101,7 +103,7 @@ class SpaceToDepthOperatorTester {
     }
   }
 
-  size_t output_channels_stride() const {
+  inline size_t output_channels_stride() const {
     if (this->output_channels_stride_ == 0) {
       return output_channels();
     } else {
@@ -110,12 +112,12 @@ class SpaceToDepthOperatorTester {
     }
   }
 
-  SpaceToDepthOperatorTester& iterations(size_t iterations) {
+  inline SpaceToDepthOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 

@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <tfl-xnnpack.h>
+#include <xnnpack/normalization.h>
 
 #include "reduce-normalization-tester.h"
 

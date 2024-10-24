@@ -10,13 +10,27 @@ $EMIT_MAX = "MAX" in OP
 #include <assert.h>
 
 #include <xnnpack/common.h>
-#include <xnnpack/math.h>
+$if not WASM:
+  #include <xnnpack/math.h>
 #include <xnnpack/reduce.h>
 
+static int16_t math_signcompliment_f16(const uint16_t a) {
+  return (a & 0x7FFF) ^ -((int16_t) a < 0);
+}
+
+$if EMIT_MAX:
+  static uint16_t math_max_f16(const uint16_t a, const uint16_t b) {
+    return math_signcompliment_f16(a) > math_signcompliment_f16(b) ? a : b;
+  }
+
+$if EMIT_MIN:
+  static uint16_t math_min_f16(const uint16_t a, const uint16_t b) {
+    return math_signcompliment_f16(a) < math_signcompliment_f16(b) ? a : b;
+  }
 
 $ACC_SUFFIX = "" if ACCUMULATORS == 1 else "_acc%d" % ACCUMULATORS
-$MAX = "math_max_s16"
-$MIN = "math_min_s16"
+$MAX = "math_max_f16"
+$MIN = "math_min_f16"
 $ISA = "wasm" if WASM else "scalar"
 $MAX_POS = 1 if OP == "MINMAX" else 0
 void xnn_f16_r${OP.lower()}_ukernel__scalar_u${BATCH_TILE}${ACC_SUFFIX}(
@@ -33,15 +47,18 @@ void xnn_f16_r${OP.lower()}_ukernel__scalar_u${BATCH_TILE}${ACC_SUFFIX}(
   const uint16_t* i = (const uint16_t*) input;
   uint16_t* o = (uint16_t*) output;
 
-  int16_t vt = math_signcomplement_f16(*i);
-  $for A in range(ACCUMULATORS):
+  $if EMIT_MIN:
+    uint16_t vmin0 = *i;
+  $if EMIT_MAX:
+    uint16_t vmax0 = *i;
+  $for A in range(1, ACCUMULATORS):
     $if EMIT_MIN:
-      int16_t vmin${A} = vt;
+      uint16_t vmin${A} = vmin0;
     $if EMIT_MAX:
-      int16_t vmax${A} = vt;
+      uint16_t vmax${A} = vmax0;
   $if BATCH_TILE == 1:
     do {
-      vt = math_signcomplement_f16(*i++);
+      const uint16_t vt = *i++;
       $if EMIT_MIN:
         vmin0 = ${MIN}(vmin0, vt);
       $if EMIT_MAX:
@@ -51,7 +68,7 @@ void xnn_f16_r${OP.lower()}_ukernel__scalar_u${BATCH_TILE}${ACC_SUFFIX}(
   $else:
     for (; batch >= ${BATCH_TILE} * sizeof(uint16_t); batch -= ${BATCH_TILE} * sizeof(uint16_t)) {
       $for N in range(BATCH_TILE):
-        const int16_t vt${N} = math_signcomplement_f16(i[${N}]);
+        const uint16_t vt${N} = i[${N}];
       i += ${BATCH_TILE};
 
       $for N in range(BATCH_TILE):
@@ -73,14 +90,14 @@ void xnn_f16_r${OP.lower()}_ukernel__scalar_u${BATCH_TILE}${ACC_SUFFIX}(
 
     if XNN_UNLIKELY(batch != 0) {
       $if BATCH_TILE == 2:
-        vt = math_signcomplement_f16(*i);
+        const uint16_t vt = *i;
         $if EMIT_MIN:
           vmin0 = ${MIN}(vmin0, vt);
         $if EMIT_MAX:
           vmax0 = ${MAX}(vmax0, vt);
       $else:
         do {
-          vt = math_signcomplement_f16(*i++);
+          const uint16_t vt = *i++;
           $if EMIT_MIN:
             vmin0 = ${MIN}(vmin0, vt);
           $if EMIT_MAX:
@@ -89,7 +106,7 @@ void xnn_f16_r${OP.lower()}_ukernel__scalar_u${BATCH_TILE}${ACC_SUFFIX}(
         } while (batch != 0);
     }
   $if EMIT_MIN:
-    o[0] = (uint16_t) math_signcomplement_f16((uint16_t) vmin0);
+    o[0] = vmin0;
   $if EMIT_MAX:
-    o[${MAX_POS}] = (uint16_t) math_signcomplement_f16((uint16_t) vmax0);
+    o[${MAX_POS}] = vmax0;
 }

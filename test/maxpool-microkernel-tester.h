@@ -8,67 +8,66 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microparams.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/microparams-init.h>
+#include <xnnpack/microfnptr.h>
+
 
 class MaxPoolMicrokernelTester {
  public:
-  MaxPoolMicrokernelTester& output_pixels(size_t output_pixels) {
+  inline MaxPoolMicrokernelTester& output_pixels(size_t output_pixels) {
     assert(output_pixels != 0);
     this->output_pixels_ = output_pixels;
     return *this;
   }
 
-  size_t output_pixels() const {
+  inline size_t output_pixels() const {
     return this->output_pixels_;
   }
 
-  MaxPoolMicrokernelTester& step(size_t step) {
+  inline MaxPoolMicrokernelTester& step(size_t step) {
     assert(step != 0);
     this->step_ = step;
     return *this;
   }
 
-  size_t step() const {
+  inline size_t step() const {
     return this->step_;
   }
 
-  MaxPoolMicrokernelTester& input_offset(size_t input_offset) {
+  inline MaxPoolMicrokernelTester& input_offset(size_t input_offset) {
     assert(input_offset != 0);
     this->input_offset_ = input_offset;
     return *this;
   }
 
-  size_t input_offset() const {
+  inline size_t input_offset() const {
     return this->input_offset_;
   }
 
-  MaxPoolMicrokernelTester& pooling_elements(size_t pooling_elements) {
+  inline MaxPoolMicrokernelTester& pooling_elements(size_t pooling_elements) {
     assert(pooling_elements != 0);
     this->pooling_elements_ = pooling_elements;
     return *this;
   }
 
-  size_t pooling_elements() const {
+  inline size_t pooling_elements() const {
     return this->pooling_elements_;
   }
 
-  size_t packed_pooling_elements() const {
+  inline size_t packed_pooling_elements() const {
     if (pooling_elements() <= primary_pooling_tile()) {
       return primary_pooling_tile();
     } else {
@@ -76,50 +75,50 @@ class MaxPoolMicrokernelTester {
     }
   }
 
-  MaxPoolMicrokernelTester& pooling_tile(size_t primary_tile, size_t incremental_tile) {
+  inline MaxPoolMicrokernelTester& pooling_tile(size_t primary_tile, size_t incremental_tile) {
     assert(primary_tile != 0);
     this->primary_pooling_tile_ = primary_tile;
     this->incremental_pooling_tile_ = incremental_tile;
     return *this;
   }
 
-  MaxPoolMicrokernelTester& primary_pooling_tile(size_t primary_pooling_tile) {
+  inline MaxPoolMicrokernelTester& primary_pooling_tile(size_t primary_pooling_tile) {
     assert(primary_pooling_tile != 0);
     this->primary_pooling_tile_ = primary_pooling_tile;
     return *this;
   }
 
-  size_t primary_pooling_tile() const {
+  inline size_t primary_pooling_tile() const {
     return this->primary_pooling_tile_;
   }
 
-  MaxPoolMicrokernelTester& incremental_pooling_tile(size_t incremental_pooling_tile) {
+  inline MaxPoolMicrokernelTester& incremental_pooling_tile(size_t incremental_pooling_tile) {
     assert(incremental_pooling_tile != 0);
     this->incremental_pooling_tile_ = incremental_pooling_tile;
     return *this;
   }
 
-  size_t incremental_pooling_tile() const {
+  inline size_t incremental_pooling_tile() const {
     return this->incremental_pooling_tile_;
   }
 
-  MaxPoolMicrokernelTester& channels(size_t channels) {
+  inline MaxPoolMicrokernelTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  MaxPoolMicrokernelTester& output_stride(size_t output_stride) {
+  inline MaxPoolMicrokernelTester& output_stride(size_t output_stride) {
     assert(output_stride != 0);
     this->output_stride_ = output_stride;
     return *this;
   }
 
-  size_t output_stride() const {
+  inline size_t output_stride() const {
     if (this->output_stride_ == 0) {
       return channels();
     } else {
@@ -128,30 +127,30 @@ class MaxPoolMicrokernelTester {
     }
   }
 
-  MaxPoolMicrokernelTester& qmin(int16_t qmin) {
+  inline MaxPoolMicrokernelTester& qmin(int16_t qmin) {
     this->qmin_ = qmin;
     return *this;
   }
 
-  int16_t qmin() const {
+  inline int16_t qmin() const {
     return this->qmin_;
   }
 
-  MaxPoolMicrokernelTester& qmax(int16_t qmax) {
+  inline MaxPoolMicrokernelTester& qmax(int16_t qmax) {
     this->qmax_ = qmax;
     return *this;
   }
 
-  int16_t qmax() const {
+  inline int16_t qmax() const {
     return this->qmax_;
   }
 
-  MaxPoolMicrokernelTester& iterations(size_t iterations) {
+  inline MaxPoolMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
@@ -160,7 +159,8 @@ class MaxPoolMicrokernelTester {
     ASSERT_LE(qmax(), std::numeric_limits<int8_t>::max());
     ASSERT_LT(qmin(), qmax());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
 
@@ -231,7 +231,8 @@ class MaxPoolMicrokernelTester {
     ASSERT_LE(qmax(), std::numeric_limits<uint8_t>::max());
     ASSERT_LT(qmin(), qmax());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
 
@@ -300,7 +301,8 @@ class MaxPoolMicrokernelTester {
   void Test(xnn_f16_maxpool_ukernel_fn maxpool, xnn_init_f16_minmax_params_fn init_params) const {
     ASSERT_LT(qmin(), qmax());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-1.0f, 1.0f);
 
     std::vector<const uint16_t*> indirect_input((output_pixels() - 1) * step() + packed_pooling_elements());
@@ -388,7 +390,8 @@ class MaxPoolMicrokernelTester {
   void Test(xnn_f32_maxpool_ukernel_fn maxpool, xnn_init_f32_minmax_params_fn init_params) const {
     ASSERT_LT(qmin(), qmax());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-1.0f, 1.0f);
 
     std::vector<const float*> indirect_input((output_pixels() - 1) * step() + packed_pooling_elements());

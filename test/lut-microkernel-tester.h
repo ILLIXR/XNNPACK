@@ -8,56 +8,55 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/common.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/microfnptr.h>
+
 
 class LUTMicrokernelTester {
  public:
-  LUTMicrokernelTester& batch_size(size_t batch_size) {
+  inline LUTMicrokernelTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  LUTMicrokernelTester& inplace(bool inplace) {
+  inline LUTMicrokernelTester& inplace(bool inplace) {
     this->inplace_ = inplace;
     return *this;
   }
 
-  bool inplace() const {
+  inline bool inplace() const {
     return this->inplace_;
   }
 
-  LUTMicrokernelTester& iterations(size_t iterations) {
+  inline LUTMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_x8_lut_ukernel_fn lut) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto u8rng = std::bind(
       std::uniform_int_distribution<uint32_t>(0, std::numeric_limits<uint8_t>::max()), std::ref(rng));
 

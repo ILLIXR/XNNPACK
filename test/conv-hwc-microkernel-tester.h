@@ -5,38 +5,36 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microparams.h>
-#include <xnnpack/pack.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/pack.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
+
 
 class ConvHWCMicrokernelTester {
- public:
-  ConvHWCMicrokernelTester& output_channels_tile(
-      uint32_t output_channels_tile) {
+public:
+  inline ConvHWCMicrokernelTester& output_channels_tile(uint32_t output_channels_tile) {
     this->output_channels_tile_ = output_channels_tile;
     return *this;
   }
 
-  uint32_t output_channels_tile() const {
+  inline uint32_t output_channels_tile() const {
     return this->output_channels_tile_;
   }
 
-  ConvHWCMicrokernelTester& padding(uint32_t padding) {
+  inline ConvHWCMicrokernelTester& padding(uint32_t padding) {
     this->padding_top_ = padding;
     this->padding_right_ = padding;
     this->padding_bottom_ = padding;
@@ -44,55 +42,55 @@ class ConvHWCMicrokernelTester {
     return *this;
   }
 
-  ConvHWCMicrokernelTester& padding_height(uint32_t padding_height) {
+  inline ConvHWCMicrokernelTester& padding_height(uint32_t padding_height) {
     this->padding_top_ = padding_height;
     this->padding_bottom_ = padding_height;
     return *this;
   }
 
-  ConvHWCMicrokernelTester& padding_width(uint32_t padding_width) {
+  inline ConvHWCMicrokernelTester& padding_width(uint32_t padding_width) {
     this->padding_right_ = padding_width;
     this->padding_left_ = padding_width;
     return *this;
   }
 
-  ConvHWCMicrokernelTester& padding_top(uint32_t padding_top) {
+  inline ConvHWCMicrokernelTester& padding_top(uint32_t padding_top) {
     this->padding_top_ = padding_top;
     return *this;
   }
 
-  uint32_t padding_top() const {
+  inline uint32_t padding_top() const {
     return this->padding_top_;
   }
 
-  ConvHWCMicrokernelTester& padding_right(uint32_t padding_right) {
+  inline ConvHWCMicrokernelTester& padding_right(uint32_t padding_right) {
     this->padding_right_ = padding_right;
     return *this;
   }
 
-  uint32_t padding_right() const {
+  inline uint32_t padding_right() const {
     return this->padding_right_;
   }
 
-  ConvHWCMicrokernelTester& padding_bottom(uint32_t padding_bottom) {
+  inline ConvHWCMicrokernelTester& padding_bottom(uint32_t padding_bottom) {
     this->padding_bottom_ = padding_bottom;
     return *this;
   }
 
-  uint32_t padding_bottom() const {
+  inline uint32_t padding_bottom() const {
     return this->padding_bottom_;
   }
 
-  ConvHWCMicrokernelTester& padding_left(uint32_t padding_left) {
+  inline ConvHWCMicrokernelTester& padding_left(uint32_t padding_left) {
     this->padding_left_ = padding_left;
     return *this;
   }
 
-  uint32_t padding_left() const {
+  inline uint32_t padding_left() const {
     return this->padding_left_;
   }
 
-  ConvHWCMicrokernelTester& input_size(uint32_t input_height, uint32_t input_width) {
+  inline ConvHWCMicrokernelTester& input_size(uint32_t input_height, uint32_t input_width) {
     assert(input_height >= 1);
     assert(input_width >= 1);
     this->input_height_ = input_height;
@@ -100,129 +98,129 @@ class ConvHWCMicrokernelTester {
     return *this;
   }
 
-  ConvHWCMicrokernelTester& input_height(uint32_t input_height) {
+  inline ConvHWCMicrokernelTester& input_height(uint32_t input_height) {
     assert(input_height >= 1);
     this->input_height_ = input_height;
     return *this;
   }
 
-  uint32_t input_height() const {
+  inline uint32_t input_height() const {
     return this->input_height_;
   }
 
-  ConvHWCMicrokernelTester& input_width(uint32_t input_width) {
+  inline ConvHWCMicrokernelTester& input_width(uint32_t input_width) {
     assert(input_width >= 1);
     this->input_width_ = input_width;
     return *this;
   }
 
-  uint32_t input_width() const {
+  inline uint32_t input_width() const {
     return this->input_width_;
   }
 
-  ConvHWCMicrokernelTester& input_channels(size_t input_channels) {
+  inline ConvHWCMicrokernelTester& input_channels(size_t input_channels) {
     assert(input_channels >= 1);
     this->input_channels_ = input_channels;
     return *this;
   }
 
-  size_t input_channels() const {
+  inline size_t input_channels() const {
     return this->input_channels_;
   }
 
-  ConvHWCMicrokernelTester& output_channels(size_t output_channels) {
+  inline ConvHWCMicrokernelTester& output_channels(size_t output_channels) {
     assert(output_channels >= 1);
     this->output_channels_ = output_channels;
     return *this;
   }
 
-  size_t output_channels() const {
+  inline size_t output_channels() const {
     return this->output_channels_;
   }
 
-  size_t packed_output_channels() const {
+  inline size_t packed_output_channels() const {
     return output_channels() % output_channels_tile() == 0 ? output_channels() : output_channels() / output_channels_tile() * output_channels_tile() + output_channels_tile();
   }
 
-  ConvHWCMicrokernelTester& batch_size(size_t batch_size) {
+  inline ConvHWCMicrokernelTester& batch_size(size_t batch_size) {
     assert(batch_size >= 1);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  ConvHWCMicrokernelTester& kernel_size(uint32_t kernel_size) {
+  inline ConvHWCMicrokernelTester& kernel_size(uint32_t kernel_size) {
     assert(kernel_size >= 1);
     this->kernel_height_ = kernel_size;
     this->kernel_width_ = kernel_size;
     return *this;
   }
 
-  ConvHWCMicrokernelTester& kernel_height(uint32_t kernel_height) {
+  inline ConvHWCMicrokernelTester& kernel_height(uint32_t kernel_height) {
     assert(kernel_height >= 1);
     this->kernel_height_ = kernel_height;
     return *this;
   }
 
-  uint32_t kernel_height() const {
+  inline uint32_t kernel_height() const {
     return this->kernel_height_;
   }
 
-  ConvHWCMicrokernelTester& kernel_width(uint32_t kernel_width) {
+  inline ConvHWCMicrokernelTester& kernel_width(uint32_t kernel_width) {
     assert(kernel_width >= 1);
     this->kernel_width_ = kernel_width;
     return *this;
   }
 
-  uint32_t kernel_width() const {
+  inline uint32_t kernel_width() const {
     return this->kernel_width_;
   }
 
-  ConvHWCMicrokernelTester& subsampling(uint32_t subsampling) {
+  inline ConvHWCMicrokernelTester& subsampling(uint32_t subsampling) {
     assert(subsampling >= 1);
     this->subsampling_height_ = subsampling;
     this->subsampling_width_ = subsampling;
     return *this;
   }
 
-  ConvHWCMicrokernelTester& subsampling_height(uint32_t subsampling_height) {
+  inline ConvHWCMicrokernelTester& subsampling_height(uint32_t subsampling_height) {
     assert(subsampling_height >= 1);
     this->subsampling_height_ = subsampling_height;
     return *this;
   }
 
-  uint32_t subsampling_height() const {
+  inline uint32_t subsampling_height() const {
     return this->subsampling_height_;
   }
 
-  ConvHWCMicrokernelTester& subsampling_width(uint32_t subsampling_width) {
+  inline ConvHWCMicrokernelTester& subsampling_width(uint32_t subsampling_width) {
     assert(subsampling_width >= 1);
     this->subsampling_width_ = subsampling_width;
     return *this;
   }
 
-  uint32_t subsampling_width() const {
+  inline uint32_t subsampling_width() const {
     return this->subsampling_width_;
   }
 
-  ConvHWCMicrokernelTester& output_y_start(uint32_t output_y_start) {
+  inline ConvHWCMicrokernelTester& output_y_start(uint32_t output_y_start) {
     this->output_y_start_ = output_y_start;
     return *this;
   }
 
-  uint32_t output_y_start() const {
+  inline uint32_t output_y_start() const {
     return this->output_y_start_;
   }
 
-  ConvHWCMicrokernelTester& output_y_end(uint32_t output_y_end) {
+  inline ConvHWCMicrokernelTester& output_y_end(uint32_t output_y_end) {
     this->output_y_end_ = output_y_end;
     return *this;
   }
 
-  uint32_t output_y_end() const {
+  inline uint32_t output_y_end() const {
     if (this->output_y_end_ == std::numeric_limits<uint32_t>::max()) {
       return output_height();
     } else {
@@ -230,50 +228,50 @@ class ConvHWCMicrokernelTester {
     }
   }
 
-  size_t input_pixel_stride() const {
+  inline size_t input_pixel_stride() const {
     return input_channels();
   }
 
-  size_t output_pixel_stride() const {
+  inline size_t output_pixel_stride() const {
     return output_channels();
   }
 
-  size_t output_height() const {
+  inline size_t output_height() const {
     const size_t padded_input_height = padding_top() + input_height() + padding_bottom();
     return (std::max<size_t>(padded_input_height + subsampling_height(), kernel_height()) - kernel_height())
       / subsampling_height();
   }
 
-  size_t output_width() const {
+  inline size_t output_width() const {
     const size_t padded_input_width = padding_left() + input_width() + padding_right();
     return (std::max<size_t>(padded_input_width + subsampling_width(), kernel_width()) - kernel_width())
       / subsampling_width();
   }
 
-  ConvHWCMicrokernelTester& qmin(uint8_t qmin) {
+  inline ConvHWCMicrokernelTester& qmin(uint8_t qmin) {
     this->qmin_ = qmin;
     return *this;
   }
 
-  uint8_t qmin() const {
+  inline uint8_t qmin() const {
     return this->qmin_;
   }
 
-  ConvHWCMicrokernelTester& qmax(uint8_t qmax) {
+  inline ConvHWCMicrokernelTester& qmax(uint8_t qmax) {
     this->qmax_ = qmax;
     return *this;
   }
 
-  uint8_t qmax() const {
+  inline uint8_t qmax() const {
     return this->qmax_;
   }
 
-  ConvHWCMicrokernelTester& iterations(size_t iterations) {
+  inline ConvHWCMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
@@ -284,7 +282,8 @@ class ConvHWCMicrokernelTester {
     ASSERT_GE(output_width(), 1);
     ASSERT_GE(output_height(), 1);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.1f, 1.0f);
 
     std::vector<float> input(XNN_EXTRA_BYTES / sizeof(float) +

@@ -10,6 +10,7 @@
 #include <memory>
 #include <vector>
 
+#include <fp16/fp16.h>
 #include <gtest/gtest.h>
 
 #include <tfl-xnnpack.h>

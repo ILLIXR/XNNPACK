@@ -8,19 +8,14 @@
 //   Generator: tools/generate-vunary-test.py
 
 
-#include <array>
-#include <cmath>
-#include <cstddef>
-#include <limits>
-
-#include <xnnpack.h>
-#include <xnnpack/common.h>
-#include <xnnpack/isa-checks.h>
-#include <xnnpack/microparams-init.h>
-#include <xnnpack/microparams.h>
-#include <xnnpack/vunary.h>
+#include <vector>
 
 #include <gtest/gtest.h>
+
+#include <xnnpack/common.h>
+#include <xnnpack/isa-checks.h>
+#include <xnnpack/vunary.h>
+
 #include "vunary-microkernel-tester.h"
 
 
@@ -71,7 +66,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U4, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -83,7 +78,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U4, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -95,7 +90,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U4, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -154,7 +149,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U8, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -166,7 +161,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U8, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -178,7 +173,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U8, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -237,7 +232,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U12, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -249,7 +244,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U12, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -261,7 +256,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U12, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -320,7 +315,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U16, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -332,7 +327,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U16, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -344,7 +339,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U16, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -403,7 +398,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U20, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -415,7 +410,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U20, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -427,7 +422,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U20, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -486,7 +481,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U24, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -498,7 +493,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U24, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -510,7 +505,7 @@
 
   TEST(F32_VELU__NEON_RR2_LUT16_P3_U24, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -569,7 +564,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U4, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -581,7 +576,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U4, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -593,7 +588,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U4, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -652,7 +647,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U8, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -664,7 +659,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U8, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -676,7 +671,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U8, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -735,7 +730,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U12, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -747,7 +742,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U12, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -759,7 +754,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U12, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -818,7 +813,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U16, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -830,7 +825,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U16, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -842,7 +837,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U16, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -901,7 +896,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U20, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -913,7 +908,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U20, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -925,7 +920,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U20, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -984,7 +979,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U24, prescale) {
     TEST_REQUIRES_ARM_NEON;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -996,7 +991,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U24, alpha) {
     TEST_REQUIRES_ARM_NEON;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1008,7 +1003,7 @@
 
   TEST(F32_VELU__NEON_RR2_P6_U24, beta) {
     TEST_REQUIRES_ARM_NEON;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1067,7 +1062,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U4, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1079,7 +1074,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U4, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1091,7 +1086,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U4, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1150,7 +1145,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U8, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1162,7 +1157,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U8, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1174,7 +1169,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U8, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1233,7 +1228,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U12, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1245,7 +1240,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U12, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1257,7 +1252,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U12, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1316,7 +1311,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U16, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1328,7 +1323,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U16, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1340,7 +1335,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U16, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1399,7 +1394,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U20, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1411,7 +1406,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U20, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1423,7 +1418,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U20, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1482,7 +1477,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U24, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1494,7 +1489,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U24, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1506,7 +1501,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_LUT16_P3_U24, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1565,7 +1560,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U4, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1577,7 +1572,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U4, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1589,7 +1584,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U4, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1648,7 +1643,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U8, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1660,7 +1655,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U8, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1672,7 +1667,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U8, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1731,7 +1726,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U12, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1743,7 +1738,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U12, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1755,7 +1750,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U12, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1814,7 +1809,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U16, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1826,7 +1821,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U16, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1838,7 +1833,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U16, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1897,7 +1892,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U20, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1909,7 +1904,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U20, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1921,7 +1916,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U20, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1980,7 +1975,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U24, prescale) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -1992,7 +1987,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U24, alpha) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2004,7 +1999,7 @@
 
   TEST(F32_VELU__NEONFMA_RR1_P6_U24, beta) {
     TEST_REQUIRES_ARM_NEON_FMA;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2063,7 +2058,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U4, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2075,7 +2070,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U4, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2087,7 +2082,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U4, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2146,7 +2141,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U8, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2158,7 +2153,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U8, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2170,7 +2165,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U8, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2229,7 +2224,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U12, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2241,7 +2236,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U12, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2253,7 +2248,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U12, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2312,7 +2307,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U16, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2324,7 +2319,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U16, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2336,7 +2331,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U16, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2395,7 +2390,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U20, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2407,7 +2402,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U20, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2419,7 +2414,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U20, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2478,7 +2473,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U24, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2490,7 +2485,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U24, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2502,7 +2497,7 @@
 
   TEST(F32_VELU__SSE2_RR2_LUT16_P3_U24, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2561,7 +2556,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U4, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2573,7 +2568,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U4, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2585,7 +2580,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U4, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2644,7 +2639,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U8, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2656,7 +2651,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U8, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2668,7 +2663,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U8, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2727,7 +2722,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U12, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2739,7 +2734,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U12, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2751,7 +2746,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U12, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2810,7 +2805,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U16, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2822,7 +2817,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U16, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2834,7 +2829,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U16, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2893,7 +2888,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U20, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2905,7 +2900,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U20, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2917,7 +2912,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U20, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2976,7 +2971,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U24, prescale) {
     TEST_REQUIRES_X86_SSE2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -2988,7 +2983,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U24, alpha) {
     TEST_REQUIRES_X86_SSE2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3000,7 +2995,7 @@
 
   TEST(F32_VELU__SSE2_RR2_P6_U24, beta) {
     TEST_REQUIRES_X86_SSE2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3059,7 +3054,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U4, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3071,7 +3066,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U4, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3083,7 +3078,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U4, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3142,7 +3137,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U8, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3154,7 +3149,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U8, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3166,7 +3161,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U8, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3225,7 +3220,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U12, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3237,7 +3232,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U12, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3249,7 +3244,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U12, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3308,7 +3303,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U16, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3320,7 +3315,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U16, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3332,7 +3327,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U16, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3391,7 +3386,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U20, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3403,7 +3398,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U20, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3415,7 +3410,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U20, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3474,7 +3469,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U24, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3486,7 +3481,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U24, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3498,7 +3493,7 @@
 
   TEST(F32_VELU__SSE41_RR2_LUT16_P3_U24, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3557,7 +3552,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U4, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3569,7 +3564,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U4, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3581,7 +3576,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U4, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3640,7 +3635,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U8, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3652,7 +3647,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U8, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3664,7 +3659,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U8, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3723,7 +3718,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U12, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3735,7 +3730,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U12, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3747,7 +3742,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U12, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3806,7 +3801,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U16, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3818,7 +3813,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U16, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3830,7 +3825,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U16, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3889,7 +3884,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U20, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3901,7 +3896,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U20, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3913,7 +3908,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U20, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3972,7 +3967,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U24, prescale) {
     TEST_REQUIRES_X86_SSE41;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3984,7 +3979,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U24, alpha) {
     TEST_REQUIRES_X86_SSE41;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -3996,7 +3991,7 @@
 
   TEST(F32_VELU__SSE41_RR2_P6_U24, beta) {
     TEST_REQUIRES_X86_SSE41;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4055,7 +4050,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U8, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4067,7 +4062,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U8, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4079,7 +4074,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U8, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4138,7 +4133,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U16, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4150,7 +4145,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U16, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4162,7 +4157,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U16, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4221,7 +4216,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U24, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4233,7 +4228,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U24, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4245,7 +4240,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U24, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4304,7 +4299,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U32, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4316,7 +4311,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U32, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4328,7 +4323,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U32, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4387,7 +4382,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U40, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4399,7 +4394,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U40, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4411,7 +4406,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U40, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4470,7 +4465,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U48, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4482,7 +4477,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U48, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4494,7 +4489,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT4_P4_PERM_U48, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4553,7 +4548,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U8, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4565,7 +4560,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U8, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4577,7 +4572,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U8, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4636,7 +4631,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U16, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4648,7 +4643,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U16, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4660,7 +4655,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U16, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4719,7 +4714,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U24, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4731,7 +4726,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U24, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4743,7 +4738,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U24, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4802,7 +4797,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U32, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4814,7 +4809,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U32, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4826,7 +4821,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U32, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4885,7 +4880,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U40, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4897,7 +4892,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U40, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4909,7 +4904,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U40, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4968,7 +4963,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U48, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4980,7 +4975,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U48, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -4992,7 +4987,7 @@
 
   TEST(F32_VELU__AVX_RR2_LUT16_P3_U48, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5051,7 +5046,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U8, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5063,7 +5058,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U8, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5075,7 +5070,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U8, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5134,7 +5129,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U16, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5146,7 +5141,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U16, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5158,7 +5153,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U16, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5217,7 +5212,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U24, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5229,7 +5224,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U24, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5241,7 +5236,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U24, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5300,7 +5295,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U32, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5312,7 +5307,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U32, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5324,7 +5319,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U32, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5383,7 +5378,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U40, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5395,7 +5390,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U40, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5407,7 +5402,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U40, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5466,7 +5461,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U48, prescale) {
     TEST_REQUIRES_X86_AVX;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5478,7 +5473,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U48, alpha) {
     TEST_REQUIRES_X86_AVX;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5490,7 +5485,7 @@
 
   TEST(F32_VELU__AVX_RR2_P6_U48, beta) {
     TEST_REQUIRES_X86_AVX;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5549,7 +5544,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U8, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5561,7 +5556,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U8, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5573,7 +5568,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U8, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5632,7 +5627,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U16, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5644,7 +5639,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U16, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5656,7 +5651,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U16, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5715,7 +5710,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U24, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5727,7 +5722,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U24, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5739,7 +5734,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U24, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5798,7 +5793,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U32, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5810,7 +5805,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U32, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5822,7 +5817,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U32, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5881,7 +5876,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U40, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5893,7 +5888,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U40, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5905,7 +5900,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U40, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5964,7 +5959,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U48, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5976,7 +5971,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U48, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -5988,7 +5983,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U48, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6047,7 +6042,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U56, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6059,7 +6054,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U56, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6071,7 +6066,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U56, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6130,7 +6125,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U64, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6142,7 +6137,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U64, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6154,7 +6149,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U64, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6213,7 +6208,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U72, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6225,7 +6220,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U72, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6237,7 +6232,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U72, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6296,7 +6291,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U80, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6308,7 +6303,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U80, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6320,7 +6315,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT4_P4_PERM_U80, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6379,7 +6374,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U8, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6391,7 +6386,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U8, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6403,7 +6398,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U8, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6462,7 +6457,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U16, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6474,7 +6469,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U16, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6486,7 +6481,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U16, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6545,7 +6540,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U24, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6557,7 +6552,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U24, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6569,7 +6564,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U24, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6628,7 +6623,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U32, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6640,7 +6635,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U32, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6652,7 +6647,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U32, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6711,7 +6706,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U40, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6723,7 +6718,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U40, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6735,7 +6730,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U40, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6794,7 +6789,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U48, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6806,7 +6801,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U48, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6818,7 +6813,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U48, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6877,7 +6872,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U56, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6889,7 +6884,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U56, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6901,7 +6896,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U56, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6960,7 +6955,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U64, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6972,7 +6967,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U64, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -6984,7 +6979,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U64, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7043,7 +7038,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U72, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7055,7 +7050,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U72, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7067,7 +7062,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U72, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7126,7 +7121,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U80, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7138,7 +7133,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U80, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7150,7 +7145,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT8_P4_PERM_U80, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7209,7 +7204,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U8, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7221,7 +7216,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U8, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7233,7 +7228,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U8, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7292,7 +7287,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U16, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7304,7 +7299,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U16, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7316,7 +7311,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U16, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7375,7 +7370,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U24, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7387,7 +7382,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U24, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7399,7 +7394,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U24, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7458,7 +7453,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U32, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7470,7 +7465,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U32, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7482,7 +7477,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U32, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7541,7 +7536,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U40, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7553,7 +7548,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U40, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7565,7 +7560,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U40, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7624,7 +7619,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U48, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7636,7 +7631,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U48, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7648,7 +7643,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U48, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7707,7 +7702,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U56, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7719,7 +7714,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U56, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7731,7 +7726,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U56, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7790,7 +7785,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U64, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7802,7 +7797,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U64, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7814,7 +7809,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U64, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7873,7 +7868,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U72, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7885,7 +7880,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U72, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7897,7 +7892,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U72, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7956,7 +7951,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U80, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7968,7 +7963,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U80, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -7980,7 +7975,7 @@
 
   TEST(F32_VELU__AVX2_RR1_LUT16_P3_GATHER_U80, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8039,7 +8034,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U8, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8051,7 +8046,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U8, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8063,7 +8058,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U8, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8122,7 +8117,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U16, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8134,7 +8129,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U16, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8146,7 +8141,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U16, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8205,7 +8200,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U24, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8217,7 +8212,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U24, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8229,7 +8224,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U24, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8288,7 +8283,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U32, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8300,7 +8295,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U32, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8312,7 +8307,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U32, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8371,7 +8366,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U40, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8383,7 +8378,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U40, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8395,7 +8390,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U40, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 200; batch_size += 39) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8454,7 +8449,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U48, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8466,7 +8461,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U48, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8478,7 +8473,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U48, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8537,7 +8532,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U56, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8549,7 +8544,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U56, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8561,7 +8556,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U56, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 280; batch_size += 55) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8620,7 +8615,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U64, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8632,7 +8627,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U64, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8644,7 +8639,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U64, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8703,7 +8698,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U72, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8715,7 +8710,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U72, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8727,7 +8722,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U72, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 360; batch_size += 71) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8786,7 +8781,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U80, prescale) {
     TEST_REQUIRES_X86_AVX2;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8798,7 +8793,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U80, alpha) {
     TEST_REQUIRES_X86_AVX2;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8810,7 +8805,7 @@
 
   TEST(F32_VELU__AVX2_RR1_P6_U80, beta) {
     TEST_REQUIRES_X86_AVX2;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8869,7 +8864,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U16, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8881,7 +8876,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U16, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8893,7 +8888,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U16, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8952,7 +8947,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U32, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8964,7 +8959,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U32, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -8976,7 +8971,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U32, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9035,7 +9030,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U48, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9047,7 +9042,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U48, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9059,7 +9054,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U48, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9118,7 +9113,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U64, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9130,7 +9125,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U64, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9142,7 +9137,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U64, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9201,7 +9196,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U80, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9213,7 +9208,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U80, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9225,7 +9220,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U80, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9284,7 +9279,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U96, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 480; batch_size += 95) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9296,7 +9291,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U96, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 480; batch_size += 95) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9308,7 +9303,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U96, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 480; batch_size += 95) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9367,7 +9362,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U112, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 560; batch_size += 111) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9379,7 +9374,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U112, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 560; batch_size += 111) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9391,7 +9386,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U112, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 560; batch_size += 111) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9450,7 +9445,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U128, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 640; batch_size += 127) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9462,7 +9457,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U128, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 640; batch_size += 127) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9474,7 +9469,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_LUT16_P3_PERM_U128, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 640; batch_size += 127) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9533,7 +9528,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U16, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9545,7 +9540,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U16, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9557,7 +9552,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U16, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9616,7 +9611,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U32, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9628,7 +9623,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U32, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9640,7 +9635,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U32, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 160; batch_size += 31) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9699,7 +9694,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U48, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9711,7 +9706,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U48, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9723,7 +9718,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U48, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 240; batch_size += 47) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9782,7 +9777,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U64, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9794,7 +9789,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U64, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9806,7 +9801,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U64, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 320; batch_size += 63) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9865,7 +9860,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U80, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9877,7 +9872,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U80, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9889,7 +9884,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U80, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 400; batch_size += 79) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9948,7 +9943,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U96, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 480; batch_size += 95) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9960,7 +9955,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U96, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 480; batch_size += 95) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -9972,7 +9967,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U96, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 480; batch_size += 95) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10031,7 +10026,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U112, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 560; batch_size += 111) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10043,7 +10038,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U112, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 560; batch_size += 111) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10055,7 +10050,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U112, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 560; batch_size += 111) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10114,7 +10109,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U128, prescale) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 640; batch_size += 127) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10126,7 +10121,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U128, alpha) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 640; batch_size += 127) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10138,7 +10133,7 @@
 
   TEST(F32_VELU__AVX512F_RR1_P6_U128, beta) {
     TEST_REQUIRES_X86_AVX512F;
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 640; batch_size += 127) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10191,7 +10186,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10202,7 +10197,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10213,7 +10208,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10266,7 +10261,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U8, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10277,7 +10272,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U8, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10288,7 +10283,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U8, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10341,7 +10336,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U12, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10352,7 +10347,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U12, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10363,7 +10358,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U12, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10416,7 +10411,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U16, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10427,7 +10422,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U16, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10438,7 +10433,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U16, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10491,7 +10486,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U20, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10502,7 +10497,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U20, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10513,7 +10508,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U20, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10566,7 +10561,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U24, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10577,7 +10572,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U24, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10588,7 +10583,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_LUT16_P3_U24, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10641,7 +10636,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10652,7 +10647,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10663,7 +10658,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10716,7 +10711,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U8, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10727,7 +10722,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U8, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10738,7 +10733,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U8, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10791,7 +10786,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U12, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10802,7 +10797,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U12, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10813,7 +10808,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U12, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10866,7 +10861,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U16, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10877,7 +10872,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U16, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10888,7 +10883,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U16, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10941,7 +10936,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U20, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10952,7 +10947,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U20, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -10963,7 +10958,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U20, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11016,7 +11011,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U24, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11027,7 +11022,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U24, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11038,7 +11033,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_ARM_RR2_P6_U24, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11091,7 +11086,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11102,7 +11097,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11113,7 +11108,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11166,7 +11161,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U8, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11177,7 +11172,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U8, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11188,7 +11183,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U8, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11241,7 +11236,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U12, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11252,7 +11247,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U12, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11263,7 +11258,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U12, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11316,7 +11311,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U16, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11327,7 +11322,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U16, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11338,7 +11333,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U16, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11391,7 +11386,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U20, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11402,7 +11397,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U20, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11413,7 +11408,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U20, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11466,7 +11461,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U24, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11477,7 +11472,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U24, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11488,7 +11483,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_LUT16_P3_U24, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11541,7 +11536,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11552,7 +11547,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11563,7 +11558,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11616,7 +11611,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U8, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11627,7 +11622,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U8, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11638,7 +11633,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U8, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11691,7 +11686,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U12, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11702,7 +11697,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U12, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11713,7 +11708,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U12, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11766,7 +11761,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U16, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11777,7 +11772,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U16, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11788,7 +11783,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U16, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11841,7 +11836,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U20, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11852,7 +11847,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U20, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11863,7 +11858,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U20, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11916,7 +11911,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U24, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11927,7 +11922,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U24, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11938,7 +11933,7 @@
   }
 
   TEST(F32_VELU__WASMSIMD_X86_RR2_P6_U24, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -11991,7 +11986,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12002,7 +11997,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12013,7 +12008,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12066,7 +12061,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U8, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12077,7 +12072,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U8, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12088,7 +12083,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U8, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12141,7 +12136,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U12, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12152,7 +12147,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U12, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12163,7 +12158,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U12, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12216,7 +12211,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U16, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12227,7 +12222,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U16, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12238,7 +12233,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U16, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12291,7 +12286,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U20, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12302,7 +12297,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U20, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12313,7 +12308,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U20, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12366,7 +12361,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U24, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12377,7 +12372,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U24, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12388,7 +12383,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_LUT16_P3_U24, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12441,7 +12436,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12452,7 +12447,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12463,7 +12458,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12516,7 +12511,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U8, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12527,7 +12522,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U8, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12538,7 +12533,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U8, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12591,7 +12586,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U12, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12602,7 +12597,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U12, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12613,7 +12608,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U12, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12666,7 +12661,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U16, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12677,7 +12672,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U16, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12688,7 +12683,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U16, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12741,7 +12736,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U20, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12752,7 +12747,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U20, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12763,7 +12758,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U20, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12816,7 +12811,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U24, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12827,7 +12822,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U24, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12838,7 +12833,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_FMA_RR2_P6_U24, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12891,7 +12886,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12902,7 +12897,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12913,7 +12908,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12966,7 +12961,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U8, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12977,7 +12972,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U8, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -12988,7 +12983,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U8, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13041,7 +13036,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U12, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13052,7 +13047,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U12, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13063,7 +13058,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U12, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13116,7 +13111,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U16, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13127,7 +13122,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U16, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13138,7 +13133,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U16, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13191,7 +13186,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U20, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13202,7 +13197,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U20, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13213,7 +13208,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U20, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13266,7 +13261,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U24, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13277,7 +13272,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U24, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13288,7 +13283,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_LUT16_P3_U24, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13341,7 +13336,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13352,7 +13347,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13363,7 +13358,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13416,7 +13411,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U8, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13427,7 +13422,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U8, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13438,7 +13433,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U8, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 40; batch_size += 7) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13491,7 +13486,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U12, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13502,7 +13497,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U12, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13513,7 +13508,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U12, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 60; batch_size += 11) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13566,7 +13561,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U16, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13577,7 +13572,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U16, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13588,7 +13583,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U16, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 80; batch_size += 15) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13641,7 +13636,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U20, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13652,7 +13647,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U20, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13663,7 +13658,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U20, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 100; batch_size += 19) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13716,7 +13711,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U24, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13727,7 +13722,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U24, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13738,7 +13733,7 @@
   }
 
   TEST(F32_VELU__WASMRELAXEDSIMD_RR2_P6_U24, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 120; batch_size += 23) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13775,7 +13770,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U1, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13786,7 +13781,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U1, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13797,7 +13792,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U1, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13850,7 +13845,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U2, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13861,7 +13856,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U2, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13872,7 +13867,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U2, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13925,7 +13920,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U3, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13936,7 +13931,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U3, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -13947,7 +13942,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U3, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14000,7 +13995,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14011,7 +14006,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14022,7 +14017,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14075,7 +14070,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U5, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14086,7 +14081,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U5, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14097,7 +14092,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U5, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14150,7 +14145,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U6, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14161,7 +14156,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U6, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14172,7 +14167,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_LUT16_P3_U6, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14209,7 +14204,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U1, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14220,7 +14215,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U1, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14231,7 +14226,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U1, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14284,7 +14279,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U2, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14295,7 +14290,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U2, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14306,7 +14301,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U2, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14359,7 +14354,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U3, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14370,7 +14365,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U3, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14381,7 +14376,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U3, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14434,7 +14429,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U4, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14445,7 +14440,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U4, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14456,7 +14451,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U4, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14509,7 +14504,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U5, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14520,7 +14515,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U5, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14531,7 +14526,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U5, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14584,7 +14579,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U6, prescale) {
-    for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+    for (float prescale : std::vector<float>({0.1f, 10.0f})) {
       for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14595,7 +14590,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U6, alpha) {
-    for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float alpha : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14606,7 +14601,7 @@
   }
 
   TEST(F32_VELU__WASM_RR2_P6_U6, beta) {
-    for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+    for (float beta : std::vector<float>({0.3f, 3.0f})) {
       for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
         VUnaryMicrokernelTester()
           .batch_size(batch_size)
@@ -14642,7 +14637,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U1, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U1, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14653,7 +14648,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U1, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U1, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14664,7 +14659,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U1, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U1, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14715,7 +14710,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U2, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U2, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14726,7 +14721,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U2, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U2, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14737,7 +14732,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U2, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U2, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14788,7 +14783,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U3, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U3, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14799,7 +14794,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U3, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U3, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14810,7 +14805,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U3, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U3, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14861,7 +14856,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U4, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U4, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14872,7 +14867,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U4, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U4, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14883,7 +14878,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U4, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U4, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14934,7 +14929,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U5, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U5, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14945,7 +14940,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U5, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U5, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -14956,7 +14951,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U5, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U5, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15007,7 +15002,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U6, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U6, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15018,7 +15013,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U6, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U6, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15029,7 +15024,7 @@ TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U6, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_LUT16_P3_U6, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15064,7 +15059,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U1, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U1, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15075,7 +15070,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U1, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U1, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15086,7 +15081,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U1, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U1, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 5; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15137,7 +15132,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U2, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U2, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15148,7 +15143,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U2, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U2, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15159,7 +15154,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U2, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U2, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 10; batch_size += 1) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15210,7 +15205,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U3, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U3, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15221,7 +15216,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U3, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U3, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15232,7 +15227,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U3, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U3, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 15; batch_size += 2) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15283,7 +15278,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U4, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U4, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15294,7 +15289,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U4, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U4, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15305,7 +15300,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U4, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U4, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 20; batch_size += 3) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15356,7 +15351,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U5, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U5, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15367,7 +15362,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U5, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U5, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15378,7 +15373,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U5, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U5, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 25; batch_size += 4) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15429,7 +15424,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U6, inplace) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U6, prescale) {
-  for (float prescale : std::array<float, 2>({0.1f, 10.0f})) {
+  for (float prescale : std::vector<float>({0.1f, 10.0f})) {
     for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15440,7 +15435,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U6, prescale) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U6, alpha) {
-  for (float alpha : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float alpha : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)
@@ -15451,7 +15446,7 @@ TEST(F32_VELU__SCALAR_RR2_P6_U6, alpha) {
 }
 
 TEST(F32_VELU__SCALAR_RR2_P6_U6, beta) {
-  for (float beta : std::array<float, 2>({0.3f, 3.0f})) {
+  for (float beta : std::vector<float>({0.3f, 3.0f})) {
     for (size_t batch_size = 1; batch_size <= 30; batch_size += 5) {
       VUnaryMicrokernelTester()
         .batch_size(batch_size)

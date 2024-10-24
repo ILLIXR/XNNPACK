@@ -100,13 +100,11 @@
   init: xnn_init_f32_expminus_neonfma_rr1_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__neonfma_rr1_p5_u20_acc5
   init: xnn_init_f32_expminus_neonfma_rr1_p5_params
-
 # RISC-V Vector
 - name: xnn_f32_raddstoreexpminusmax_ukernel__rvv_rr2_p6_u2v
   init: xnn_init_f32_expminus_rvv_rr2_p6_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__rvv_rr2_p6_u4v
   init: xnn_init_f32_expminus_rvv_rr2_p6_params
-
 # x86 SSE
 - name: xnn_f32_raddstoreexpminusmax_ukernel__sse2_rr2_p5_u4
   init: xnn_init_f32_expminus_sse2_rr2_p5_params
@@ -132,14 +130,7 @@
   init: xnn_init_f32_expminus_sse2_rr2_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__sse2_rr2_p5_u20_acc5
   init: xnn_init_f32_expminus_sse2_rr2_p5_params
-
 # x86 AVX
-- name: xnn_f32_raddstoreexpminusmax_ukernel__avx2_rr1_p5_u32
-  init: xnn_init_f32_expminus_avx2_rr1_p5_params
-- name: xnn_f32_raddstoreexpminusmax_ukernel__avx2_rr1_p5_u32_acc2
-  init: xnn_init_f32_expminus_avx2_rr1_p5_params
-- name: xnn_f32_raddstoreexpminusmax_ukernel__avx2_rr1_p5_u32_acc4
-  init: xnn_init_f32_expminus_avx2_rr1_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__avx2_rr1_p5_u64
   init: xnn_init_f32_expminus_avx2_rr1_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__avx2_rr1_p5_u64_acc2
@@ -164,14 +155,7 @@
   init: xnn_init_f32_expminus_avx2_rr1_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__avx2_rr1_p5_u96_acc6
   init: xnn_init_f32_expminus_avx2_rr1_p5_params
-
 # x86 AVX512
-- name: xnn_f32_raddstoreexpminusmax_ukernel__avx512f_rr1_p5_scalef_u64
-  init: xnn_init_f32_expminus_avx512_rr1_p5_params
-- name: xnn_f32_raddstoreexpminusmax_ukernel__avx512f_rr1_p5_scalef_u64_acc2
-  init: xnn_init_f32_expminus_avx512_rr1_p5_params
-- name: xnn_f32_raddstoreexpminusmax_ukernel__avx512f_rr1_p5_scalef_u64_acc4
-  init: xnn_init_f32_expminus_avx512_rr1_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__avx512f_rr1_p5_scalef_u128
   init: xnn_init_f32_expminus_avx512_rr1_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__avx512f_rr1_p5_scalef_u128_acc2
@@ -196,7 +180,6 @@
   init: xnn_init_f32_expminus_avx512_rr1_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__avx512f_rr1_p5_scalef_u192_acc6
   init: xnn_init_f32_expminus_avx512_rr1_p5_params
-
 # WAsm SIMD
 - name: xnn_f32_raddstoreexpminusmax_ukernel__wasmsimd_rr2_p5_u4
   init: xnn_init_f32_expminus_wasmsimd_rr2_p5_params
@@ -222,7 +205,6 @@
   init: xnn_init_f32_expminus_wasmsimd_rr2_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__wasmsimd_rr2_p5_u20_acc5
   init: xnn_init_f32_expminus_wasmsimd_rr2_p5_params
-
 # WAsm Relaxed SIMD
 - name: xnn_f32_raddstoreexpminusmax_ukernel__wasmrelaxedsimd_rr2_p5_u4
   init: xnn_init_f32_expminus_wasmsimd_rr2_p5_params
@@ -248,7 +230,6 @@
   init: xnn_init_f32_expminus_wasmsimd_rr2_p5_params
 - name: xnn_f32_raddstoreexpminusmax_ukernel__wasmrelaxedsimd_rr2_p5_u20_acc5
   init: xnn_init_f32_expminus_wasmsimd_rr2_p5_params
-
 # Scalar
 - name: xnn_f32_raddstoreexpminusmax_ukernel__scalar_rr2_lut64_p2_u1
   init: xnn_init_f32_expminus_scalar_rr2_lut64_p2_params

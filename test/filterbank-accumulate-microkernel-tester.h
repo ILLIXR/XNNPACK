@@ -5,43 +5,46 @@
 
 #pragma once
 
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <numeric>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/microfnptr.h>
+
 
 class FilterbankAccumulateMicrokernelTester {
  public:
-  FilterbankAccumulateMicrokernelTester& rows(size_t rows) {
+  inline FilterbankAccumulateMicrokernelTester& rows(size_t rows) {
     assert(rows != 0);
     this->rows_ = rows;
     return *this;
   }
 
-  size_t rows() const {
+  inline size_t rows() const {
     return this->rows_;
   }
 
-  FilterbankAccumulateMicrokernelTester& iterations(size_t iterations) {
+  inline FilterbankAccumulateMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_u32_filterbank_accumulate_ukernel_fn filterbank_accumulate) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> u8dist(1, 10);
     std::uniform_int_distribution<uint16_t> u16dist;
     std::uniform_int_distribution<uint32_t> u32dist;

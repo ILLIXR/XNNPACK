@@ -8,65 +8,65 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microparams.h>
-#include <xnnpack/requantization.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
+#include <xnnpack/requantization.h>
+
 
 class GAvgPoolMicrokernelTester {
  public:
-  GAvgPoolMicrokernelTester& rows(size_t rows) {
+  inline GAvgPoolMicrokernelTester& rows(size_t rows) {
     assert(rows != 0);
     this->rows_ = rows;
     return *this;
   }
 
-  size_t rows() const {
+  inline size_t rows() const {
     return this->rows_;
   }
 
-  GAvgPoolMicrokernelTester& channels(size_t channels) {
+  inline GAvgPoolMicrokernelTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  GAvgPoolMicrokernelTester& channel_tile(size_t channel_tile) {
+  inline GAvgPoolMicrokernelTester& channel_tile(size_t channel_tile) {
     assert(channel_tile != 0);
     this->channel_tile_ = channel_tile;
     return *this;
   }
 
-  size_t channel_tile() const {
+  inline size_t channel_tile() const {
     return this->channel_tile_;
   }
 
-  GAvgPoolMicrokernelTester& input_stride(size_t input_stride) {
+  inline GAvgPoolMicrokernelTester& input_stride(size_t input_stride) {
     assert(input_stride != 0);
     this->input_stride_ = input_stride;
     return *this;
   }
 
-  size_t input_stride() const {
+  inline size_t input_stride() const {
     if (this->input_stride_ == 0) {
       return channels();
     } else {
@@ -75,70 +75,70 @@ class GAvgPoolMicrokernelTester {
     }
   }
 
-  GAvgPoolMicrokernelTester& input_scale(float input_scale) {
+  inline GAvgPoolMicrokernelTester& input_scale(float input_scale) {
     assert(input_scale > 0.0f);
     assert(std::isnormal(input_scale));
     this->input_scale_ = input_scale;
     return *this;
   }
 
-  float input_scale() const {
+  inline float input_scale() const {
     return this->input_scale_;
   }
 
-  GAvgPoolMicrokernelTester& input_zero_point(uint8_t input_zero_point) {
+  inline GAvgPoolMicrokernelTester& input_zero_point(uint8_t input_zero_point) {
     this->input_zero_point_ = input_zero_point;
     return *this;
   }
 
-  uint8_t input_zero_point() const {
+  inline uint8_t input_zero_point() const {
     return this->input_zero_point_;
   }
 
-  GAvgPoolMicrokernelTester& output_scale(float output_scale) {
+  inline GAvgPoolMicrokernelTester& output_scale(float output_scale) {
     assert(output_scale > 0.0f);
     assert(std::isnormal(output_scale));
     this->output_scale_ = output_scale;
     return *this;
   }
 
-  float output_scale() const {
+  inline float output_scale() const {
     return this->output_scale_;
   }
 
-  GAvgPoolMicrokernelTester& output_zero_point(uint8_t output_zero_point) {
+  inline GAvgPoolMicrokernelTester& output_zero_point(uint8_t output_zero_point) {
     this->output_zero_point_ = output_zero_point;
     return *this;
   }
 
-  uint8_t output_zero_point() const {
+  inline uint8_t output_zero_point() const {
     return this->output_zero_point_;
   }
 
-  GAvgPoolMicrokernelTester& qmin(uint8_t qmin) {
+  inline GAvgPoolMicrokernelTester& qmin(uint8_t qmin) {
     this->qmin_ = qmin;
     return *this;
   }
 
-  uint8_t qmin() const {
+  inline uint8_t qmin() const {
     return this->qmin_;
   }
 
-  GAvgPoolMicrokernelTester& qmax(uint8_t qmax) {
+  inline GAvgPoolMicrokernelTester& qmax(uint8_t qmax) {
     this->qmax_ = qmax;
     return *this;
   }
 
-  uint8_t qmax() const {
+  inline uint8_t qmax() const {
     return this->qmax_;
   }
 
-  GAvgPoolMicrokernelTester& iterations(size_t iterations) {
+  inline GAvgPoolMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
@@ -147,7 +147,8 @@ class GAvgPoolMicrokernelTester {
       xnn_init_qu8_avgpool_minmax_params_fn init_params,
       xnn_qu8_requantize_fn requantize) const
   {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
 
@@ -212,7 +213,8 @@ class GAvgPoolMicrokernelTester {
       xnn_init_qu8_avgpool_minmax_params_fn init_params,
       xnn_qu8_requantize_fn requantize) const
   {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
 
@@ -280,7 +282,8 @@ class GAvgPoolMicrokernelTester {
       xnn_init_qs8_avgpool_minmax_params_fn init_params,
       xnn_qs8_requantize_fn requantize) const
   {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
 
@@ -345,7 +348,8 @@ class GAvgPoolMicrokernelTester {
       xnn_init_qs8_avgpool_minmax_params_fn init_params,
       xnn_qs8_requantize_fn requantize) const
   {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
 
@@ -408,7 +412,8 @@ class GAvgPoolMicrokernelTester {
   }
 
   void Test(xnn_f16_gavgpool_minmax_unipass_ukernel_fn gavgpool_minmax, xnn_init_f16_scaleminmax_params_fn init_params) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<uint16_t> input((rows() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(uint16_t));
@@ -469,7 +474,8 @@ class GAvgPoolMicrokernelTester {
   }
 
   void Test(xnn_f16_gavgpool_minmax_multipass_ukernel_fn gavgpool_minmax, xnn_init_f16_scaleminmax_params_fn init_params) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<uint16_t> input((rows() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(uint16_t));
@@ -530,7 +536,8 @@ class GAvgPoolMicrokernelTester {
   }
 
   void Test(xnn_f32_gavgpool_minmax_unipass_ukernel_fn gavgpool_minmax, xnn_init_f32_scaleminmax_params_fn init_params) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<float> input((rows() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(float));
@@ -588,7 +595,8 @@ class GAvgPoolMicrokernelTester {
   }
 
   void Test(xnn_f32_gavgpool_minmax_multipass_ukernel_fn gavgpool_minmax, xnn_init_f32_scaleminmax_params_fn init_params) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<float> input((rows() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(float));
@@ -598,7 +606,8 @@ class GAvgPoolMicrokernelTester {
     std::vector<float> output_ref(channels());
     for (size_t iteration = 0; iteration < iterations(); iteration++) {
       std::generate(input.begin(), input.end(), [&]() { return f32dist(rng); });
-      std::fill(output.begin(), output.end(), 0.f); // kernels accumulate.
+      std::fill(output.begin(), output.end(), std::nanf(""));
+
       // Compute reference results, without clamping.
       for (size_t c = 0; c < channels(); c++) {
         float acc = 0.0f;

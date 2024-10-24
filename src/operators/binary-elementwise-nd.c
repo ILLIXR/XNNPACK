@@ -4,27 +4,19 @@
 // LICENSE file in the root directory of this source tree.
 
 #include <assert.h>
-#include <inttypes.h>
 #include <math.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
+
+#include <fp16/fp16.h>
 
 #include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
-#include <xnnpack/common.h>
-#include <xnnpack/compute.h>
 #include <xnnpack/config.h>
 #include <xnnpack/log.h>
-#include <xnnpack/math.h>
-#include <xnnpack/microparams.h>
-#include <xnnpack/operator-type.h>
+#include <xnnpack/microparams-init.h>
 #include <xnnpack/operator.h>
-#include <xnnpack/params.h>
-
-#include <fp16/fp16.h>
-#include "pthreadpool.h"
 
 static void init_binary_elementwise_nd(
   const void* params,

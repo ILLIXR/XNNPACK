@@ -5,48 +5,46 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
-#include <cassert>
-#include <cmath>
+#include <chrono>
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/microfnptr.h>
+
 
 class VScaleExtExpMicrokernelTester {
  public:
-  VScaleExtExpMicrokernelTester& elements(size_t elements) {
+  inline VScaleExtExpMicrokernelTester& elements(size_t elements) {
     assert(elements != 0);
     this->elements_ = elements;
     return *this;
   }
 
-  size_t elements() const {
+  inline size_t elements() const {
     return this->elements_;
   }
 
-  VScaleExtExpMicrokernelTester& iterations(size_t iterations) {
+  inline VScaleExtExpMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_f32_vscaleextexp_ukernel_fn vscaleextexp) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     // Choose such range that expf(x[i]) overflows, but double-precision exp doesn't overflow.
-    auto f32rng = [&rng]() {
-      return std::uniform_real_distribution<float>(90.0f, 100.0f)(rng);
-    };
+    auto f32rng = std::bind(std::uniform_real_distribution<float>(90.0f, 100.0f), rng);
 
     std::vector<float> x(elements() + XNN_EXTRA_BYTES / sizeof(float));
     std::vector<float> y(elements());

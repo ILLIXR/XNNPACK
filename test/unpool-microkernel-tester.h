@@ -5,58 +5,57 @@
 
 #pragma once
 
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <xnnpack/microfnptr.h>
+
 
 class UnpoolMicrokernelTester {
  public:
-  UnpoolMicrokernelTester& p(size_t p) {
+  inline UnpoolMicrokernelTester& p(size_t p) {
     assert(p != 0);
     this->p_ = p;
     return *this;
   }
 
-  size_t p() const {
+  inline size_t p() const {
     return this->p_;
   }
 
-  UnpoolMicrokernelTester& c(size_t c) {
+  inline UnpoolMicrokernelTester& c(size_t c) {
     assert(c != 0);
     this->c_ = c;
     return *this;
   }
 
-  size_t c() const {
+  inline size_t c() const {
     return this->c_;
   }
 
-  UnpoolMicrokernelTester& f(uint32_t f) {
+  inline UnpoolMicrokernelTester& f(uint32_t f) {
     this->f_ = f;
     return *this;
   }
 
-  uint32_t f() const {
+  inline uint32_t f() const {
     return this->f_;
   }
 
-  UnpoolMicrokernelTester& y_stride(size_t y_stride) {
+  inline UnpoolMicrokernelTester& y_stride(size_t y_stride) {
     assert(y_stride != 0);
     this->y_stride_ = y_stride;
     return *this;
   }
 
-  size_t y_stride() const {
+  inline size_t y_stride() const {
     if (this->y_stride_ == 0) {
       return c();
     } else {
@@ -65,17 +64,18 @@ class UnpoolMicrokernelTester {
     }
   }
 
-  UnpoolMicrokernelTester& iterations(size_t iterations) {
+  inline UnpoolMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_x32_unpool_ukernel_fn unpool) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto x_rng = std::bind(std::uniform_int_distribution<uint32_t>(), std::ref(rng));
     auto i_rng = std::bind(std::uniform_int_distribution<uint32_t>(0, uint32_t(p() - 1)), std::ref(rng));
 

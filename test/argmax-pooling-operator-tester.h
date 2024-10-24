@@ -5,27 +5,25 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/common.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
+#include <cstdint>
 #include <memory>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
-#include "pthreadpool.h"
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/common.h>
+
 
 class ArgmaxPoolingOperatorTester {
  public:
-  ArgmaxPoolingOperatorTester& padding_tf_same(bool padding_same) {
+  inline ArgmaxPoolingOperatorTester& padding_tf_same(bool padding_same) {
     if (padding_same) {
       assert(padding_top() == 0);
       assert(padding_left() == 0);
@@ -36,11 +34,11 @@ class ArgmaxPoolingOperatorTester {
     return *this;
   }
 
-  bool padding_tf_same() const {
+  inline bool padding_tf_same() const {
     return this->padding_tf_same_;
   }
 
-  ArgmaxPoolingOperatorTester& padding(uint32_t padding) {
+  inline ArgmaxPoolingOperatorTester& padding(uint32_t padding) {
     assert(!padding_tf_same());
     this->padding_top_ = padding;
     this->padding_right_ = padding;
@@ -49,7 +47,7 @@ class ArgmaxPoolingOperatorTester {
     return *this;
   }
 
-  ArgmaxPoolingOperatorTester& padding(uint32_t padding_height, uint32_t padding_width) {
+  inline ArgmaxPoolingOperatorTester& padding(uint32_t padding_height, uint32_t padding_width) {
     assert(!padding_tf_same());
     this->padding_top_ = padding_height;
     this->padding_right_ = padding_width;
@@ -58,27 +56,27 @@ class ArgmaxPoolingOperatorTester {
     return *this;
   }
 
-  ArgmaxPoolingOperatorTester& padding_height(uint32_t padding_height) {
+  inline ArgmaxPoolingOperatorTester& padding_height(uint32_t padding_height) {
     assert(!padding_tf_same());
     this->padding_top_ = padding_height;
     this->padding_bottom_ = padding_height;
     return *this;
   }
 
-  ArgmaxPoolingOperatorTester& padding_width(uint32_t padding_width) {
+  inline ArgmaxPoolingOperatorTester& padding_width(uint32_t padding_width) {
     assert(!padding_tf_same());
     this->padding_right_ = padding_width;
     this->padding_left_ = padding_width;
     return *this;
   }
 
-  ArgmaxPoolingOperatorTester& padding_top(uint32_t padding_top) {
+  inline ArgmaxPoolingOperatorTester& padding_top(uint32_t padding_top) {
     assert(!padding_tf_same());
     this->padding_top_ = padding_top;
     return *this;
   }
 
-  uint32_t padding_top() const {
+  inline uint32_t padding_top() const {
     if (padding_tf_same()) {
       const uint32_t total_padding_height = output_height() * pooling_height() - input_height();
       return total_padding_height / 2;
@@ -87,13 +85,13 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  ArgmaxPoolingOperatorTester& padding_left(uint32_t padding_left) {
+  inline ArgmaxPoolingOperatorTester& padding_left(uint32_t padding_left) {
     assert(!padding_tf_same());
     this->padding_left_ = padding_left;
     return *this;
   }
 
-  uint32_t padding_left() const {
+  inline uint32_t padding_left() const {
     if (padding_tf_same()) {
       const uint32_t total_padding_width = output_width() * pooling_width() - input_width();
       return total_padding_width / 2;
@@ -102,13 +100,13 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  ArgmaxPoolingOperatorTester& padding_bottom(uint32_t padding_bottom) {
+  inline ArgmaxPoolingOperatorTester& padding_bottom(uint32_t padding_bottom) {
     assert(!padding_tf_same());
     this->padding_bottom_ = padding_bottom;
     return *this;
   }
 
-  uint32_t padding_bottom() const {
+  inline uint32_t padding_bottom() const {
     if (padding_tf_same()) {
       const uint32_t total_padding_height = output_height() * pooling_height() - input_height();
       return total_padding_height - total_padding_height / 2;
@@ -117,13 +115,13 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  ArgmaxPoolingOperatorTester& padding_right(uint32_t padding_right) {
+  inline ArgmaxPoolingOperatorTester& padding_right(uint32_t padding_right) {
     assert(!padding_tf_same());
     this->padding_right_ = padding_right;
     return *this;
   }
 
-  uint32_t padding_right() const {
+  inline uint32_t padding_right() const {
     if (padding_tf_same()) {
       const uint32_t total_padding_width = output_width() * pooling_width() - input_width();
       return total_padding_width - total_padding_width / 2;
@@ -132,7 +130,7 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  ArgmaxPoolingOperatorTester& input_size(size_t input_height, size_t input_width) {
+  inline ArgmaxPoolingOperatorTester& input_size(size_t input_height, size_t input_width) {
     assert(input_height >= 1);
     assert(input_width >= 1);
     this->input_height_ = input_height;
@@ -140,54 +138,54 @@ class ArgmaxPoolingOperatorTester {
     return *this;
   }
 
-  ArgmaxPoolingOperatorTester& input_height(size_t input_height) {
+  inline ArgmaxPoolingOperatorTester& input_height(size_t input_height) {
     assert(input_height >= 1);
     this->input_height_ = input_height;
     return *this;
   }
 
-  size_t input_height() const {
+  inline size_t input_height() const {
     return this->input_height_;
   }
 
-  ArgmaxPoolingOperatorTester& input_width(size_t input_width) {
+  inline ArgmaxPoolingOperatorTester& input_width(size_t input_width) {
     assert(input_width >= 1);
     this->input_width_ = input_width;
     return *this;
   }
 
-  size_t input_width() const {
+  inline size_t input_width() const {
     return this->input_width_;
   }
 
-  ArgmaxPoolingOperatorTester& channels(size_t channels) {
+  inline ArgmaxPoolingOperatorTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  ArgmaxPoolingOperatorTester& batch_size(size_t batch_size) {
+  inline ArgmaxPoolingOperatorTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  ArgmaxPoolingOperatorTester& pooling_size(uint32_t pooling_size) {
+  inline ArgmaxPoolingOperatorTester& pooling_size(uint32_t pooling_size) {
     assert(pooling_size >= 1);
     this->pooling_height_ = pooling_size;
     this->pooling_width_ = pooling_size;
     return *this;
   }
 
-  ArgmaxPoolingOperatorTester& pooling_size(uint32_t pooling_height, uint32_t pooling_width) {
+  inline ArgmaxPoolingOperatorTester& pooling_size(uint32_t pooling_height, uint32_t pooling_width) {
     assert(pooling_height >= 1);
     assert(pooling_width >= 1);
     this->pooling_height_ = pooling_height;
@@ -195,27 +193,27 @@ class ArgmaxPoolingOperatorTester {
     return *this;
   }
 
-  ArgmaxPoolingOperatorTester& pooling_height(uint32_t pooling_height) {
+  inline ArgmaxPoolingOperatorTester& pooling_height(uint32_t pooling_height) {
     assert(pooling_height >= 1);
     this->pooling_height_ = pooling_height;
     return *this;
   }
 
-  uint32_t pooling_height() const {
+  inline uint32_t pooling_height() const {
     return this->pooling_height_;
   }
 
-  ArgmaxPoolingOperatorTester& pooling_width(uint32_t pooling_width) {
+  inline ArgmaxPoolingOperatorTester& pooling_width(uint32_t pooling_width) {
     assert(pooling_width >= 1);
     this->pooling_width_ = pooling_width;
     return *this;
   }
 
-  uint32_t pooling_width() const {
+  inline uint32_t pooling_width() const {
     return this->pooling_width_;
   }
 
-  size_t output_height() const {
+  inline size_t output_height() const {
     if (padding_tf_same()) {
       return (input_height() + pooling_height() - 1) / pooling_height();
     } else {
@@ -224,7 +222,7 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  size_t output_width() const {
+  inline size_t output_width() const {
     if (padding_tf_same()) {
       return (input_width() + pooling_width() - 1) / pooling_width();
     } else {
@@ -233,13 +231,13 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  ArgmaxPoolingOperatorTester& input_pixel_stride(size_t input_pixel_stride) {
+  inline ArgmaxPoolingOperatorTester& input_pixel_stride(size_t input_pixel_stride) {
     assert(input_pixel_stride != 0);
     this->input_pixel_stride_ = input_pixel_stride;
     return *this;
   }
 
-  size_t input_pixel_stride() const {
+  inline size_t input_pixel_stride() const {
     if (this->input_pixel_stride_ == 0) {
       return channels();
     } else {
@@ -248,13 +246,13 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  ArgmaxPoolingOperatorTester& output_pixel_stride(size_t output_pixel_stride) {
+  inline ArgmaxPoolingOperatorTester& output_pixel_stride(size_t output_pixel_stride) {
     assert(output_pixel_stride != 0);
     this->output_pixel_stride_ = output_pixel_stride;
     return *this;
   }
 
-  size_t output_pixel_stride() const {
+  inline size_t output_pixel_stride() const {
     if (this->output_pixel_stride_ == 0) {
       return channels();
     } else {
@@ -263,7 +261,7 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  ArgmaxPoolingOperatorTester& next_input_size(uint32_t next_input_height, uint32_t next_input_width) {
+  inline ArgmaxPoolingOperatorTester& next_input_size(uint32_t next_input_height, uint32_t next_input_width) {
     assert(next_input_height >= 1);
     assert(next_input_width >= 1);
     this->next_input_height_ = next_input_height;
@@ -271,13 +269,13 @@ class ArgmaxPoolingOperatorTester {
     return *this;
   }
 
-  ArgmaxPoolingOperatorTester& next_input_height(uint32_t next_input_height) {
+  inline ArgmaxPoolingOperatorTester& next_input_height(uint32_t next_input_height) {
     assert(next_input_height >= 1);
     this->next_input_height_ = next_input_height;
     return *this;
   }
 
-  uint32_t next_input_height() const {
+  inline uint32_t next_input_height() const {
     if (this->next_input_height_ == 0) {
       return input_height();
     } else {
@@ -285,13 +283,13 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  ArgmaxPoolingOperatorTester& next_input_width(uint32_t next_input_width) {
+  inline ArgmaxPoolingOperatorTester& next_input_width(uint32_t next_input_width) {
     assert(next_input_width >= 1);
     this->next_input_width_ = next_input_width;
     return *this;
   }
 
-  uint32_t next_input_width() const {
+  inline uint32_t next_input_width() const {
     if (this->next_input_width_ == 0) {
       return input_width();
     } else {
@@ -299,23 +297,23 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  size_t next_output_height() const {
+  inline size_t next_output_height() const {
     const size_t padded_next_input_height = padding_top() + next_input_height() + padding_bottom();
     return padded_next_input_height / pooling_height();
   }
 
-  size_t next_output_width() const {
+  inline size_t next_output_width() const {
     const size_t padded_next_input_width = padding_left() + next_input_width() + padding_right();
     return padded_next_input_width / pooling_width();
   }
 
-  ArgmaxPoolingOperatorTester& next_batch_size(size_t next_batch_size) {
+  inline ArgmaxPoolingOperatorTester& next_batch_size(size_t next_batch_size) {
     assert(next_batch_size >= 1);
     this->next_batch_size_ = next_batch_size;
     return *this;
   }
 
-  size_t next_batch_size() const {
+  inline size_t next_batch_size() const {
     if (this->next_batch_size_ == 0) {
       return batch_size();
     } else {
@@ -323,12 +321,12 @@ class ArgmaxPoolingOperatorTester {
     }
   }
 
-  ArgmaxPoolingOperatorTester& multithreaded(size_t multithreaded) {
+  inline ArgmaxPoolingOperatorTester& multithreaded(size_t multithreaded) {
     this->multithreaded_ = multithreaded;
     return *this;
   }
 
-  size_t multithreaded() const {
+  inline size_t multithreaded() const {
     return this->multithreaded_;
   }
 
@@ -337,17 +335,18 @@ class ArgmaxPoolingOperatorTester {
     return multithreaded() ? 5 : 1;
   }
 
-  ArgmaxPoolingOperatorTester& iterations(size_t iterations) {
+  inline ArgmaxPoolingOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void TestF32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<float> input((batch_size() * input_height() * input_width() - 1) * input_pixel_stride() + channels() + XNN_EXTRA_BYTES / sizeof(float));
@@ -458,7 +457,8 @@ class ArgmaxPoolingOperatorTester {
   }
 
   void TestSetupF32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<float> input(XNN_EXTRA_BYTES / sizeof(float) + std::max<size_t>(

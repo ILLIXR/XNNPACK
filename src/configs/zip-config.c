@@ -14,8 +14,9 @@
 
 #include <xnnpack/common.h>
 #include <xnnpack/config.h>
-#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
 #include <xnnpack/zip.h>
+
 
 static struct xnn_zip_config x8_zip_config = {0};
 static struct xnn_zip_config x32_zip_config = {0};
@@ -58,13 +59,22 @@ static void init_x8_zip_config(void) {
     x8_zip_config.x3 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x3_ukernel__scalar;
     x8_zip_config.x4 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x4_ukernel__scalar;
     x8_zip_config.xm = (xnn_zipv_ukernel_fn) xnn_x8_zip_xm_ukernel__scalar;
-  #else
+  #elif XNN_ARCH_WASM
+    x8_zip_config.x2 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x2_ukernel__scalar;
+    x8_zip_config.x3 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x3_ukernel__scalar;
+    x8_zip_config.x4 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x4_ukernel__scalar;
+    x8_zip_config.xm = (xnn_zipv_ukernel_fn) xnn_x8_zip_xm_ukernel__scalar;
+  #elif XNN_ARCH_RISCV
+    x8_zip_config.x2 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x2_ukernel__scalar;
+    x8_zip_config.x3 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x3_ukernel__scalar;
+    x8_zip_config.x4 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x4_ukernel__scalar;
+    x8_zip_config.xm = (xnn_zipv_ukernel_fn) xnn_x8_zip_xm_ukernel__scalar;
+  #elif XNN_ARCH_PPC64
     x8_zip_config.x2 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x2_ukernel__scalar;
     x8_zip_config.x3 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x3_ukernel__scalar;
     x8_zip_config.x4 = (xnn_zipc_ukernel_fn) xnn_x8_zip_x4_ukernel__scalar;
     x8_zip_config.xm = (xnn_zipv_ukernel_fn) xnn_x8_zip_xm_ukernel__scalar;
   #endif
-
 }
 
 static void init_x32_zip_config(void) {
@@ -97,13 +107,22 @@ static void init_x32_zip_config(void) {
     x32_zip_config.x3 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x3_ukernel__wasmsimd;
     x32_zip_config.x4 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x4_ukernel__wasmsimd;
     x32_zip_config.xm = (xnn_zipv_ukernel_fn) xnn_x32_zip_xm_ukernel__wasmsimd;
-  #else
+  #elif XNN_ARCH_WASM
+    x32_zip_config.x2 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x2_ukernel__scalar;
+    x32_zip_config.x3 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x3_ukernel__scalar;
+    x32_zip_config.x4 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x4_ukernel__scalar;
+    x32_zip_config.xm = (xnn_zipv_ukernel_fn) xnn_x32_zip_xm_ukernel__scalar;
+  #elif XNN_ARCH_RISCV
+    x32_zip_config.x2 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x2_ukernel__scalar;
+    x32_zip_config.x3 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x3_ukernel__scalar;
+    x32_zip_config.x4 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x4_ukernel__scalar;
+    x32_zip_config.xm = (xnn_zipv_ukernel_fn) xnn_x32_zip_xm_ukernel__scalar;
+  #elif XNN_ARCH_PPC64
     x32_zip_config.x2 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x2_ukernel__scalar;
     x32_zip_config.x3 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x3_ukernel__scalar;
     x32_zip_config.x4 = (xnn_zipc_ukernel_fn) xnn_x32_zip_x4_ukernel__scalar;
     x32_zip_config.xm = (xnn_zipv_ukernel_fn) xnn_x32_zip_xm_ukernel__scalar;
   #endif
-
 }
 
 #if XNN_PLATFORM_WINDOWS

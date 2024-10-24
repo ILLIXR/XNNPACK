@@ -52,8 +52,6 @@ TRANSPOSE_TEST_TEMPLATE = """\
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   TransposeMicrokernelTester()
     .input_stride(${TILE_WIDTH * 2})
     .output_stride(${TILE_HEIGHT * 2})
@@ -67,8 +65,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH}) {
 TEST(${TEST_NAME}, bh_1_${TILE_HEIGHT * 2}_bw_1_${TILE_WIDTH * 2}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   for (size_t i = 1; i <= ${TILE_HEIGHT * 2}; ++i) {
     for (size_t j = 1; j <= ${TILE_WIDTH * 2}; ++j) {
       TransposeMicrokernelTester()
@@ -86,8 +82,6 @@ TEST(${TEST_NAME}, bh_1_${TILE_HEIGHT * 2}_bw_1_${TILE_WIDTH * 2}) {
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH * 2}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   TransposeMicrokernelTester()
     .input_stride(${TILE_WIDTH * 2})
     .output_stride(${TILE_HEIGHT})
@@ -101,8 +95,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH * 2}) {
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH + 1}_${TILE_WIDTH * 2}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   for (size_t i = ${TILE_WIDTH + 1}; i < ${TILE_WIDTH * 2}; ++i) {
     TransposeMicrokernelTester()
       .input_stride(i)
@@ -118,8 +110,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH + 1}_${TILE_WIDTH * 2}) {
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH + 1}_${TILE_WIDTH * 2}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   for (size_t i = ${TILE_WIDTH + 1}; i < ${TILE_WIDTH * 2}; ++i) {
     TransposeMicrokernelTester()
       .input_stride(i)
@@ -135,8 +125,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH + 1}_${TILE_WIDTH * 2})
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   TransposeMicrokernelTester()
     .input_stride(${TILE_WIDTH})
     .output_stride(${TILE_HEIGHT * 3 + 4})
@@ -150,8 +138,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH}) {
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT + 1}_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   for (size_t i = ${TILE_HEIGHT + 1}; i < ${TILE_HEIGHT * 2}; ++i) {
     TransposeMicrokernelTester()
       .input_stride(${TILE_WIDTH + 17})
@@ -167,8 +153,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT + 1}_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH}) {
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT + 1}_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH * 2}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   for (size_t i = ${TILE_HEIGHT + 1}; i < ${TILE_HEIGHT * 2}; ++i) {
     TransposeMicrokernelTester()
       .input_stride(${TILE_WIDTH * 2})
@@ -184,8 +168,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT + 1}_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH * 2}
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT + 1}_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH + 1}_${TILE_WIDTH * 2}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   for (size_t i = ${TILE_HEIGHT + 1}; i < ${TILE_HEIGHT * 2}; ++i) {
     for (size_t j = ${TILE_WIDTH + 1}; j < ${TILE_WIDTH * 2}; ++j) {
       TransposeMicrokernelTester()
@@ -203,8 +185,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT + 1}_${TILE_HEIGHT * 2}_bw_${TILE_WIDTH + 1}
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH}_is_${TILE_WIDTH * 2}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   TransposeMicrokernelTester()
     .input_stride(${TILE_WIDTH * 2})
     .output_stride(${TILE_HEIGHT})
@@ -218,8 +198,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH}_is_${TILE_WIDTH * 2}) {
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH}_os_${TILE_HEIGHT * 2}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   TransposeMicrokernelTester()
     .input_stride(${TILE_WIDTH})
     .output_stride(${TILE_HEIGHT * 2})
@@ -233,8 +211,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH}_os_${TILE_HEIGHT * 2}) {
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH}_is_${TILE_WIDTH * 2}_os_${TILE_HEIGHT * 2}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   TransposeMicrokernelTester()
     .input_stride(${TILE_WIDTH * 2})
     .output_stride(${TILE_HEIGHT * 2})
@@ -248,8 +224,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT}_bw_${TILE_WIDTH}_is_${TILE_WIDTH * 2}_os_${
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT * 17}_bw_${TILE_WIDTH * 19}_ies_${ELEMENT_SIZE + 11}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   TransposeMicrokernelTester()
     .input_stride(${TILE_WIDTH * 19})
     .output_stride(${TILE_HEIGHT * 17})
@@ -264,8 +238,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT * 17}_bw_${TILE_WIDTH * 19}_ies_${ELEMENT_SI
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT * 3}_bw_${TILE_WIDTH * 5}_oes_${ELEMENT_SIZE + 11}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   TransposeMicrokernelTester()
     .input_stride(${TILE_WIDTH * 5})
     .output_stride(${TILE_HEIGHT * 3})
@@ -280,8 +252,6 @@ TEST(${TEST_NAME}, bh_${TILE_HEIGHT * 3}_bw_${TILE_WIDTH * 5}_oes_${ELEMENT_SIZE
 TEST(${TEST_NAME}, bh_${TILE_HEIGHT * 7}_bw_${TILE_WIDTH * 23}_ies_${ELEMENT_SIZE + 17}_oes_${ELEMENT_SIZE + 13}) {
   $if ISA_CHECK:
     ${ISA_CHECK};
-  $if ISA == "rvv":
-    if (xnn_init_hardware_config()->vlenb < ${TILE_HEIGHT * ELEMENT_SIZE}) GTEST_SKIP();
   TransposeMicrokernelTester()
     .input_stride(${TILE_WIDTH * 23 + 5})
     .output_stride(${TILE_HEIGHT * 7 + 6})
@@ -323,7 +293,6 @@ def generate_test_cases(ukernel, tile_height, tile_width, element_size, isa, ini
           "TILE_WIDTH": tile_width,
           "ELEMENT_SIZE": element_size,
           "TEST_ARGS": test_args,
-          "ISA": isa,
           "ISA_CHECK": xnncommon.generate_isa_check_macro(isa),
       })
 
@@ -369,15 +338,15 @@ def main(args):
 //   Generator: {generator}
 
 
-#include <xnnpack/common.h>
-#include <xnnpack/config.h>
-#include <xnnpack/isa-checks.h>
-#include <xnnpack/microparams-init.h>
-#include <xnnpack/transpose.h>
-
 #include <gtest/gtest.h>
+
+#include <xnnpack/common.h>
+#include <xnnpack/isa-checks.h>
+
+#include <xnnpack/transpose.h>
 #include "transpose-microkernel-tester.h"
-""".format(specification=options.spec, generator=sys.argv[0])
+""".format(
+    specification=options.spec, generator=sys.argv[0])
 
     for ukernel_spec in spec_yaml:
       name = ukernel_spec["name"]

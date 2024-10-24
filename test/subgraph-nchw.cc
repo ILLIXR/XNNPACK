@@ -3,7 +3,7 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <xnnpack/subgraph.h>
+#include <tfl-xnnpack.h>
 
 #include "subgraph-tester.h"
 #include <gtest/gtest.h>
@@ -11,7 +11,7 @@
 namespace xnnpack {
 
 TEST(SUBGRAPH_NCHW, single_conv) {
-  SubgraphTester tester(4);
+  auto tester = SubgraphTester(4);
   tester
     .AddDynamicTensorF32({1, 256, 256, 3}, 0)
     .AddStaticTensorF32({32, 3, 3, 3}, TensorType::kDense, 1)
@@ -35,7 +35,7 @@ TEST(SUBGRAPH_NCHW, single_conv) {
 }
 
 TEST(SUBGRAPH_NCHW, single_conv_and_global_average_pooling) {
-  SubgraphTester tester(5);
+  auto tester = SubgraphTester(5);
   tester
     .AddDynamicTensorF32({1, 256, 256, 3}, 0)
     .AddStaticTensorF32({32, 3, 3, 3}, TensorType::kDense, 1)
@@ -62,7 +62,7 @@ TEST(SUBGRAPH_NCHW, single_conv_and_global_average_pooling) {
 }
 
 TEST(SUBGRAPH_NCHW, pixelwise_conv_sandwich) {
-  SubgraphTester tester(8);
+  auto tester = SubgraphTester(8);
   tester
     .AddDynamicTensorF32({1, 256, 256, 3}, 0)
     .AddStaticTensorF32({8, 3, 3, 3}, TensorType::kDense, 1)
@@ -103,7 +103,7 @@ TEST(SUBGRAPH_NCHW, pixelwise_conv_sandwich) {
 }
 
 TEST(SUBGRAPH_NCHW, bottleneck) {
-  SubgraphTester tester(15);
+  auto tester = SubgraphTester(15);
   tester
     .AddDynamicTensorF32({1, 256, 256, 3}, 0)
     .AddStaticTensorF32({8, 3, 3, 3}, TensorType::kDense, 1)

@@ -3,33 +3,31 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/common.h>
-#include <xnnpack/node-type.h>
-#include <xnnpack/subgraph.h>
-
 #include <algorithm>  // For std::generate.
 #include <array>      // For std::array.
-#include <cassert>
-#include <cmath>
-#include <cstddef>  // For size_t.
-#include <cstdint>  // For uint32_t.
-#include <functional>
-#include <limits>   // For std::numeric_limits.
-#include <memory>   // For std::unique_ptr.
-#include <numeric>  // For std::accumulate.
-#include <random>   // For std::uniform_real_distribution.
-#include <vector>   // For std::vector.
+#include <cstddef>    // For size_t.
+#include <cstdint>    // For uint32_t.
+#include <limits>     // For std::numeric_limits.
+#include <memory>     // For std::unique_ptr.
+#include <numeric>    // For std::accumulate.
+#include <random>     // For std::random_device, std::mt19937, std::uniform_real_distribution.
+#include <vector>     // For std::vector.
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+#include <gtest/gtest.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/node-type.h>
+#include <xnnpack/subgraph.h>
 
 template <class T>
 class ScaledDotProductAttentionTestBase : public ::testing::Test {
  protected:
-  ScaledDotProductAttentionTestBase() {
+  ScaledDotProductAttentionTestBase()
+  {
+    random_device = std::make_unique<std::random_device>();
+    rng = std::mt19937((*random_device)());
     f32dist = std::uniform_real_distribution<float>(0.1f, 1.0f);
     dim_dist = std::uniform_int_distribution<size_t>(5, 15);
     bernoulli_dist = std::bernoulli_distribution(0.5);
@@ -152,7 +150,8 @@ class ScaledDotProductAttentionTestBase : public ::testing::Test {
     return std::accumulate(dims.begin(), dims.end(), size_t(1), std::multiplies<size_t>());
   }
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_real_distribution<float> f32dist;
   std::uniform_real_distribution<float> cap_dist;
   std::uniform_int_distribution<size_t> dim_dist;

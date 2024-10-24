@@ -8,6 +8,8 @@
 // LICENSE file in the root directory of this source tree.
 
 #include <assert.h>
+// Disable gcc amxintrin header
+#define _AMXTILEINTRIN_H_INCLUDED
 
 #include <immintrin.h>
 
@@ -16,7 +18,6 @@
 #include <xnnpack/math.h>
 #include <xnnpack/unaligned.h>
 #include <xnnpack/prefetch.h>
-
 
 void xnn_qs8_qc8w_gemm_minmax_fp32_ukernel_16x16c4__avx512amx_prfm(
     size_t mr,
@@ -41,11 +42,14 @@ void xnn_qs8_qc8w_gemm_minmax_fp32_ukernel_16x16c4__avx512amx_prfm(
 
 // TODO: amxintrin.h only provide intrinsics for __x86_64__
 // Update if amxintrin changes
-#if defined(__x86_64__)
+#if defined(__x86_64__) && defined(__AMX_TILE__)
   __attribute__((aligned(64))) int32_t res0[16 * 16];
 
   kc = round_up_po2(kc, 4 * sizeof(int8_t));
-  const size_t kremainder = (kc & 63) ? (kc & 63) : 64;
+  size_t kremainder = kc & 63;
+  if (kremainder == 0) {  // zero is invalid config
+    kremainder = 64;
+  }
 
   // Define tile config data structure
   struct __tile_config {
@@ -247,9 +251,8 @@ void xnn_qs8_qc8w_gemm_minmax_fp32_ukernel_16x16c4__avx512amx_prfm(
     __m512 vscaled14x0123456789ABCDEF = _mm512_cvtepi32_ps(vacc14x0123456789ABCDEF);
     __m512 vscaled15x0123456789ABCDEF = _mm512_cvtepi32_ps(vacc15x0123456789ABCDEF);
 
-    const __m512 vscale0123456789ABCDEF = _mm512_load_ps((const float*) w + 0);
-    w = (const int32_t*) w + 16;
-
+    const __m512 vscale0123456789ABCDEF = _mm512_load_ps(w);
+    w = (const float*) w + 16;
     vscaled0x0123456789ABCDEF = _mm512_mul_ps(vscaled0x0123456789ABCDEF, vscale0123456789ABCDEF);
     vscaled1x0123456789ABCDEF = _mm512_mul_ps(vscaled1x0123456789ABCDEF, vscale0123456789ABCDEF);
     vscaled2x0123456789ABCDEF = _mm512_mul_ps(vscaled2x0123456789ABCDEF, vscale0123456789ABCDEF);
@@ -413,5 +416,5 @@ void xnn_qs8_qc8w_gemm_minmax_fp32_ukernel_16x16c4__avx512amx_prfm(
   // Release tile config
   //  _tile_release();
   __asm__ volatile ("tilerelease" ::);
-  #endif  // defined(__x86_64__)
+  #endif  // defined(__x86_64__) && defined(__AMX_TILE__)
 }

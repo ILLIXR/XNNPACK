@@ -5,116 +5,117 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microparams.h>
-#include <xnnpack/pack.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
+#include <functional>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/pack.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
+
 
 class VMulCAddCMicrokernelTester {
  public:
-  VMulCAddCMicrokernelTester& channel_tile(size_t channel_tile) {
+  inline VMulCAddCMicrokernelTester& channel_tile(size_t channel_tile) {
     this->channel_tile_ = channel_tile;
     return *this;
   }
 
-  size_t channel_tile() const {
+  inline size_t channel_tile() const {
     return this->channel_tile_;
   }
 
-  VMulCAddCMicrokernelTester& channels(size_t channels) {
+  inline VMulCAddCMicrokernelTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  size_t packed_channels() const {
+  inline size_t packed_channels() const {
     return channels() % channel_tile() == 0 ? channels() : (channels() / channel_tile() + 1) * channel_tile();
   }
 
-  VMulCAddCMicrokernelTester& rows(size_t rows) {
+  inline VMulCAddCMicrokernelTester& rows(size_t rows) {
     assert(rows != 0);
     this->rows_ = rows;
     return *this;
   }
 
-  size_t rows() const {
+  inline size_t rows() const {
     return this->rows_;
   }
 
-  VMulCAddCMicrokernelTester& input_stride(size_t input_stride) {
+  inline VMulCAddCMicrokernelTester& input_stride(size_t input_stride) {
     this->input_stride_ = input_stride;
     return *this;
   }
 
-  size_t input_stride() const {
+  inline size_t input_stride() const {
     return this->input_stride_ == 0 ? channels() : this->input_stride_;
   }
 
-  VMulCAddCMicrokernelTester& output_stride(size_t output_stride) {
+  inline VMulCAddCMicrokernelTester& output_stride(size_t output_stride) {
     this->output_stride_ = output_stride;
     return *this;
   }
 
-  size_t output_stride() const {
+  inline size_t output_stride() const {
     return this->output_stride_ == 0 ? channels() : this->output_stride_;
   }
 
-  VMulCAddCMicrokernelTester& inplace(bool inplace) {
+  inline VMulCAddCMicrokernelTester& inplace(bool inplace) {
     this->inplace_ = inplace;
     return *this;
   }
 
-  bool inplace() const {
+  inline bool inplace() const {
     return this->inplace_;
   }
 
-  VMulCAddCMicrokernelTester& qmin(uint8_t qmin) {
+  inline VMulCAddCMicrokernelTester& qmin(uint8_t qmin) {
     this->qmin_ = qmin;
     return *this;
   }
 
-  uint8_t qmin() const {
+  inline uint8_t qmin() const {
     return this->qmin_;
   }
 
-  VMulCAddCMicrokernelTester& qmax(uint8_t qmax) {
+  inline VMulCAddCMicrokernelTester& qmax(uint8_t qmax) {
     this->qmax_ = qmax;
     return *this;
   }
 
-  uint8_t qmax() const {
+  inline uint8_t qmax() const {
     return this->qmax_;
   }
 
-  VMulCAddCMicrokernelTester& iterations(size_t iterations) {
+  inline VMulCAddCMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_f16_vmulcaddc_ukernel_fn vmulcaddc, xnn_init_f16_minmax_params_fn init_params) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     if (inplace()) {
@@ -182,7 +183,8 @@ class VMulCAddCMicrokernelTester {
   }
 
   void Test(xnn_f32_vmulcaddc_ukernel_fn vmulcaddc, xnn_init_f32_minmax_params_fn init_params) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     if (inplace()) {

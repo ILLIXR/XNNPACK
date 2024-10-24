@@ -5,136 +5,136 @@
 
 #pragma once
 
-#include <pthreadpool.h>
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/common.h>
-
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <limits>
 #include <memory>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
-#include "pthreadpool.h"
+#include <pthreadpool.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/common.h>
+
+#include <gtest/gtest.h>
+
 
 class ScaledDotProductAttentionOperatorTester {
  public:
-  ScaledDotProductAttentionOperatorTester& batch_size(size_t batch_size) {
+  inline ScaledDotProductAttentionOperatorTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  ScaledDotProductAttentionOperatorTester& query_heads(size_t query_heads) {
+  inline ScaledDotProductAttentionOperatorTester& query_heads(size_t query_heads) {
     assert(query_heads != 0);
     this->query_heads_ = query_heads;
     return *this;
   }
 
-  size_t query_heads() const {
+  inline size_t query_heads() const {
     return this->query_heads_;
   }
 
-  ScaledDotProductAttentionOperatorTester& key_value_heads(size_t key_value_heads) {
+  inline ScaledDotProductAttentionOperatorTester& key_value_heads(size_t key_value_heads) {
     assert(key_value_heads == 1 || key_value_heads == query_heads());
     this->key_value_heads_ = key_value_heads;
     return *this;
   }
 
-  size_t key_value_heads() const {
+  inline size_t key_value_heads() const {
     return this->key_value_heads_;
   }
 
-  ScaledDotProductAttentionOperatorTester& cap_tanh(float cap) {
+  inline ScaledDotProductAttentionOperatorTester& cap_tanh(float cap) {
     this->cap_type_ = xnn_attention_logits_cap_type_tanh;
     this->cap_value_ = cap;
     return *this;
   }
 
-  xnn_attention_logits_cap_type cap_type() const {
+  inline xnn_attention_logits_cap_type cap_type() const {
     return this->cap_type_;
   }
 
-  float cap_value() const {
+  inline float cap_value() const {
     return this->cap_value_;
   }
 
-  ScaledDotProductAttentionOperatorTester& query_tokens(size_t query_tokens) {
+  inline ScaledDotProductAttentionOperatorTester& query_tokens(size_t query_tokens) {
     this->query_tokens_ = query_tokens;
     return *this;
   }
 
-  size_t query_tokens() const {
+  inline size_t query_tokens() const {
     return this->query_tokens_;
   }
 
-  ScaledDotProductAttentionOperatorTester& key_value_tokens(size_t key_value_tokens) {
+  inline ScaledDotProductAttentionOperatorTester& key_value_tokens(size_t key_value_tokens) {
     this->key_value_tokens_ = key_value_tokens;
     return *this;
   }
 
-  size_t key_value_tokens() const {
+  inline size_t key_value_tokens() const {
     if (this->key_value_tokens_ == 0) return query_tokens();
     return this->key_value_tokens_;
   }
 
-  ScaledDotProductAttentionOperatorTester& query_key_channels(size_t query_key_channels) {
+  inline ScaledDotProductAttentionOperatorTester& query_key_channels(size_t query_key_channels) {
     this->query_key_channels_ = query_key_channels;
     return *this;
   }
 
-  size_t query_key_channels() const {
+  inline size_t query_key_channels() const {
     return this->query_key_channels_;
   }
 
-  ScaledDotProductAttentionOperatorTester& value_channels(size_t value_channels) {
+  inline ScaledDotProductAttentionOperatorTester& value_channels(size_t value_channels) {
     this->value_channels_ = value_channels;
     return *this;
   }
 
-  size_t value_channels() const {
+  inline size_t value_channels() const {
     return this->value_channels_;
   }
 
-  ScaledDotProductAttentionOperatorTester& multithreaded(bool multithreaded) {
+  inline ScaledDotProductAttentionOperatorTester& multithreaded(bool multithreaded) {
     this->multithreaded_ = multithreaded;
     return *this;
   }
 
-  bool multithreaded() const {
+  inline bool multithreaded() const {
     return this->multithreaded_;
   }
 
-  size_t num_threads() const {
+  inline size_t num_threads() const {
     return multithreaded() ? 5 : 1;
   }
 
-  ScaledDotProductAttentionOperatorTester& iterations(size_t iterations) {
+  inline ScaledDotProductAttentionOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void TestF16() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.1, 1.0f);
-    // Use a different scale distribution to mitigate precision issues.
+    // Use a different scale distributon to mitigate precision issues.
     // In tests, channels are ~100, so scale is ~0.1.
     const float dk_scale = 1.0f / std::sqrt(static_cast<float>(query_key_channels()));
     std::uniform_real_distribution<float> scaledist(std::min(0.01f, dk_scale), std::max(0.01f, dk_scale));
@@ -297,7 +297,8 @@ class ScaledDotProductAttentionOperatorTester {
   }
 
   void TestF32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-1.0f, 1.0f);
     std::uniform_real_distribution<float> scaledist(0.2f, 2.0f);
 

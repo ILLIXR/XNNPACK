@@ -5,62 +5,62 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/math.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/math.h>
+
 
 class IBilinearMicrokernelTester {
  public:
-  IBilinearMicrokernelTester& pixels(uint32_t pixels) {
+  inline IBilinearMicrokernelTester& pixels(uint32_t pixels) {
     assert(pixels >= 1);
     this->pixels_ = pixels;
     return *this;
   }
 
-  uint32_t pixels() const {
+  inline uint32_t pixels() const {
     return this->pixels_;
   }
 
-  IBilinearMicrokernelTester& channels(uint32_t channels) {
+  inline IBilinearMicrokernelTester& channels(uint32_t channels) {
     assert(channels >= 1);
     this->channels_ = channels;
     return *this;
   }
 
-  uint32_t channels() const {
+  inline uint32_t channels() const {
     return this->channels_;
   }
 
-  IBilinearMicrokernelTester& input_offset(uint32_t input_offset) {
+  inline IBilinearMicrokernelTester& input_offset(uint32_t input_offset) {
     this->input_offset_ = input_offset;
     return *this;
   }
 
-  uint32_t input_offset() const {
+  inline uint32_t input_offset() const {
     return this->input_offset_;
   }
 
-  IBilinearMicrokernelTester& output_stride(uint32_t output_stride) {
+  inline IBilinearMicrokernelTester& output_stride(uint32_t output_stride) {
     assert(output_stride != 0);
     this->output_stride_ = output_stride;
     return *this;
   }
 
-  uint32_t output_stride() const {
+  inline uint32_t output_stride() const {
     if (this->output_stride_ == 0) {
       return channels();
     } else {
@@ -69,22 +69,22 @@ class IBilinearMicrokernelTester {
     }
   }
 
-  IBilinearMicrokernelTester& iterations(size_t iterations) {
+  inline IBilinearMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
-  IBilinearMicrokernelTester& input_stride(uint32_t input_stride) {
+  inline IBilinearMicrokernelTester& input_stride(uint32_t input_stride) {
     assert(input_stride != 0);
     this->input_stride_ = input_stride;
     return *this;
   }
 
-  uint32_t input_stride() const {
+  inline uint32_t input_stride() const {
     if (this->input_stride_ == 0) {
       return 4 * pixels();
     } else {
@@ -94,7 +94,8 @@ class IBilinearMicrokernelTester {
   }
 
   void Test(xnn_f16_ibilinear_ukernel_fn ibilinear) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.1f, 1.0f);
 
     std::vector<const uint16_t*> indirection(pixels() * 4);
@@ -147,7 +148,8 @@ class IBilinearMicrokernelTester {
   }
 
   void Test(xnn_f32_ibilinear_ukernel_fn ibilinear) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<const float*> indirection(pixels() * 4);
@@ -200,7 +202,8 @@ class IBilinearMicrokernelTester {
   }
 
   void Test(xnn_s8_ibilinear_ukernel_fn ibilinear) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
     std::uniform_int_distribution<int16_t> w11dist(0, 2047);
@@ -256,7 +259,8 @@ class IBilinearMicrokernelTester {
   }
 
   void Test(xnn_u8_ibilinear_ukernel_fn ibilinear) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
     std::uniform_int_distribution<int16_t> w11dist(0, 2047);
@@ -310,7 +314,8 @@ class IBilinearMicrokernelTester {
   }
 
   void TestCHW(xnn_f16_ibilinear_chw_ukernel_fn ibilinear) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.1f, 1.0f);
 
     std::vector<const uint16_t*> indirection(pixels() * 2);
@@ -367,7 +372,8 @@ class IBilinearMicrokernelTester {
   }
 
   void TestCHW(xnn_f32_ibilinear_chw_ukernel_fn ibilinear) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<const float*> indirection(pixels() * 2);

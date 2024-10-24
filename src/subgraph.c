@@ -3,18 +3,15 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <assert.h>
-#include <inttypes.h>
+#include <math.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include <fp16/fp16.h>
 
 #include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
-#include <xnnpack/common.h>
 #include <xnnpack/config.h>
 #include <xnnpack/log.h>
 #include <xnnpack/math.h>
@@ -22,7 +19,6 @@
 #include <xnnpack/params.h>
 #include <xnnpack/subgraph.h>
 
-#include <fp16/fp16.h>
 
 #ifndef XNN_ENABLE_SPARSE
   #error "XNN_ENABLE_SPARSE not defined"
@@ -750,7 +746,6 @@ bool xnn_subgraph_rewrite_for_fp16(xnn_subgraph_t subgraph)
       case xnn_node_type_concatenate2:
       case xnn_node_type_concatenate3:
       case xnn_node_type_concatenate4:
-      case xnn_node_type_concatenate5:
       case xnn_node_type_convert:
       case xnn_node_type_squared_difference:
       case xnn_node_type_subtract:
@@ -776,7 +771,6 @@ bool xnn_subgraph_rewrite_for_fp16(xnn_subgraph_t subgraph)
       case xnn_node_type_max_pooling_2d:
       case xnn_node_type_negate:
       case xnn_node_type_prelu:
-      case xnn_node_type_reciprocal_square_root:
       case xnn_node_type_sigmoid:
       case xnn_node_type_softmax:
       case xnn_node_type_space_to_depth_2d:
@@ -831,17 +825,10 @@ bool xnn_subgraph_rewrite_for_fp16(xnn_subgraph_t subgraph)
         }
         break;
       case xnn_node_type_convert:
-        switch (node->compute_type) {
-          case xnn_compute_type_fp32_to_qd8:
-          case xnn_compute_type_fp32_to_qs8:
-          case xnn_compute_type_fp32_to_qu8:
-            subgraph->values[node->inputs[0]].fp16_compatible = true;
-            break;
-          case xnn_compute_type_qs8_to_fp32:
-          case xnn_compute_type_qu8_to_fp32:
-            subgraph->values[node->outputs[0]].fp16_compatible = true;
-          default:
-            break;
+        if (node->compute_type == xnn_compute_type_fp32_to_qd8) {
+          subgraph->values[node->inputs[0]].fp16_compatible = true;
+        } else if (node->compute_type == xnn_compute_type_fp32_to_qs8) {
+          subgraph->values[node->inputs[0]].fp16_compatible = true;
         }
         break;
       default:

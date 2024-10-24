@@ -5,83 +5,84 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <stdio.h>
-#include <tfl-xnnpack.h>
-#include <xnnpack/math.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microparams.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <stdint.h>
+#include <stdio.h>
 #include <cstdlib>
+#include <functional>
 #include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/math.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
+
 
 class VHSwishMicrokernelTester {
  public:
-  VHSwishMicrokernelTester& batch_size(size_t batch_size) {
+  inline VHSwishMicrokernelTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  VHSwishMicrokernelTester& input_scale(float input_scale) {
+  inline VHSwishMicrokernelTester& input_scale(float input_scale) {
     assert(input_scale > 0.0f);
     assert(std::isnormal(input_scale));
     this->input_scale_ = input_scale;
     return *this;
   }
 
-  float input_scale() const {
+  inline float input_scale() const {
     return this->input_scale_;
   }
 
-  VHSwishMicrokernelTester& input_zero_point(int16_t input_zero_point) {
+  inline VHSwishMicrokernelTester& input_zero_point(int16_t input_zero_point) {
     this->input_zero_point_ = input_zero_point;
     return *this;
   }
 
-  int16_t input_zero_point() const {
+  inline int16_t input_zero_point() const {
     return this->input_zero_point_;
   }
 
-  VHSwishMicrokernelTester& output_scale(float output_scale) {
+  inline VHSwishMicrokernelTester& output_scale(float output_scale) {
     assert(output_scale > 0.0f);
     assert(std::isnormal(output_scale));
     this->output_scale_ = output_scale;
     return *this;
   }
 
-  float output_scale() const {
+  inline float output_scale() const {
     return this->output_scale_;
   }
 
-  VHSwishMicrokernelTester& output_zero_point(int16_t output_zero_point) {
+  inline VHSwishMicrokernelTester& output_zero_point(int16_t output_zero_point) {
     this->output_zero_point_ = output_zero_point;
     return *this;
   }
 
-  int16_t output_zero_point() const {
+  inline int16_t output_zero_point() const {
     return this->output_zero_point_;
   }
 
-  VHSwishMicrokernelTester& iterations(size_t iterations) {
+  inline VHSwishMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
@@ -91,7 +92,8 @@ class VHSwishMicrokernelTester {
     ASSERT_GE(output_zero_point(), std::numeric_limits<int8_t>::min());
     ASSERT_LE(output_zero_point(), std::numeric_limits<int8_t>::max());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
 
@@ -117,8 +119,8 @@ class VHSwishMicrokernelTester {
         const int32_t input_value = int32_t(uint32_t(input_zero_point() - input[i]) << 7);
         int32_t in = input_value * input_scale_div;
         in -= 16384;  // subtract 0.5 in Q15
-        in = std::min<int32_t>(in, 0);
-        in = std::max<int32_t>(in, -32768);
+        in = std::min(in, 0);
+        in = std::max(in, -32768);
         const int32_t out = math_asr_s32(input_value * scale_ratio + INT32_C(0x4000), 15);
         int32_t output_value = math_asr_s32(in * out + INT32_C(0x4000), 15) + output_zero_point();
         output_value = std::min<int32_t>(output_value, std::numeric_limits<int8_t>::max());
@@ -141,7 +143,8 @@ class VHSwishMicrokernelTester {
     ASSERT_GE(output_zero_point(), std::numeric_limits<uint8_t>::min());
     ASSERT_LE(output_zero_point(), std::numeric_limits<uint8_t>::max());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
 
@@ -167,8 +170,8 @@ class VHSwishMicrokernelTester {
         const int32_t input_value = int32_t(uint32_t(input_zero_point() - input[i]) << 7);
         int32_t in = input_value * input_scale_div;
         in -= 16384;  // subtract 0.5 in Q15
-        in = std::min<int32_t>(in, 0);
-        in = std::max<int32_t>(in, -32768);
+        in = std::min(in, 0);
+        in = std::max(in, -32768);
         const int32_t out = math_asr_s32(input_value * scale_ratio + INT32_C(0x4000), 15);
         int32_t output_value = math_asr_s32(in * out + INT32_C(0x4000), 15) + output_zero_point();
         output_value = std::min<int32_t>(output_value, std::numeric_limits<uint8_t>::max());

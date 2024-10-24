@@ -5,52 +5,52 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/microfnptr.h>
+
 
 class PReLUMicrokernelTester {
  public:
-  PReLUMicrokernelTester& rows(size_t rows) {
+  inline PReLUMicrokernelTester& rows(size_t rows) {
     assert(rows != 0);
     this->rows_ = rows;
     return *this;
   }
 
-  size_t rows() const {
+  inline size_t rows() const {
     return this->rows_;
   }
 
-  PReLUMicrokernelTester& channels(size_t channels) {
+  inline PReLUMicrokernelTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  PReLUMicrokernelTester& input_stride(size_t input_stride) {
+  inline PReLUMicrokernelTester& input_stride(size_t input_stride) {
     assert(input_stride != 0);
     this->input_stride_ = input_stride;
     return *this;
   }
 
-  size_t input_stride() const {
+  inline size_t input_stride() const {
     if (this->input_stride_ == 0) {
       return channels();
     } else {
@@ -59,13 +59,13 @@ class PReLUMicrokernelTester {
     }
   }
 
-  PReLUMicrokernelTester& output_stride(size_t output_stride) {
+  inline PReLUMicrokernelTester& output_stride(size_t output_stride) {
     assert(output_stride != 0);
     this->output_stride_ = output_stride;
     return *this;
   }
 
-  size_t output_stride() const {
+  inline size_t output_stride() const {
     if (this->output_stride_ == 0) {
       return channels();
     } else {
@@ -74,26 +74,27 @@ class PReLUMicrokernelTester {
     }
   }
 
-  PReLUMicrokernelTester& inplace(bool inplace) {
+  inline PReLUMicrokernelTester& inplace(bool inplace) {
     this->inplace_ = inplace;
     return *this;
   }
 
-  bool inplace() const {
+  inline bool inplace() const {
     return this->inplace_;
   }
 
-  PReLUMicrokernelTester& iterations(size_t iterations) {
+  inline PReLUMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_f16_prelu_ukernel_fn prelu) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-1.0f, 1.0f);
     std::uniform_real_distribution<float> w32dist(0.25f, 0.75f);
 
@@ -138,7 +139,8 @@ class PReLUMicrokernelTester {
   }
 
   void Test(xnn_f32_prelu_ukernel_fn prelu) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-1.0f, 1.0f);
     std::uniform_real_distribution<float> w32dist(0.25f, 0.75f);
 

@@ -5,56 +5,56 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
-#include <functional>
 #include <numeric>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/microfnptr.h>
+
 
 class FilterbankSubtractMicrokernelTester {
  public:
 
-  FilterbankSubtractMicrokernelTester& batch(size_t batch) {
+  inline FilterbankSubtractMicrokernelTester& batch(size_t batch) {
     assert(batch != 0);
     this->batch_ = batch;
     return *this;
   }
 
-  size_t batch() const {
+  inline size_t batch() const {
     return this->batch_;
   }
 
-  FilterbankSubtractMicrokernelTester& inplace(bool inplace) {
+  inline FilterbankSubtractMicrokernelTester& inplace(bool inplace) {
     this->inplace_ = inplace;
     return *this;
   }
 
-  bool inplace() const {
+  inline bool inplace() const {
     return this->inplace_;
   }
 
-  FilterbankSubtractMicrokernelTester& iterations(size_t iterations) {
+  inline FilterbankSubtractMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_u32_filterbank_subtract_ukernel_fn filterbank_subtract) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto u32rng = std::bind(std::uniform_int_distribution<uint32_t>(), std::ref(rng));
     const uint32_t smoothing = 655;
     const uint32_t alternate_smoothing = 655;

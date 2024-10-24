@@ -5,91 +5,86 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
-#include <functional>
 #include <initializer_list>
-#include <limits>
-#include <memory>
 #include <numeric>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+
 
 class ConstantPadOperatorTester {
  public:
-  ConstantPadOperatorTester& input_shape(std::initializer_list<size_t> input_shape) {
+  inline ConstantPadOperatorTester& input_shape(std::initializer_list<size_t> input_shape) {
     assert(input_shape.size() <= XNN_MAX_TENSOR_DIMS);
     input_shape_ = std::vector<size_t>(input_shape);
     return *this;
   }
 
-  const std::vector<size_t>& input_shape() const {
+  inline const std::vector<size_t>& input_shape() const {
     return input_shape_;
   }
 
-  size_t input_dim(size_t i) const {
+  inline size_t input_dim(size_t i) const {
     return i < input_shape_.size() ? input_shape_[i] : 1;
   }
 
-  size_t num_dims() const {
+  inline size_t num_dims() const {
     return input_shape_.size();
   }
 
-  size_t num_input_elements() const {
+  inline size_t num_input_elements() const {
     return std::accumulate(
       input_shape_.cbegin(), input_shape_.cend(), size_t(1), std::multiplies<size_t>());
   }
 
-  ConstantPadOperatorTester& pre_paddings(std::initializer_list<size_t> pre_paddings) {
+  inline ConstantPadOperatorTester& pre_paddings(std::initializer_list<size_t> pre_paddings) {
     assert(pre_paddings.size() <= XNN_MAX_TENSOR_DIMS);
     pre_paddings_ = std::vector<size_t>(pre_paddings);
     return *this;
   }
 
-  const std::vector<size_t>& pre_paddings() const {
+  inline const std::vector<size_t>& pre_paddings() const {
     return pre_paddings_;
   }
 
-  size_t pre_padding(size_t i) const {
+  inline size_t pre_padding(size_t i) const {
     return i < pre_paddings_.size() ? pre_paddings_[i] : 0;
   }
 
-  size_t num_pre_paddings() const {
+  inline size_t num_pre_paddings() const {
     return pre_paddings_.size();
   }
 
-  ConstantPadOperatorTester& post_paddings(std::initializer_list<size_t> post_paddings) {
+  inline ConstantPadOperatorTester& post_paddings(std::initializer_list<size_t> post_paddings) {
     assert(post_paddings.size() <= XNN_MAX_TENSOR_DIMS);
     post_paddings_ = std::vector<size_t>(post_paddings);
     return *this;
   }
 
-  const std::vector<size_t>& post_paddings() const {
+  inline const std::vector<size_t>& post_paddings() const {
     return post_paddings_;
   }
 
-  size_t post_padding(size_t i) const {
+  inline size_t post_padding(size_t i) const {
     return i < post_paddings_.size() ? post_paddings_[i] : 0;
   }
 
-  size_t num_post_paddings() const {
+  inline size_t num_post_paddings() const {
     return post_paddings_.size();
   }
 
-  size_t output_dim(size_t i) const {
+  inline size_t output_dim(size_t i) const {
     return pre_padding(i) + input_dim(i) + post_padding(i);
   }
 
-  size_t num_output_elements() const {
+  inline size_t num_output_elements() const {
     size_t elements = 1;
     for (size_t i = 0; i < num_dims(); i++) {
       elements *= output_dim(i);
@@ -97,12 +92,12 @@ class ConstantPadOperatorTester {
     return elements;
   }
 
-  ConstantPadOperatorTester& iterations(size_t iterations) {
+  inline ConstantPadOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
@@ -110,7 +105,8 @@ class ConstantPadOperatorTester {
     ASSERT_EQ(num_dims(), num_pre_paddings());
     ASSERT_EQ(num_dims(), num_post_paddings());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
 
@@ -229,7 +225,8 @@ class ConstantPadOperatorTester {
     ASSERT_EQ(num_dims(), num_pre_paddings());
     ASSERT_EQ(num_dims(), num_post_paddings());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
 
@@ -330,7 +327,8 @@ class ConstantPadOperatorTester {
     ASSERT_EQ(num_dims(), num_pre_paddings());
     ASSERT_EQ(num_dims(), num_post_paddings());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<uint16_t> u16dist;
 
     // Compute generalized shapes.
@@ -448,7 +446,8 @@ class ConstantPadOperatorTester {
     ASSERT_EQ(num_dims(), num_pre_paddings());
     ASSERT_EQ(num_dims(), num_post_paddings());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<uint16_t> u16dist;
 
     // Compute generalized shapes.
@@ -548,7 +547,8 @@ class ConstantPadOperatorTester {
     ASSERT_EQ(num_dims(), num_pre_paddings());
     ASSERT_EQ(num_dims(), num_post_paddings());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<uint32_t> u32dist;
 
     // Compute generalized shapes.
@@ -666,7 +666,8 @@ class ConstantPadOperatorTester {
     ASSERT_EQ(num_dims(), num_pre_paddings());
     ASSERT_EQ(num_dims(), num_post_paddings());
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<uint32_t> u32dist;
 
     // Compute generalized shapes.

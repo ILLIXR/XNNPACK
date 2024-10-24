@@ -8,58 +8,57 @@
 
 #pragma once
 
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
+
+#include <cstddef>
+#include <cstdlib>
 
 #include <algorithm>
-#include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <cstdlib>
+#include <cfloat>
+#include <cmath>
 #include <functional>
 #include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <xnnpack/microfnptr.h>
+
 
 class ZipMicrokernelTester {
  public:
-  ZipMicrokernelTester& n(size_t n) {
+  inline ZipMicrokernelTester& n(size_t n) {
     assert(n != 0);
     this->n_ = n;
     return *this;
   }
 
-  size_t n() const {
+  inline size_t n() const {
     return this->n_;
   }
 
-  ZipMicrokernelTester& g(size_t g) {
+  inline ZipMicrokernelTester& g(size_t g) {
     assert(g != 0);
     this->g_ = g;
     return *this;
   }
 
-  size_t g() const {
+  inline size_t g() const {
     return this->g_;
   }
 
-  ZipMicrokernelTester& iterations(size_t iterations) {
+  inline ZipMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_x8_zipc_ukernel_fn zip) const {
-    xnnpack::ReplicableRandomDevice rng;
-    auto u8rng = [&rng]() {
-      return std::uniform_int_distribution<uint32_t>(
-          0, std::numeric_limits<uint8_t>::max())(rng);
-    };
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
+    auto u8rng = std::bind(std::uniform_int_distribution<uint32_t>(0, std::numeric_limits<uint8_t>::max()), rng);
 
     std::vector<uint8_t> x(n() * g());
     std::vector<uint8_t> x_ref(g() * n());
@@ -82,11 +81,9 @@ class ZipMicrokernelTester {
   }
 
   void Test(xnn_x8_zipv_ukernel_fn zip) const {
-    xnnpack::ReplicableRandomDevice rng;
-    auto u8rng = [&rng]() {
-      return std::uniform_int_distribution<uint32_t>(
-          0, std::numeric_limits<uint8_t>::max())(rng);
-    };
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
+    auto u8rng = std::bind(std::uniform_int_distribution<uint32_t>(0, std::numeric_limits<uint8_t>::max()), rng);
 
     std::vector<uint8_t> x(n() * g());
     std::vector<uint8_t> x_ref(g() * n());
@@ -109,10 +106,9 @@ class ZipMicrokernelTester {
   }
 
   void Test(xnn_x32_zipc_ukernel_fn zip) const {
-    xnnpack::ReplicableRandomDevice rng;
-    auto u32rng = [&rng]() {
-      return std::uniform_int_distribution<uint32_t>()(rng);
-    };
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
+    auto u32rng = std::bind(std::uniform_int_distribution<uint32_t>(), rng);
 
     std::vector<uint32_t> x(n() * g());
     std::vector<uint32_t> x_ref(g() * n());
@@ -135,10 +131,9 @@ class ZipMicrokernelTester {
   }
 
   void Test(xnn_x32_zipv_ukernel_fn zip) const {
-    xnnpack::ReplicableRandomDevice rng;
-    auto u32rng = [&rng]() {
-      return std::uniform_int_distribution<uint32_t>()(rng);
-    };
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
+    auto u32rng = std::bind(std::uniform_int_distribution<uint32_t>(), rng);
 
     std::vector<uint32_t> x(n() * g());
     std::vector<uint32_t> x_ref(g() * n());

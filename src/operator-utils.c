@@ -4,17 +4,14 @@
 // LICENSE file in the root directory of this source tree.
 
 #include <assert.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
 
 #include <tfl-xnnpack.h>           // For xnn_operator_t.
 #include <xnnpack/common.h>    // For XNN_ALLOCATION_ALIGNMENT.
 #include <xnnpack/cache.h>     // For xnn_code_cache.
 #include <xnnpack/log.h>
 #include <xnnpack/math.h>
-#include <xnnpack/operator-utils.h>
 #include <xnnpack/operator.h>  // For xnn_operator definition.
+#include <xnnpack/operator-utils.h>
 
 #if XNN_PLATFORM_JIT
 // Generate code for a single set of parameters.

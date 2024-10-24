@@ -5,64 +5,68 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microparams.h>
+#include <gtest/gtest.h>
+
+#include <fp16/fp16.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
+#include <functional>
+#include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
-#include <fp16/fp16.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
+#include <xnnpack/requantization.h>
+
 
 class VCMulMicrokernelTester {
  public:
-  VCMulMicrokernelTester& batch_size(size_t batch_size) {
+  inline VCMulMicrokernelTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  VCMulMicrokernelTester& inplace_a(bool inplace_a) {
+  inline VCMulMicrokernelTester& inplace_a(bool inplace_a) {
     this->inplace_a_ = inplace_a;
     return *this;
   }
 
-  bool inplace_a() const {
+  inline bool inplace_a() const {
     return this->inplace_a_;
   }
 
-  VCMulMicrokernelTester& inplace_b(bool inplace_b) {
+  inline VCMulMicrokernelTester& inplace_b(bool inplace_b) {
     this->inplace_b_ = inplace_b;
     return *this;
   }
 
-  bool inplace_b() const {
+  inline bool inplace_b() const {
     return this->inplace_b_;
   }
 
-  VCMulMicrokernelTester& iterations(size_t iterations) {
+  inline VCMulMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_f16_vbinary_ukernel_fn vcmul, xnn_init_f16_default_params_fn init_params = nullptr) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32rdist(1.0f, 10.0f);
     std::uniform_real_distribution<float> f32idist(0.01f, 0.1f);
 
@@ -82,7 +86,7 @@ class VCMulMicrokernelTester {
       } else if (inplace_b()) {
         std::copy(b.cbegin(), b.cend(), y.begin());
       } else {
-        std::fill(y.begin(), y.end(), UINT16_C(0x7E00) /* NaN */);
+        std::fill(y.begin(), y.end(), nanf(""));
       }
       const uint16_t* a_data = inplace_a() ? y.data() : a.data();
       const uint16_t* b_data = inplace_b() ? y.data() : b.data();
@@ -116,7 +120,8 @@ class VCMulMicrokernelTester {
   }
 
   void Test(xnn_f32_vbinary_ukernel_fn vcmul, xnn_init_f32_default_params_fn init_params = nullptr) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32rdist(1.0f, 10.0f);
     std::uniform_real_distribution<float> f32idist(0.01f, 0.1f);
 

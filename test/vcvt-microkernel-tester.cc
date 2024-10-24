@@ -5,12 +5,6 @@
 
 #include "vcvt-microkernel-tester.h"
 
-#include <stdint.h>
-#include <tfl-xnnpack.h>
-#include <xnnpack/math.h>
-#include <xnnpack/microfnptr.h>
-#include <xnnpack/microparams.h>
-
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -23,14 +17,20 @@
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
+#include <tfl-xnnpack.h>
+#include <xnnpack/math.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams-init.h>
+#include <xnnpack/microparams.h>
+
 #include <gtest/gtest.h>
 #include <fp16/fp16.h>
 
 void VCvtMicrokernelTester::Test(
     xnn_f16_f32_vcvt_ukernel_fn vcvt,
     xnn_init_f16_f32_cvt_params_fn init_params) const {
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_real_distribution<float> f32dist(-100.0f, 100.0f);
 
   std::vector<uint16_t> input(batch_size() +
@@ -62,7 +62,8 @@ void VCvtMicrokernelTester::Test(
 void VCvtMicrokernelTester::Test(
     xnn_f32_f16_vcvt_ukernel_fn vcvt,
     xnn_init_f32_f16_cvt_params_fn init_params) const {
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_real_distribution<float> f32dist(-100.0f, 100.0f);
 
   std::vector<float> input(batch_size() + XNN_EXTRA_BYTES / sizeof(float));
@@ -98,7 +99,8 @@ void VCvtMicrokernelTester::Test(xnn_f16_qs8_vcvt_ukernel_fn vcvt,
   ASSERT_GE(output_zero_point(), std::numeric_limits<int8_t>::min());
   ASSERT_LE(output_zero_point(), std::numeric_limits<int8_t>::max());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_real_distribution<float> f32dist(-1.0f, 1.0f);
 
   std::vector<float> input_float(batch_size());
@@ -157,7 +159,8 @@ void VCvtMicrokernelTester::Test(
   ASSERT_GE(output_zero_point(), std::numeric_limits<int8_t>::min());
   ASSERT_LE(output_zero_point(), std::numeric_limits<int8_t>::max());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_real_distribution<float> f32dist(-1.0f, 1.0f);
 
   std::vector<float> input(batch_size() + XNN_EXTRA_BYTES / sizeof(float));
@@ -205,7 +208,8 @@ void VCvtMicrokernelTester::Test(
   ASSERT_GE(output_zero_point(), std::numeric_limits<uint8_t>::min());
   ASSERT_LE(output_zero_point(), std::numeric_limits<uint8_t>::max());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_real_distribution<float> f32dist(-1.0f, 1.0f);
 
   std::vector<float> input(batch_size() + XNN_EXTRA_BYTES / sizeof(float));
@@ -250,7 +254,8 @@ void VCvtMicrokernelTester::Test(xnn_qs8_vcvt_ukernel_fn vcvt,
   ASSERT_GE(output_zero_point(), std::numeric_limits<int8_t>::min());
   ASSERT_LE(output_zero_point(), std::numeric_limits<int8_t>::max());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
 
@@ -298,7 +303,8 @@ void VCvtMicrokernelTester::Test(
   ASSERT_GE(output_zero_point(), std::numeric_limits<int8_t>::min());
   ASSERT_LE(output_zero_point(), std::numeric_limits<int8_t>::max());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_int_distribution<int16_t> i16dist;
 
   std::vector<int16_t> input(batch_size() + XNN_EXTRA_BYTES / sizeof(int16_t));
@@ -346,7 +352,8 @@ void VCvtMicrokernelTester::Test(
   ASSERT_GE(input_zero_point(), std::numeric_limits<int8_t>::min());
   ASSERT_LE(input_zero_point(), std::numeric_limits<int8_t>::max());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
 
@@ -387,7 +394,8 @@ void VCvtMicrokernelTester::Test(
   ASSERT_GE(input_zero_point(), std::numeric_limits<int8_t>::min());
   ASSERT_LE(input_zero_point(), std::numeric_limits<int8_t>::max());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
 
@@ -427,7 +435,8 @@ void VCvtMicrokernelTester::Test(xnn_qu8_vcvt_ukernel_fn vcvt,
   ASSERT_GE(output_zero_point(), std::numeric_limits<uint8_t>::min());
   ASSERT_LE(output_zero_point(), std::numeric_limits<uint8_t>::max());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_int_distribution<int32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
 
@@ -474,7 +483,8 @@ void VCvtMicrokernelTester::Test(
   ASSERT_GE(input_zero_point(), std::numeric_limits<uint8_t>::min());
   ASSERT_LE(input_zero_point(), std::numeric_limits<uint8_t>::max());
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_int_distribution<int32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
 

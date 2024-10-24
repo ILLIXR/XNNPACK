@@ -15,45 +15,46 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <functional>
 #include <limits>
 #include <memory>
+#include <numeric>
 #include <random>
 #include <utility>
 #include <vector>
 
-#include "replicable_random_device.h"
 #include <gtest/gtest.h>
 #include <fp16/fp16.h>
 
 class BatchMatMulOperatorTester {
  public:
-  BatchMatMulOperatorTester& m(size_t m) {
+  inline BatchMatMulOperatorTester& m(size_t m) {
     assert(m >= 1);
     this->m_ = m;
     return *this;
   }
 
-  size_t m() const {
+  inline size_t m() const {
     return this->m_;
   }
 
-  BatchMatMulOperatorTester& k(size_t k) {
+  inline BatchMatMulOperatorTester& k(size_t k) {
     assert(k >= 1);
     this->k_ = k;
     return *this;
   }
 
-  size_t k() const {
+  inline size_t k() const {
     return this->k_;
   }
 
-  BatchMatMulOperatorTester& n(size_t n) {
+  inline BatchMatMulOperatorTester& n(size_t n) {
     assert(n >= 1);
     this->n_ = n;
     return *this;
   }
 
-  size_t n() const {
+  inline size_t n() const {
     return this->n_;
   }
 
@@ -63,7 +64,7 @@ class BatchMatMulOperatorTester {
     return *this;
   }
 
-  const std::vector<size_t>& batch_dims_a() const {
+  inline const std::vector<size_t>& batch_dims_a() const {
     return this->batch_dims_a_;
   }
 
@@ -79,29 +80,29 @@ class BatchMatMulOperatorTester {
     return *this;
   }
 
-  const std::vector<size_t>& batch_dims_b() const {
+  inline const std::vector<size_t>& batch_dims_b() const {
     return this->batch_dims_b_;
   }
 
-  BatchMatMulOperatorTester& transpose_b(bool transpose_b) {
+  inline BatchMatMulOperatorTester& transpose_b(bool transpose_b) {
     this->transpose_b_ = transpose_b;
     return *this;
   }
 
-  bool transpose_b() const {
+  inline bool transpose_b() const {
     return this->transpose_b_;
   }
 
-  BatchMatMulOperatorTester& iterations(size_t iterations) {
+  inline BatchMatMulOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
-  uint32_t flags() const {
+  inline uint32_t flags() const {
     if (transpose_b()) {
       return XNN_FLAG_TRANSPOSE_B;
     } else {
@@ -109,7 +110,7 @@ class BatchMatMulOperatorTester {
     }
   }
 
-  enum xnn_status expected_status_reshape() const {
+  inline enum xnn_status expected_status_reshape() const {
     return expected_status_reshape_;
   }
 
@@ -251,7 +252,8 @@ class BatchMatMulOperatorTester {
     ASSERT_EQ(batch_dims_a().size(), batch_dims_b().size());
     const size_t num_batch_dims = batch_dims_a().size();
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.1f, 1.0f);
 
     size_t batch_size_a = 1;
@@ -334,7 +336,8 @@ class BatchMatMulOperatorTester {
     ASSERT_EQ(batch_dims_a().size(), batch_dims_b().size());
     const size_t num_batch_dims = batch_dims_a().size();
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.1f, 1.0f);
 
     size_t batch_size_a = 1;
@@ -417,7 +420,8 @@ class BatchMatMulOperatorTester {
     ASSERT_EQ(batch_dims_a().size(), batch_dims_b().size());
     const size_t num_batch_dims = batch_dims_a().size();
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(range_f32_.first,
                                                   range_f32_.second);
 

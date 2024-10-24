@@ -5,20 +5,21 @@
 
 #pragma once
 
-#include <xnnpack/math.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
-#include <functional>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/math.h>
+
 
 static const int16_t xnn_reference_table_fftr_twiddle[256] = {
   -402,-32765,   -804,-32757,  -1206,-32745,  -1608,-32728,
@@ -63,9 +64,9 @@ static void xnn_cs16_fftr_reference(
 
   assert(samples >= 2);
   assert(samples % 2 == 0);
-  assert(input != nullptr);
-  assert(output != nullptr);
-  assert(twiddle != nullptr);
+  assert(input != NULL);
+  assert(output != NULL);
+  assert(twiddle != NULL);
 
   const int16_t* il = input;
   const int16_t* ir = input + samples * 2;
@@ -120,27 +121,28 @@ static void xnn_cs16_fftr_reference(
 
 class FftrMicrokernelTester {
  public:
-  FftrMicrokernelTester& samples(size_t samples) {
+  inline FftrMicrokernelTester& samples(size_t samples) {
     assert(samples != 0);
     this->samples_ = samples;
     return *this;
   }
 
-  size_t samples() const {
+  inline size_t samples() const {
     return this->samples_;
   }
 
-  FftrMicrokernelTester& iterations(size_t iterations) {
+  inline FftrMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_cs16_fftr_ukernel_fn fftr) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto i16rng = std::bind(std::uniform_int_distribution<int16_t>(), std::ref(rng));
     const size_t sample_size = samples() * 2 + 2;
 

@@ -8,26 +8,24 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/cache.h>
-#include <xnnpack/common.h>
-#include <xnnpack/math.h>
-#include <xnnpack/microparams.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
+#include <cmath>
 #include <limits>
 #include <memory>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/cache.h>
+#include <xnnpack/quantization.h>
+
 
 static int8_t sign_extend_int4(int8_t value) {
   int8_t mask = 0x08;
@@ -44,43 +42,43 @@ class FullyConnectedOperatorTester {
     FP32,
   };
 
-  FullyConnectedOperatorTester& input_channels(size_t input_channels) {
+  inline FullyConnectedOperatorTester& input_channels(size_t input_channels) {
     assert(input_channels >= 1);
     this->input_channels_ = input_channels;
     return *this;
   }
 
-  size_t input_channels() const {
+  inline size_t input_channels() const {
     return this->input_channels_;
   }
 
-  FullyConnectedOperatorTester& output_channels(size_t output_channels) {
+  inline FullyConnectedOperatorTester& output_channels(size_t output_channels) {
     assert(output_channels >= 1);
     this->output_channels_ = output_channels;
     return *this;
   }
 
-  size_t output_channels() const {
+  inline size_t output_channels() const {
     return this->output_channels_;
   }
 
-  FullyConnectedOperatorTester& batch_size(size_t batch_size) {
+  inline FullyConnectedOperatorTester& batch_size(size_t batch_size) {
     assert(batch_size >= 1);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  FullyConnectedOperatorTester& input_stride(size_t input_stride) {
+  inline FullyConnectedOperatorTester& input_stride(size_t input_stride) {
     assert(input_stride >= 1);
     this->input_stride_ = input_stride;
     return *this;
   }
 
-  size_t input_stride() const {
+  inline size_t input_stride() const {
     if (this->input_stride_ == 0) {
       return input_channels();
     } else {
@@ -89,13 +87,13 @@ class FullyConnectedOperatorTester {
     }
   }
 
-  FullyConnectedOperatorTester& output_stride(size_t output_stride) {
+  inline FullyConnectedOperatorTester& output_stride(size_t output_stride) {
     assert(output_stride >= 1);
     this->output_stride_ = output_stride;
     return *this;
   }
 
-  size_t output_stride() const {
+  inline size_t output_stride() const {
     if (this->output_stride_ == 0) {
       return output_channels();
     } else {
@@ -104,104 +102,104 @@ class FullyConnectedOperatorTester {
     }
   }
 
-  FullyConnectedOperatorTester& input_zero_point(size_t input_zero_point) {
+  inline FullyConnectedOperatorTester& input_zero_point(size_t input_zero_point) {
     this->input_zero_point_ = input_zero_point;
     return *this;
   }
 
-  size_t input_zero_point() const {
+  inline size_t input_zero_point() const {
     return this->input_zero_point_;
   }
 
-  FullyConnectedOperatorTester& kernel_zero_point(size_t kernel_zero_point) {
+  inline FullyConnectedOperatorTester& kernel_zero_point(size_t kernel_zero_point) {
     this->kernel_zero_point_ = kernel_zero_point;
     return *this;
   }
 
-  size_t kernel_zero_point() const {
+  inline size_t kernel_zero_point() const {
     return this->kernel_zero_point_;
   }
 
-  FullyConnectedOperatorTester& output_zero_point(size_t output_zero_point) {
+  inline FullyConnectedOperatorTester& output_zero_point(size_t output_zero_point) {
     this->output_zero_point_ = output_zero_point;
     return *this;
   }
 
-  size_t output_zero_point() const {
+  inline size_t output_zero_point() const {
     return this->output_zero_point_;
   }
 
-  FullyConnectedOperatorTester& qmin(uint8_t qmin) {
+  inline FullyConnectedOperatorTester& qmin(uint8_t qmin) {
     this->qmin_ = qmin;
     return *this;
   }
 
-  uint8_t qmin() const {
+  inline uint8_t qmin() const {
     return this->qmin_;
   }
 
-  FullyConnectedOperatorTester& qmax(uint8_t qmax) {
+  inline FullyConnectedOperatorTester& qmax(uint8_t qmax) {
     this->qmax_ = qmax;
     return *this;
   }
 
-  uint8_t qmax() const {
+  inline uint8_t qmax() const {
     return this->qmax_;
   }
 
-  FullyConnectedOperatorTester& transpose_weights(bool transpose_weights) {
+  inline FullyConnectedOperatorTester& transpose_weights(bool transpose_weights) {
     this->transpose_weights_ = transpose_weights;
     return *this;
   }
 
-  bool transpose_weights() const {
+  inline bool transpose_weights() const {
     return this->transpose_weights_;
   }
 
-  FullyConnectedOperatorTester& has_bias(bool has_bias) {
+  inline FullyConnectedOperatorTester& has_bias(bool has_bias) {
     this->has_bias_ = has_bias;
     return *this;
   }
 
-  bool has_bias() const {
+  inline bool has_bias() const {
     return this->has_bias_;
   }
 
-  FullyConnectedOperatorTester& weights_type(WeightsType weights_type) {
+  inline FullyConnectedOperatorTester& weights_type(WeightsType weights_type) {
     this->weights_type_ = weights_type;
     return *this;
   }
 
-  WeightsType weights_type() const {
+  inline WeightsType weights_type() const {
     return this->weights_type_;
   }
 
-  FullyConnectedOperatorTester& use_weights_cache(bool use_weights_cache) {
+  inline FullyConnectedOperatorTester& use_weights_cache(bool use_weights_cache) {
     this->use_weights_cache_ = use_weights_cache;
     return *this;
   }
 
-  bool use_weights_cache() const {
+  inline bool use_weights_cache() const {
     return this->use_weights_cache_;
   }
 
 #if XNN_PLATFORM_JIT
-  FullyConnectedOperatorTester& use_jit(bool use_jit) {
+  inline FullyConnectedOperatorTester& use_jit(bool use_jit) {
     this->use_jit_ = use_jit;
     return *this;
   }
 
-  bool use_jit() const {
+  inline bool use_jit() const {
     return this->use_jit_;
   }
 #endif
 
-  FullyConnectedOperatorTester& iterations(size_t iterations) {
+  inline FullyConnectedOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
@@ -216,7 +214,8 @@ class FullyConnectedOperatorTester {
   void TestQD8F16QC4W() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-1.f, 1.f);
     std::uniform_real_distribution<float> f32idist(0.5f, 2.0f);
     std::uniform_int_distribution<int32_t> w8dist(-std::numeric_limits<int8_t>::max(), std::numeric_limits<int8_t>::max());
@@ -419,7 +418,8 @@ class FullyConnectedOperatorTester {
   void TestQD8F32QC4W() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-1.f, 1.f);
     std::uniform_real_distribution<float> f32idist(0.5f, 2.0f);
     std::uniform_int_distribution<int32_t> w8dist(std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
@@ -614,7 +614,8 @@ class FullyConnectedOperatorTester {
   void TestQD8F16QC8W() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-1.0f, 1.0f);
     std::uniform_real_distribution<float> f32idist(0.1f, 1.0f);
     std::uniform_int_distribution<int32_t> w8dist(-std::numeric_limits<int8_t>::max(), std::numeric_limits<int8_t>::max());
@@ -796,7 +797,8 @@ class FullyConnectedOperatorTester {
   void TestQD8F32QC8W() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(-1.f, 1.f);
     std::uniform_real_distribution<float> f32idist(0.5f, 2.0f);
     std::uniform_int_distribution<int32_t> w8dist(std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
@@ -972,7 +974,8 @@ class FullyConnectedOperatorTester {
   void TestQS8() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> i32dist(-10000, 10000);
     std::uniform_int_distribution<int32_t> i8dist(
       std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
@@ -1160,7 +1163,8 @@ class FullyConnectedOperatorTester {
   void TestQS8QC8W() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32idist(0.1f, 1.0f);
     std::uniform_real_distribution<float> f32wdist(-1.0f, 1.0f);
     std::uniform_int_distribution<int32_t> i32dist(-10000, 10000);
@@ -1382,7 +1386,8 @@ class FullyConnectedOperatorTester {
   void TestQU8() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<int32_t> i32dist(-10000, 10000);
     std::uniform_int_distribution<int32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
@@ -1563,7 +1568,8 @@ class FullyConnectedOperatorTester {
   void TestF32() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.1f, 1.0f);
 
     std::vector<float> input(XNN_EXTRA_BYTES / sizeof(float) +
@@ -1771,7 +1777,8 @@ class FullyConnectedOperatorTester {
   void TestF32QC4W() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32idist(0.1f, 1.0f);
     std::uniform_real_distribution<float> f32wdist(-1.0f, 1.0f);
     std::uniform_int_distribution<uint32_t> i8wdist(-1, std::numeric_limits<uint8_t>::max());
@@ -1974,7 +1981,8 @@ class FullyConnectedOperatorTester {
   void TestF32QC8W() const {
     ASSERT_EQ(weights_type(), WeightsType::Default);
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32idist(0.1f, 1.0f);
     std::uniform_real_distribution<float> f32wdist(-1.0f, 1.0f);
     std::uniform_int_distribution<int32_t> i8wdist(
@@ -2198,7 +2206,8 @@ class FullyConnectedOperatorTester {
         GTEST_FAIL() << "unexpected weights type";
     }
 
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.1f, 1.0f);
 
     std::vector<uint16_t> input(XNN_EXTRA_BYTES / sizeof(uint16_t) +

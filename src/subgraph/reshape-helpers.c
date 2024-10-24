@@ -1,19 +1,5 @@
-// Copyright 2023 Google LLC
-//
-// This source code is licensed under the BSD-style license found in the
-// LICENSE file in the root directory of this source tree.
-
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
-
-#include <xnnpack.h>
 #include <xnnpack/log.h>
-#include <xnnpack/math.h>
 #include <xnnpack/reshape-helpers.h>
-#include <xnnpack/subgraph.h>
-
-#include "pthreadpool.h"
 
 enum xnn_status resize_unary_elementwise_output_tensor(
   const struct xnn_operator_data* opdata,
@@ -32,10 +18,6 @@ enum xnn_status resize_unary_elementwise_output_tensor(
   const size_t new_size = xnn_tensor_get_size(output);
   if (new_size > output->size || opdata->workspace_size > old_workspace_size) {
     output->size = new_size;
-    if (output->datatype == xnn_datatype_qdint8) {
-      // reallocation will use this to adjust memory needed for dynamic quant params
-      output->quantization.dynamic_params_size = xnn_tensor_get_dynamic_quant_param_size(output);
-    }
     return xnn_status_reallocation_required;
   }
   return xnn_status_success;

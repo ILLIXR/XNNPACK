@@ -5,24 +5,23 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
-#include <memory>
+#include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+
 
 class UnpoolingOperatorTester {
  public:
-  UnpoolingOperatorTester& padding(uint32_t padding) {
+  inline UnpoolingOperatorTester& padding(uint32_t padding) {
     this->padding_top_ = padding;
     this->padding_right_ = padding;
     this->padding_bottom_ = padding;
@@ -30,7 +29,7 @@ class UnpoolingOperatorTester {
     return *this;
   }
 
-  UnpoolingOperatorTester& padding(uint32_t padding_height, uint32_t padding_width) {
+  inline UnpoolingOperatorTester& padding(uint32_t padding_height, uint32_t padding_width) {
     this->padding_top_ = padding_height;
     this->padding_right_ = padding_width;
     this->padding_bottom_ = padding_height;
@@ -38,55 +37,55 @@ class UnpoolingOperatorTester {
     return *this;
   }
 
-  UnpoolingOperatorTester& padding_height(uint32_t padding_height) {
+  inline UnpoolingOperatorTester& padding_height(uint32_t padding_height) {
     this->padding_top_ = padding_height;
     this->padding_bottom_ = padding_height;
     return *this;
   }
 
-  UnpoolingOperatorTester& padding_width(uint32_t padding_width) {
+  inline UnpoolingOperatorTester& padding_width(uint32_t padding_width) {
     this->padding_right_ = padding_width;
     this->padding_left_ = padding_width;
     return *this;
   }
 
-  UnpoolingOperatorTester& padding_top(uint32_t padding_top) {
+  inline UnpoolingOperatorTester& padding_top(uint32_t padding_top) {
     this->padding_top_ = padding_top;
     return *this;
   }
 
-  uint32_t padding_top() const {
+  inline uint32_t padding_top() const {
     return this->padding_top_;
   }
 
-  UnpoolingOperatorTester& padding_right(uint32_t padding_right) {
+  inline UnpoolingOperatorTester& padding_right(uint32_t padding_right) {
     this->padding_right_ = padding_right;
     return *this;
   }
 
-  uint32_t padding_right() const {
+  inline uint32_t padding_right() const {
     return this->padding_right_;
   }
 
-  UnpoolingOperatorTester& padding_bottom(uint32_t padding_bottom) {
+  inline UnpoolingOperatorTester& padding_bottom(uint32_t padding_bottom) {
     this->padding_bottom_ = padding_bottom;
     return *this;
   }
 
-  uint32_t padding_bottom() const {
+  inline uint32_t padding_bottom() const {
     return this->padding_bottom_;
   }
 
-  UnpoolingOperatorTester& padding_left(uint32_t padding_left) {
+  inline UnpoolingOperatorTester& padding_left(uint32_t padding_left) {
     this->padding_left_ = padding_left;
     return *this;
   }
 
-  uint32_t padding_left() const {
+  inline uint32_t padding_left() const {
     return this->padding_left_;
   }
 
-  UnpoolingOperatorTester& input_size(size_t input_height, size_t input_width) {
+  inline UnpoolingOperatorTester& input_size(size_t input_height, size_t input_width) {
     assert(input_height >= 1);
     assert(input_width >= 1);
     this->input_height_ = input_height;
@@ -94,54 +93,54 @@ class UnpoolingOperatorTester {
     return *this;
   }
 
-  UnpoolingOperatorTester& input_height(size_t input_height) {
+  inline UnpoolingOperatorTester& input_height(size_t input_height) {
     assert(input_height >= 1);
     this->input_height_ = input_height;
     return *this;
   }
 
-  size_t input_height() const {
+  inline size_t input_height() const {
     return this->input_height_;
   }
 
-  UnpoolingOperatorTester& input_width(size_t input_width) {
+  inline UnpoolingOperatorTester& input_width(size_t input_width) {
     assert(input_width >= 1);
     this->input_width_ = input_width;
     return *this;
   }
 
-  size_t input_width() const {
+  inline size_t input_width() const {
     return this->input_width_;
   }
 
-  UnpoolingOperatorTester& channels(size_t channels) {
+  inline UnpoolingOperatorTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  UnpoolingOperatorTester& batch_size(size_t batch_size) {
+  inline UnpoolingOperatorTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  UnpoolingOperatorTester& pooling_size(uint32_t pooling_size) {
+  inline UnpoolingOperatorTester& pooling_size(uint32_t pooling_size) {
     assert(pooling_size >= 1);
     this->pooling_height_ = pooling_size;
     this->pooling_width_ = pooling_size;
     return *this;
   }
 
-  UnpoolingOperatorTester& pooling_size(uint32_t pooling_height, uint32_t pooling_width) {
+  inline UnpoolingOperatorTester& pooling_size(uint32_t pooling_height, uint32_t pooling_width) {
     assert(pooling_height >= 1);
     assert(pooling_width >= 1);
     this->pooling_height_ = pooling_height;
@@ -149,43 +148,43 @@ class UnpoolingOperatorTester {
     return *this;
   }
 
-  UnpoolingOperatorTester& pooling_height(uint32_t pooling_height) {
+  inline UnpoolingOperatorTester& pooling_height(uint32_t pooling_height) {
     assert(pooling_height >= 1);
     this->pooling_height_ = pooling_height;
     return *this;
   }
 
-  uint32_t pooling_height() const {
+  inline uint32_t pooling_height() const {
     return this->pooling_height_;
   }
 
-  UnpoolingOperatorTester& pooling_width(uint32_t pooling_width) {
+  inline UnpoolingOperatorTester& pooling_width(uint32_t pooling_width) {
     assert(pooling_width >= 1);
     this->pooling_width_ = pooling_width;
     return *this;
   }
 
-  uint32_t pooling_width() const {
+  inline uint32_t pooling_width() const {
     return this->pooling_width_;
   }
 
-  size_t output_height() const {
+  inline size_t output_height() const {
     const size_t padding_height = padding_top() + padding_bottom();
     return std::max<size_t>(input_height() * pooling_height(), padding_height) - padding_height;
   }
 
-  size_t output_width() const {
+  inline size_t output_width() const {
     const size_t padding_width = padding_left() + padding_right();
     return std::max<size_t>(input_width() * pooling_width(), padding_width) - padding_width;
   }
 
-  UnpoolingOperatorTester& input_pixel_stride(size_t input_pixel_stride) {
+  inline UnpoolingOperatorTester& input_pixel_stride(size_t input_pixel_stride) {
     assert(input_pixel_stride != 0);
     this->input_pixel_stride_ = input_pixel_stride;
     return *this;
   }
 
-  size_t input_pixel_stride() const {
+  inline size_t input_pixel_stride() const {
     if (this->input_pixel_stride_ == 0) {
       return channels();
     } else {
@@ -194,13 +193,13 @@ class UnpoolingOperatorTester {
     }
   }
 
-  UnpoolingOperatorTester& output_pixel_stride(size_t output_pixel_stride) {
+  inline UnpoolingOperatorTester& output_pixel_stride(size_t output_pixel_stride) {
     assert(output_pixel_stride != 0);
     this->output_pixel_stride_ = output_pixel_stride;
     return *this;
   }
 
-  size_t output_pixel_stride() const {
+  inline size_t output_pixel_stride() const {
     if (this->output_pixel_stride_ == 0) {
       return channels();
     } else {
@@ -209,7 +208,7 @@ class UnpoolingOperatorTester {
     }
   }
 
-  UnpoolingOperatorTester& next_input_size(uint32_t next_input_height, uint32_t next_input_width) {
+  inline UnpoolingOperatorTester& next_input_size(uint32_t next_input_height, uint32_t next_input_width) {
     assert(next_input_height >= 1);
     assert(next_input_width >= 1);
     this->next_input_height_ = next_input_height;
@@ -217,13 +216,13 @@ class UnpoolingOperatorTester {
     return *this;
   }
 
-  UnpoolingOperatorTester& next_input_height(uint32_t next_input_height) {
+  inline UnpoolingOperatorTester& next_input_height(uint32_t next_input_height) {
     assert(next_input_height >= 1);
     this->next_input_height_ = next_input_height;
     return *this;
   }
 
-  uint32_t next_input_height() const {
+  inline uint32_t next_input_height() const {
     if (this->next_input_height_ == 0) {
       return input_height();
     } else {
@@ -231,13 +230,13 @@ class UnpoolingOperatorTester {
     }
   }
 
-  UnpoolingOperatorTester& next_input_width(uint32_t next_input_width) {
+  inline UnpoolingOperatorTester& next_input_width(uint32_t next_input_width) {
     assert(next_input_width >= 1);
     this->next_input_width_ = next_input_width;
     return *this;
   }
 
-  uint32_t next_input_width() const {
+  inline uint32_t next_input_width() const {
     if (this->next_input_width_ == 0) {
       return input_width();
     } else {
@@ -245,23 +244,23 @@ class UnpoolingOperatorTester {
     }
   }
 
-  size_t next_output_height() const {
+  inline size_t next_output_height() const {
     const size_t padding_height = padding_top() + padding_bottom();
     return std::max<size_t>(next_input_height() * pooling_height(), padding_height) - padding_height;
   }
 
-  size_t next_output_width() const {
+  inline size_t next_output_width() const {
     const size_t padding_width = padding_left() + padding_right();
     return std::max<size_t>(next_input_width() * pooling_width(), padding_width) - padding_width;
   }
 
-  UnpoolingOperatorTester& next_batch_size(size_t next_batch_size) {
+  inline UnpoolingOperatorTester& next_batch_size(size_t next_batch_size) {
     assert(next_batch_size >= 1);
     this->next_batch_size_ = next_batch_size;
     return *this;
   }
 
-  size_t next_batch_size() const {
+  inline size_t next_batch_size() const {
     if (this->next_batch_size_ == 0) {
       return batch_size();
     } else {
@@ -269,17 +268,18 @@ class UnpoolingOperatorTester {
     }
   }
 
-  UnpoolingOperatorTester& iterations(size_t iterations) {
+  inline UnpoolingOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void TestX32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto u32rng = std::bind(std::uniform_int_distribution<uint32_t>(), std::ref(rng));
     auto idx_rng = std::bind(std::uniform_int_distribution<uint32_t>(0, pooling_height() * pooling_width() - 1), std::ref(rng));
 
@@ -356,7 +356,8 @@ class UnpoolingOperatorTester {
   }
 
   void TestSetupX32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto u32rng = std::bind(std::uniform_int_distribution<uint32_t>(), std::ref(rng));
     auto idx_rng = std::bind(std::uniform_int_distribution<uint32_t>(0, pooling_height() * pooling_width() - 1), std::ref(rng));
 

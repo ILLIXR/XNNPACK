@@ -5,44 +5,44 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
-#include <functional>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/microfnptr.h>
+
 
 class VSquareAbsMicrokernelTester {
  public:
-  VSquareAbsMicrokernelTester& batch(size_t batch) {
+  inline VSquareAbsMicrokernelTester& batch(size_t batch) {
     assert(batch != 0);
     this->batch_ = batch;
     return *this;
   }
 
-  size_t batch() const {
+  inline size_t batch() const {
     return this->batch_;
   }
 
-  VSquareAbsMicrokernelTester& iterations(size_t iterations) {
+  inline VSquareAbsMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_cs16_vsquareabs_ukernel_fn vsquareabs) const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     auto i16rng = std::bind(std::uniform_int_distribution<int16_t>(), std::ref(rng));
 
     std::vector<int16_t> input(batch() * 2 + XNN_EXTRA_BYTES / sizeof(int16_t));

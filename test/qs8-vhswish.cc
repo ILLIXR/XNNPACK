@@ -8,14 +8,14 @@
 //   Generator: tools/generate-vhswish-test.py
 
 
-#include <xnnpack/common.h>
-#include <xnnpack/isa-checks.h>
-#include <xnnpack/microparams-init.h>
-#include <xnnpack/vhswish.h>
+#include <gtest/gtest.h>
 
 #include <vector>
 
-#include <gtest/gtest.h>
+#include <xnnpack/common.h>
+#include <xnnpack/isa-checks.h>
+#include <xnnpack/vhswish.h>
+
 #include "vhswish-microkernel-tester.h"
 
 

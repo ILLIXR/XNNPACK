@@ -18,14 +18,14 @@
 #include <xnnpack/config.h>
 #include <xnnpack/log.h>
 #include <xnnpack/math.h>
+#include <xnnpack/microfnptr.h>
 #include <xnnpack/microkernel-type.h>
 #include <xnnpack/microparams.h>
-#include <xnnpack/operator-type.h>
 #include <xnnpack/operator.h>
+#include <xnnpack/operator-type.h>
 #include <xnnpack/params.h>
+#include <xnnpack/pack.h>
 
-#include "pthreadpool.h"
-#include <fp16/fp16.h>
 
 static enum xnn_status create_scaled_dot_product_attention_nhtc(
   enum xnn_attention_logits_cap_type cap_type,

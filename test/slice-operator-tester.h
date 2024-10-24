@@ -5,13 +5,10 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-
+#include <iostream>
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <initializer_list>
@@ -21,72 +18,74 @@
 
 #include <gtest/gtest.h>
 
+#include <tfl-xnnpack.h>
+
 class SliceOperatorTester {
  public:
-  SliceOperatorTester& input_shape(std::initializer_list<size_t> input_shape) {
+  inline SliceOperatorTester& input_shape(std::initializer_list<size_t> input_shape) {
     assert(input_shape.size() <= XNN_MAX_TENSOR_DIMS);
     input_shape_ = std::vector<size_t>(input_shape);
     return *this;
   }
 
-  const std::vector<size_t>& input_shape() const {
+  inline const std::vector<size_t>& input_shape() const {
     return input_shape_;
   }
 
-  size_t input_dim(size_t i) const {
+  inline size_t input_dim(size_t i) const {
     return i < input_shape_.size() ? input_shape_[i] : 1;
   }
 
-  size_t num_dims() const {
+  inline size_t num_dims() const {
     return input_shape_.size();
   }
 
-  size_t num_input_elements() const {
+  inline size_t num_input_elements() const {
     return std::accumulate(
       input_shape_.cbegin(), input_shape_.cend(), size_t(1), std::multiplies<size_t>());
   }
 
-  SliceOperatorTester& offsets(std::initializer_list<size_t> offsets) {
+  inline SliceOperatorTester& offsets(std::initializer_list<size_t> offsets) {
     assert(offsets.size() <= XNN_MAX_TENSOR_DIMS);
     offsets_ = std::vector<size_t>(offsets);
     return *this;
   }
 
-  const std::vector<size_t>& offsets() const {
+  inline const std::vector<size_t>& offsets() const {
     return offsets_;
   }
 
-  size_t offset(size_t i) const {
+  inline size_t offset(size_t i) const {
     return i < offsets_.size() ? offsets_[i] : 0;
   }
 
-  size_t num_offsets() const {
+  inline size_t num_offsets() const {
     return offsets_.size();
   }
 
-  SliceOperatorTester& sizes(std::initializer_list<size_t> sizes) {
+  inline SliceOperatorTester& sizes(std::initializer_list<size_t> sizes) {
     assert(sizes.size() <= XNN_MAX_TENSOR_DIMS);
     sizes_ = std::vector<size_t>(sizes);
     return *this;
   }
 
-  const std::vector<size_t>& sizes() const {
+  inline const std::vector<size_t>& sizes() const {
     return sizes_;
   }
 
-  size_t size(size_t i) const {
+  inline size_t size(size_t i) const {
     return i < sizes_.size() ? sizes_[i] : 1;
   }
 
-  size_t num_sizes() const {
+  inline size_t num_sizes() const {
     return sizes_.size();
   }
 
-  size_t output_dim(size_t i) const {
+  inline size_t output_dim(size_t i) const {
     return size(i);
   }
 
-  size_t num_output_elements() const {
+  inline size_t num_output_elements() const {
     size_t elements = 1;
     for (size_t i = 0; i < num_dims(); i++) {
       elements *= output_dim(i);
@@ -94,12 +93,12 @@ class SliceOperatorTester {
     return elements;
   }
 
-  SliceOperatorTester& iterations(size_t iterations) {
+  inline SliceOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 

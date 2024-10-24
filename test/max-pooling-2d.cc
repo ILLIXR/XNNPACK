@@ -3,13 +3,6 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/node-type.h>
-#include <xnnpack/operator-utils.h>
-#include <xnnpack/operator.h>
-#include <xnnpack/requantization.h>
-#include <xnnpack/subgraph.h>
-
 #include <algorithm>  // For std::generate, std::min.
 #include <array>      // For std::array.
 #include <cmath>      // For std::lrintf.
@@ -17,16 +10,24 @@
 #include <cstdint>    // For uint32_t.
 #include <limits>     // For std::numeric_limits.
 #include <memory>     // For std::unique_ptr.
-#include <random>     // For std::uniform_real_distribution.
+#include <random>     // For std::random_device, std::mt19937, std::uniform_real_distribution.
 #include <vector>     // For std::vector.
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+#include <gtest/gtest.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/operator.h>
+#include <xnnpack/operator-utils.h>
+#include <xnnpack/requantization.h>
+#include <xnnpack/subgraph.h>
 
 template <class T> class MaxPooling2DTestBase : public ::testing::Test {
- protected:
-  MaxPooling2DTestBase() {
+protected:
+  MaxPooling2DTestBase()
+  {
+    random_device = std::make_unique<std::random_device>();
+    rng = std::mt19937((*random_device)());
     input_size_dist = std::uniform_int_distribution<uint32_t>(10, 15);
     kernel_size_dist = std::uniform_int_distribution<uint32_t>(2, 5);
     f32dist = std::uniform_real_distribution<float>();
@@ -70,7 +71,8 @@ template <class T> class MaxPooling2DTestBase : public ::testing::Test {
       std::vector<T>(XNN_EXTRA_BYTES / sizeof(T) + batch_size * output_height * output_width * channels);
   }
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_int_distribution<uint32_t> input_size_dist;
   std::uniform_int_distribution<uint32_t> kernel_size_dist;
   std::uniform_int_distribution<int32_t> i32dist;

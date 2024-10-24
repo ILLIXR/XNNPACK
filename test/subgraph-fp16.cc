@@ -3,11 +3,6 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/allocation-type.h>
-#include <xnnpack/node-type.h>
-#include <xnnpack/subgraph.h>
-
 #include <algorithm>
 #include <array>
 #include <cstddef>
@@ -18,13 +13,17 @@
 #include <random>
 #include <vector>
 
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+#include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/node-type.h>
+#include <xnnpack/subgraph.h>
+
 #include "mock-allocator.h"
-#include "replicable_random_device.h"
 #include "runtime-tester.h"
 #include "subgraph-tester.h"
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
-#include <fp16/fp16.h>
 
 namespace xnnpack {
 
@@ -33,7 +32,7 @@ using ::testing::AnyNumber;
 using ::testing::Return;
 
 TEST(SUBGRAPH_FP16, value_both_external_output_and_input) {
-  SubgraphTester tester(4);
+  auto tester = SubgraphTester(4);
   std::array<size_t, 4> pre_paddings = {0,1,0,0};
   std::array<size_t, 4> post_paddings = {0,1,0,0};
   // external input[0]
@@ -107,7 +106,7 @@ TEST(SUBGRAPH_FP16, value_both_external_output_and_input) {
 }
 
 TEST(SUBGRAPH_FP16, with_static_value) {
-  SubgraphTester tester(3);
+  auto tester = SubgraphTester(3);
   float static_tensor_data[3 + XNN_EXTRA_BYTES / sizeof(float)] = {
     1.0f, 2.0f, 3.0f
   };
@@ -175,7 +174,7 @@ TEST(SUBGRAPH_FP16, external_inputs_allocation_type_remains_external) {
   //                  |
   //               external
   //               output[2]
-  RuntimeTester tester(3);
+  auto tester = RuntimeTester(3);
   tester
       .AddInputTensorF32({1, 2, 2, 3}, 0)
       .AddInputTensorF32({1, 2, 2, 3}, 1)
@@ -198,7 +197,7 @@ TEST(SUBGRAPH_FP16, external_inputs_allocation_type_remains_external) {
 }
 
 TEST(SUBGRAPH_FP16, static_buffer_allocation_failure) {
-  SubgraphTester tester(3);
+  auto tester = SubgraphTester(3);
   tester
       .AddInputTensorF32({1, 2, 2, 3}, 0)
       .AddStaticTensorF32({1, 1, 1, 3}, TensorType::kDense, 1,
@@ -221,7 +220,7 @@ TEST(SUBGRAPH_FP16, static_buffer_allocation_failure) {
 }
 
 TEST(SUBGRAPH_FP16, external_value_allocation_failure) {
-  SubgraphTester tester(3);
+  auto tester = SubgraphTester(3);
   tester
       .AddInputTensorF32({1, 2, 2, 3}, 0)
       .AddStaticTensorF32({1, 1, 1, 3}, TensorType::kDense, 1,
@@ -243,7 +242,7 @@ TEST(SUBGRAPH_FP16, external_value_allocation_failure) {
 }
 
 TEST(SUBGRAPH_FP16, convolution_weights_used_by_another_node) {
-  SubgraphTester tester(7);
+  auto tester = SubgraphTester(7);
 
   float static_filter_data[6 + XNN_EXTRA_BYTES / sizeof(float)] = {
     1.0f, 2.0f, 3.0f,
@@ -322,7 +321,7 @@ TEST(SUBGRAPH_FP16, convolution_weights_used_by_another_node) {
 }
 
 TEST(SUBGRAPH_FP16, convolution_bias_used_by_another_node) {
-  SubgraphTester tester(7);
+  auto tester = SubgraphTester(7);
 
   float static_bias_data[2 + XNN_EXTRA_BYTES / sizeof(float)] = {
     1.0f, 2.0f,
@@ -392,8 +391,8 @@ TEST(SUBGRAPH_FP16, convolution_bias_used_by_another_node) {
 }
 
 TEST(SUBGRAPH_FP16, fully_connected_qd8_f16_qc8w) {
-  SubgraphTester tester(5);
-  SubgraphTester reference_tester(5);
+  auto tester = SubgraphTester(5);
+  auto reference_tester = SubgraphTester(5);
 
   int8_t static_filter_data[6 + XNN_EXTRA_BYTES / sizeof(int8_t)] = {
     1, 2, 3,
@@ -451,7 +450,8 @@ TEST(SUBGRAPH_FP16, fully_connected_qd8_f16_qc8w) {
 
   // We should have 4 nodes, the original fully connected and conversion nodes, a convert for the external input,
   // and a convert for the external output.
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   auto f32rng = std::bind(std::uniform_real_distribution<float>(-1.f, 1.f), std::ref(rng));
   std::vector<float> input(15 + XNN_EXTRA_BYTES / sizeof(float));
   std::generate(input.begin(), input.end(), std::ref(f32rng));
@@ -488,7 +488,7 @@ TEST(SUBGRAPH_FP16, fully_connected_qd8_f16_qc8w) {
 }
 
 TEST(SUBGRAPH_FP16, fully_connected_weights_used_by_another_node) {
-  SubgraphTester tester(7);
+  auto tester = SubgraphTester(7);
 
   float static_filter_data[6 + XNN_EXTRA_BYTES / sizeof(float)] = {
     1.0f, 2.0f, 3.0f,
@@ -558,7 +558,7 @@ TEST(SUBGRAPH_FP16, fully_connected_weights_used_by_another_node) {
 }
 
 TEST(SUBGRAPH_FP16, fully_connected_bias_used_by_another_node) {
-  SubgraphTester tester(7);
+  auto tester = SubgraphTester(7);
 
   float static_bias_data[2 + XNN_EXTRA_BYTES / sizeof(float)] = {
     1.0f, 2.0f,
@@ -619,7 +619,7 @@ TEST(SUBGRAPH_FP16, fully_connected_bias_used_by_another_node) {
 }
 
 TEST(SUBGRAPH_FP16, prelu_slope_used_by_another_node) {
-  SubgraphTester tester(5);
+  auto tester = SubgraphTester(5);
 
   float static_slope_data[2 + XNN_EXTRA_BYTES / sizeof(float)] = {
     1.0f, 2.0f,
@@ -678,7 +678,7 @@ TEST(SUBGRAPH_FP16, prelu_slope_used_by_another_node) {
 }
 
 TEST(SUBGRAPH_FP16_DYNAMIC_FULLY_CONNECTED, dynamic_weights_no_bias_weights_converted_to_fp16) {
-  SubgraphTester tester(5);
+  auto tester = SubgraphTester(5);
 
   // external input[0]   external input [1]
   //              \       /
@@ -708,7 +708,7 @@ TEST(SUBGRAPH_FP16_DYNAMIC_FULLY_CONNECTED, dynamic_weights_no_bias_weights_conv
 }
 
 TEST(SUBGRAPH_FP16_DYNAMIC_FULLY_CONNECTED, dynamic_weights_static_bias_weights_converted_to_fp16) {
-  SubgraphTester tester(5);
+  auto tester = SubgraphTester(5);
 
   // external input[0]   external input [1]
   //              \       /            static bias [4]
@@ -740,7 +740,7 @@ TEST(SUBGRAPH_FP16_DYNAMIC_FULLY_CONNECTED, dynamic_weights_static_bias_weights_
 }
 
 TEST(SUBGRAPH_FP16_DYNAMIC_FULLY_CONNECTED, static_weights_dynamic_bias_bias_converted_to_fp16) {
-  SubgraphTester tester(5);
+  auto tester = SubgraphTester(5);
 
   // external input[0] static weights [4] external input [1]
   //              \         |              /
@@ -772,7 +772,7 @@ TEST(SUBGRAPH_FP16_DYNAMIC_FULLY_CONNECTED, static_weights_dynamic_bias_bias_con
 }
 
 TEST(SUBGRAPH_FP16_DYNAMIC_FULLY_CONNECTED, dynamic_weights_dynamic_bias_weights_and_bias_converted_to_fp16) {
-  SubgraphTester tester(6);
+  auto tester = SubgraphTester(6);
 
   // external input[0]   external input [1]  external input [2]
   //              \       /                  /

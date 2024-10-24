@@ -8,54 +8,52 @@
 
 #pragma once
 
+#include <gtest/gtest.h>
+
+#include <cstddef>
+#include <cstdlib>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <random>
+#include <vector>
+
+#include <fp16/fp16.h>
+
 #include <tfl-xnnpack.h>
 #include <xnnpack/aligned-allocator.h>
 #include <xnnpack/common.h>
 
-#include <algorithm>
-#include <cassert>
-#include <cmath>
-#include <cstddef>
-#include <cstdint>
-#include <cstdlib>
-#include <limits>
-#include <memory>
-#include <random>
-#include <vector>
-
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
-#include <fp16/fp16.h>
 
 class GlobalSumPoolingOperatorTester {
  public:
-  GlobalSumPoolingOperatorTester& channels(size_t channels) {
+  inline GlobalSumPoolingOperatorTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  GlobalSumPoolingOperatorTester& width(size_t width) {
+  inline GlobalSumPoolingOperatorTester& width(size_t width) {
     assert(width != 0);
     this->width_ = width;
     return *this;
   }
 
-  size_t width() const {
+  inline size_t width() const {
     return this->width_;
   }
 
-  GlobalSumPoolingOperatorTester& input_stride(size_t input_stride) {
+  inline GlobalSumPoolingOperatorTester& input_stride(size_t input_stride) {
     assert(input_stride != 0);
     this->input_stride_ = input_stride;
     return *this;
   }
 
-  size_t input_stride() const {
+  inline size_t input_stride() const {
     if (this->input_stride_ == 0) {
       return channels();
     } else {
@@ -64,13 +62,13 @@ class GlobalSumPoolingOperatorTester {
     }
   }
 
-  GlobalSumPoolingOperatorTester& output_stride(size_t output_stride) {
+  inline GlobalSumPoolingOperatorTester& output_stride(size_t output_stride) {
     assert(output_stride != 0);
     this->output_stride_ = output_stride;
     return *this;
   }
 
-  size_t output_stride() const {
+  inline size_t output_stride() const {
     if (this->output_stride_ == 0) {
       return channels();
     } else {
@@ -79,45 +77,46 @@ class GlobalSumPoolingOperatorTester {
     }
   }
 
-  GlobalSumPoolingOperatorTester& batch_size(size_t batch_size) {
+  inline GlobalSumPoolingOperatorTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  GlobalSumPoolingOperatorTester& qmin(uint8_t qmin) {
+  inline GlobalSumPoolingOperatorTester& qmin(uint8_t qmin) {
     this->qmin_ = qmin;
     return *this;
   }
 
-  uint8_t qmin() const {
+  inline uint8_t qmin() const {
     return this->qmin_;
   }
 
-  GlobalSumPoolingOperatorTester& qmax(uint8_t qmax) {
+  inline GlobalSumPoolingOperatorTester& qmax(uint8_t qmax) {
     this->qmax_ = qmax;
     return *this;
   }
 
-  uint8_t qmax() const {
+  inline uint8_t qmax() const {
     return this->qmax_;
   }
 
-  GlobalSumPoolingOperatorTester& iterations(size_t iterations) {
+  inline GlobalSumPoolingOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void TestNWCxF16() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(1.0e-3f, 1.0f);
 
     std::vector<uint16_t> input((batch_size() * width() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(uint16_t));
@@ -204,7 +203,8 @@ class GlobalSumPoolingOperatorTester {
   }
 
   void TestNWCxF32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist;
 
     std::vector<float> input((batch_size() * width() - 1) * input_stride() + channels() + XNN_EXTRA_BYTES / sizeof(float));

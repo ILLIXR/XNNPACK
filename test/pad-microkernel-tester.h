@@ -5,77 +5,74 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
-#include <algorithm>
 #include <array>
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
-#include <cstring>
 #include <functional>
 #include <iomanip>
 #include <ios>
-#include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/microfnptr.h>
+
 
 class PadMicrokernelTester {
  public:
-  PadMicrokernelTester& rows(size_t rows) {
+  inline PadMicrokernelTester& rows(size_t rows) {
     assert(rows != 0);
     this->rows_ = rows;
     return *this;
   }
 
-  size_t rows() const {
+  inline size_t rows() const {
     return this->rows_;
   }
 
-  PadMicrokernelTester& input_channels(size_t input_channels) {
+  inline PadMicrokernelTester& input_channels(size_t input_channels) {
     assert(input_channels != 0);
     this->input_channels_ = input_channels;
     return *this;
   }
 
-  size_t input_channels() const {
+  inline size_t input_channels() const {
     return this->input_channels_;
   }
 
-  PadMicrokernelTester& pre_padding(size_t pre_padding) {
+  inline PadMicrokernelTester& pre_padding(size_t pre_padding) {
     this->pre_padding_ = pre_padding;
     return *this;
   }
 
-  size_t pre_padding() const {
+  inline size_t pre_padding() const {
     return this->pre_padding_;
   }
 
-  PadMicrokernelTester& post_padding(size_t post_padding) {
+  inline PadMicrokernelTester& post_padding(size_t post_padding) {
     this->post_padding_ = post_padding;
     return *this;
   }
 
-  size_t post_padding() const {
+  inline size_t post_padding() const {
     return this->post_padding_;
   }
 
-  size_t output_channels() const {
+  inline size_t output_channels() const {
     return pre_padding() + input_channels() + post_padding();
   }
 
-  PadMicrokernelTester& input_stride(size_t input_stride) {
+  inline PadMicrokernelTester& input_stride(size_t input_stride) {
     assert(input_stride != 0);
     this->input_stride_ = input_stride;
     return *this;
   }
 
-  size_t input_stride() const {
+  inline size_t input_stride() const {
     if (this->input_stride_ == 0) {
       return input_channels();
     } else {
@@ -84,13 +81,13 @@ class PadMicrokernelTester {
     }
   }
 
-  PadMicrokernelTester& output_stride(size_t output_stride) {
+  inline PadMicrokernelTester& output_stride(size_t output_stride) {
     assert(output_stride != 0);
     this->output_stride_ = output_stride;
     return *this;
   }
 
-  size_t output_stride() const {
+  inline size_t output_stride() const {
     if (this->output_stride_ == 0) {
       return pre_padding() + input_channels() + post_padding();
     } else {
@@ -99,21 +96,19 @@ class PadMicrokernelTester {
     }
   }
 
-  PadMicrokernelTester& iterations(size_t iterations) {
+  inline PadMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_pad_ukernel_fn pad) const {
-    xnnpack::ReplicableRandomDevice rng;
-    auto u8rng = [&rng]() {
-      return std::uniform_int_distribution<uint32_t>(
-          0, std::numeric_limits<uint8_t>::max())(rng);
-    };
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
+    auto u8rng = std::bind(std::uniform_int_distribution<uint32_t>(0, std::numeric_limits<uint8_t>::max()), rng);
 
     std::vector<uint8_t> input(input_channels() + (rows() - 1) * input_stride() + XNN_EXTRA_BYTES / sizeof(uint8_t));
     std::vector<uint8_t> output((pre_padding() + input_channels() + post_padding()) + (rows() - 1) * output_stride());

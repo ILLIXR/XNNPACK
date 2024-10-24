@@ -3,23 +3,20 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/node-type.h>
-#include <xnnpack/subgraph.h>
-
-#include <cstddef>
-#include <cstdint>
 #include <limits>
 #include <vector>
 
-#include "runtime-tester.h"
-#include "subgraph-tester.h"
 #include <gtest/gtest.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/subgraph.h>
+
+#include "runtime-tester.h"
 
 namespace xnnpack {
 
 TEST(ADD_THEN_CLAMP, fusion) {
-  RuntimeTester tester(4);
+  auto tester = RuntimeTester(4);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input1_id = 0;
@@ -49,7 +46,7 @@ TEST(ADD_THEN_CLAMP, fusion) {
 }
 
 TEST(AVERAGE_POOLING_2D_THEN_CLAMP, fusion) {
-  RuntimeTester tester(3);
+  auto tester = RuntimeTester(3);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input_id = 0;
@@ -77,7 +74,7 @@ TEST(AVERAGE_POOLING_2D_THEN_CLAMP, fusion) {
 }
 
 TEST(CLAMP_THEN_CLAMP, fusion) {
-  RuntimeTester tester(3);
+  auto tester = RuntimeTester(3);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input_id = 0;
@@ -109,7 +106,7 @@ TEST(CLAMP_THEN_CLAMP, fusion) {
 }
 
 TEST(CONVOLUTION_2D_THEN_CLAMP, fusion) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input_id = 0;
@@ -150,7 +147,7 @@ TEST(CONVOLUTION_2D_THEN_CLAMP, fusion) {
 }
 
 TEST(DIVIDE_THEN_CLAMP, fusion) {
-  RuntimeTester tester(4);
+  auto tester = RuntimeTester(4);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input1_id = 0;
@@ -180,7 +177,7 @@ TEST(DIVIDE_THEN_CLAMP, fusion) {
 }
 
 TEST(DECONVOLUTION_2D_THEN_CLAMP, fusion) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input_id = 0;
@@ -222,7 +219,7 @@ TEST(DECONVOLUTION_2D_THEN_CLAMP, fusion) {
 }
 
 TEST(DEPTHWISE_CONVOLUTION_2D_THEN_CLAMP, fusion) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input_id = 0;
@@ -262,7 +259,7 @@ TEST(DEPTHWISE_CONVOLUTION_2D_THEN_CLAMP, fusion) {
 }
 
 TEST(FULLY_CONNECTED_2D_THEN_CLAMP, fusion) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input_id = 0;
@@ -294,7 +291,7 @@ TEST(FULLY_CONNECTED_2D_THEN_CLAMP, fusion) {
 }
 
 TEST(FULLY_CONNECTED_2D_THEN_COPY_THEN_FULLY_CONNECTED, fusion) {
-  RuntimeTester tester(11);
+  auto tester = RuntimeTester(11);
   uint32_t fc1_input_id = 0;
   uint32_t fc1_filter_id = 1;
   uint32_t fc1_bias_id = 2;
@@ -330,7 +327,7 @@ TEST(FULLY_CONNECTED_2D_THEN_COPY_THEN_FULLY_CONNECTED, fusion) {
 }
 
 TEST(MULTIPLY_THEN_CLAMP, fusion) {
-  RuntimeTester tester(4);
+  auto tester = RuntimeTester(4);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input1_id = 0;
@@ -360,7 +357,7 @@ TEST(MULTIPLY_THEN_CLAMP, fusion) {
 }
 
 TEST(MAX_POOLING_THEN_CLAMP, fusion) {
-  RuntimeTester tester(3);
+  auto tester = RuntimeTester(3);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input_id = 0;
@@ -388,7 +385,7 @@ TEST(MAX_POOLING_THEN_CLAMP, fusion) {
 }
 
 TEST(SUBTRACT_THEN_CLAMP, fusion) {
-  RuntimeTester tester(4);
+  auto tester = RuntimeTester(4);
   float output_min = -0.5f;
   float output_max = 0.5f;
   uint32_t input1_id = 0;
@@ -418,7 +415,7 @@ TEST(SUBTRACT_THEN_CLAMP, fusion) {
 }
 
 TEST(CONSTANT_PAD_THEN_CONVOLUTION, fusion) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   uint32_t input_id = 0;
   uint32_t intermediate_id = 1;
   uint32_t filter_id = 2;
@@ -463,7 +460,7 @@ TEST(CONSTANT_PAD_THEN_CONVOLUTION, fusion) {
 }
 
 TEST(CONSTANT_PAD_THEN_CONVOLUTION, not_fused_due_to_non_zero_padding_in_n_dimension) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   uint32_t input_id = 0;
   uint32_t intermediate_id = 1;
   uint32_t filter_id = 2;
@@ -497,7 +494,7 @@ TEST(CONSTANT_PAD_THEN_CONVOLUTION, not_fused_due_to_non_zero_padding_in_n_dimen
 }
 
 TEST(CONSTANT_PAD_THEN_CONVOLUTION, not_fused_due_to_padding_value_not_zero) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   uint32_t input_id = 0;
   uint32_t intermediate_id = 1;
   uint32_t filter_id = 2;
@@ -530,7 +527,7 @@ TEST(CONSTANT_PAD_THEN_CONVOLUTION, not_fused_due_to_padding_value_not_zero) {
 }
 
 TEST(CONSTANT_PAD_THEN_DEPTHWISE_CONVOLUTION, fusion) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   uint32_t input_id = 0;
   uint32_t intermediate_id = 1;
   uint32_t filter_id = 2;
@@ -572,7 +569,7 @@ TEST(CONSTANT_PAD_THEN_DEPTHWISE_CONVOLUTION, fusion) {
 }
 
 TEST(CONSTANT_PAD_THEN_DEPTHWISE_CONVOLUTION, not_fused_due_to_non_zero_padding_in_n_dimension) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   uint32_t input_id = 0;
   uint32_t intermediate_id = 1;
   uint32_t filter_id = 2;
@@ -607,7 +604,7 @@ TEST(CONSTANT_PAD_THEN_DEPTHWISE_CONVOLUTION, not_fused_due_to_non_zero_padding_
 }
 
 TEST(CONSTANT_PAD_THEN_DEPTHWISE_CONVOLUTION, not_fused_due_to_padding_value_not_zero) {
-  RuntimeTester tester(5);
+  auto tester = RuntimeTester(5);
   uint32_t input_id = 0;
   uint32_t intermediate_id = 1;
   uint32_t filter_id = 2;
@@ -646,7 +643,7 @@ TEST(COPY, fused_downstream) {
   const uint32_t intermediate_id = 1;
   const uint32_t output_id = 2;
   const std::vector<size_t> dims = {1, 2, 3, 4};
-  RuntimeTester tester(3);
+  auto tester = RuntimeTester(3);
   tester
       .AddInputTensorF32(dims, input_id)
       .AddDynamicTensorF32(dims, intermediate_id)
@@ -674,7 +671,7 @@ TEST(COPY, fused_downstream_node_with_multiple_inputs) {
   const uint32_t output_id = 2;
   const uint32_t static_id = 3;
   const std::vector<size_t> dims = {1, 2, 3, 4};
-  RuntimeTester tester(4);
+  auto tester = RuntimeTester(4);
   tester
       .AddInputTensorF32(dims, input_id)
       .AddDynamicTensorF32(dims, copy_out_id)
@@ -703,7 +700,7 @@ TEST(COPY, not_fused_downstream_due_to_persistent_tensor) {
   const uint32_t intermediate_id = 1;
   const uint32_t output_id = 2;
   const std::vector<size_t> dims = {1, 2, 3, 4};
-  RuntimeTester tester(3);
+  auto tester = RuntimeTester(3);
   tester
       .AddInputTensorF32(dims, input_id)
       .AddDynamicTensorF32(dims, intermediate_id, /*flags=*/XNN_VALUE_FLAG_PERSISTENT)
@@ -724,7 +721,7 @@ TEST(COPY, fused_upstream) {
   const uint32_t intermediate_id = 1;
   const uint32_t output_id = 2;
   const std::vector<size_t> dims = {1, 2, 3, 4};
-  RuntimeTester tester(3);
+  auto tester = RuntimeTester(3);
   tester
       .AddInputTensorF32(dims, input_id)
       .AddDynamicTensorF32(dims, intermediate_id)
@@ -758,7 +755,7 @@ TEST(COPY, fused_upstream_with_multiple_outputs) {
   const size_t axis = 1;
   const std::vector<size_t> split_dims = {1, 1, 3, 4};
 
-  RuntimeTester tester(6);
+  auto tester = RuntimeTester(6);
   tester
       .AddInputTensorF32(dims, input_id)
       .AddDynamicTensorF32(split_dims, split_out1)
@@ -801,7 +798,7 @@ TEST(COPY, not_fused_upstream_due_to_persistent_tensor) {
   const uint32_t persistent_id = 1;
   const uint32_t output_id = 2;
   const std::vector<size_t> dims = {1, 2, 3, 4};
-  RuntimeTester tester(3);
+  auto tester = RuntimeTester(3);
   tester
       .AddInputTensorF32(dims, input_id)
       .AddDynamicTensorF32(dims, persistent_id, /*flags=*/XNN_VALUE_FLAG_PERSISTENT)
@@ -829,7 +826,7 @@ TEST(COPY, not_fused_upstream_due_to_persistent_tensor_but_can_be_fused_downstre
   const uint32_t copy_out_id = 2;
   const uint32_t output_id = 3;
   const std::vector<size_t> dims = {1, 2, 3, 4};
-  RuntimeTester tester(4);
+  auto tester = RuntimeTester(4);
   tester
       .AddInputTensorF32(dims, input_id)
       .AddDynamicTensorF32(dims, persistent_id, /*flags=*/XNN_VALUE_FLAG_PERSISTENT)
@@ -862,7 +859,7 @@ TEST(COPY, fused_chain_of_copies) {
   const uint32_t copy_out2 = 2;
   const uint32_t output_id = 3;
   const std::vector<size_t> dims = {1, 2, 3, 4};
-  RuntimeTester tester(4);
+  auto tester = RuntimeTester(4);
   tester
       .AddInputTensorF32(dims, input_id)
       .AddDynamicTensorF32(dims, copy_out1)

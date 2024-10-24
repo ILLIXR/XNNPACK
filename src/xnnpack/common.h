@@ -355,7 +355,7 @@
   #define XNN_MAX_SIMD_SIZE 16
 #endif
 
-// Use constant here to avoid dependency on xnnpack.h
+// Use constant here to avoid dependency on tfl-xnnpack.h
 #if XNN_MAX_SIMD_SIZE >= 16
   #define XNN_MULTIPASS_EXTRA_BYTES XNN_MAX_SIMD_SIZE
 #else

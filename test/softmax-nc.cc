@@ -6,11 +6,10 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <cstddef>
-#include <cstdint>
+#include <gtest/gtest.h>
 
 #include "softmax-operator-tester.h"
-#include <gtest/gtest.h>
+
 
 #ifndef XNN_EXCLUDE_F16_TESTS
 TEST(SOFTMAX_NC_F16, single_class) {

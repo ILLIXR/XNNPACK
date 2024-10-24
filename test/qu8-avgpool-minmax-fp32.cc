@@ -11,14 +11,14 @@
 //   Generator: tools/generate-avgpool-test.py
 
 
-#include <xnnpack/avgpool.h>
+#include <gtest/gtest.h>
+
 #include <xnnpack/common.h>
 #include <xnnpack/isa-checks.h>
-#include <xnnpack/microparams-init.h>
-#include <xnnpack/pavgpool.h>
 
+#include <xnnpack/avgpool.h>
+#include <xnnpack/pavgpool.h>
 #include "avgpool-microkernel-tester.h"
-#include <gtest/gtest.h>
 
 
 #if XNN_ARCH_ARM || XNN_ARCH_ARM64

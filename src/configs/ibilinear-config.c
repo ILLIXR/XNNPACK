@@ -14,8 +14,9 @@
 
 #include <xnnpack/common.h>
 #include <xnnpack/config.h>
+#include <xnnpack/microparams-init.h>
 #include <xnnpack/ibilinear.h>
-#include <xnnpack/microfnptr.h>
+
 
 static struct xnn_ibilinear_config f16_ibilinear_config = {0};
 static struct xnn_ibilinear_config f32_ibilinear_config = {0};
@@ -91,7 +92,15 @@ static void init_f32_ibilinear_config(void) {
     f32_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_f32_ibilinear_ukernel__wasmsimd_c8;
     f32_ibilinear_config.pixel_tile = 1;
     f32_ibilinear_config.channel_tile = 8;
-  #else
+  #elif XNN_ARCH_WASM
+    f32_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_f32_ibilinear_ukernel__scalar_c2;
+    f32_ibilinear_config.pixel_tile = 1;
+    f32_ibilinear_config.channel_tile = 2;
+  #elif XNN_ARCH_RISCV
+    f32_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_f32_ibilinear_ukernel__scalar_c2;
+    f32_ibilinear_config.pixel_tile = 1;
+    f32_ibilinear_config.channel_tile = 2;
+  #elif XNN_ARCH_PPC64
     f32_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_f32_ibilinear_ukernel__scalar_c2;
     f32_ibilinear_config.pixel_tile = 1;
     f32_ibilinear_config.channel_tile = 2;
@@ -131,7 +140,15 @@ static void init_s8_ibilinear_config(void) {
     s8_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_s8_ibilinear_ukernel__wasmsimd_dot16x2_c8;
     s8_ibilinear_config.pixel_tile = 1;
     s8_ibilinear_config.channel_tile = 8;
-  #else
+  #elif XNN_ARCH_WASM
+    s8_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_s8_ibilinear_ukernel__scalar_c1;
+    s8_ibilinear_config.pixel_tile = 1;
+    s8_ibilinear_config.channel_tile = 1;
+  #elif XNN_ARCH_RISCV
+    s8_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_s8_ibilinear_ukernel__scalar_c1;
+    s8_ibilinear_config.pixel_tile = 1;
+    s8_ibilinear_config.channel_tile = 1;
+  #elif XNN_ARCH_PPC64
     s8_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_s8_ibilinear_ukernel__scalar_c1;
     s8_ibilinear_config.pixel_tile = 1;
     s8_ibilinear_config.channel_tile = 1;
@@ -171,7 +188,15 @@ static void init_u8_ibilinear_config(void) {
     u8_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_u8_ibilinear_ukernel__wasmsimd_dot16x2_c8;
     u8_ibilinear_config.pixel_tile = 1;
     u8_ibilinear_config.channel_tile = 8;
-  #else
+  #elif XNN_ARCH_WASM
+    u8_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_u8_ibilinear_ukernel__scalar_c1;
+    u8_ibilinear_config.pixel_tile = 1;
+    u8_ibilinear_config.channel_tile = 1;
+  #elif XNN_ARCH_RISCV
+    u8_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_u8_ibilinear_ukernel__scalar_c1;
+    u8_ibilinear_config.pixel_tile = 1;
+    u8_ibilinear_config.channel_tile = 1;
+  #elif XNN_ARCH_PPC64
     u8_ibilinear_config.ukernel = (xnn_ibilinear_ukernel_fn) xnn_u8_ibilinear_ukernel__scalar_c1;
     u8_ibilinear_config.pixel_tile = 1;
     u8_ibilinear_config.channel_tile = 1;

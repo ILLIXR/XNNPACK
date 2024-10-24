@@ -5,19 +5,20 @@
 
 #pragma once
 
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/math.h>
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <numeric>
 #include <vector>
 
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/math.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/pack.h>
 
 // Reference bias packing function for f32.
 static void f32_packb_reference(
@@ -83,62 +84,62 @@ static void f32_packb_reference(
 class PackBMicrokernelTester {
  public:
 
-  PackBMicrokernelTester& groups(size_t groups) {
+  inline PackBMicrokernelTester& groups(size_t groups) {
     this->groups_ = groups;
     return *this;
   }
 
-  size_t groups() const {
+  inline size_t groups() const {
     return this->groups_;
   }
 
-  PackBMicrokernelTester& channel_tile(size_t channel_tile) {
+  inline PackBMicrokernelTester& channel_tile(size_t channel_tile) {
     this->channel_tile_ = channel_tile;
     return *this;
   }
 
-  size_t channel_tile() const {
+  inline size_t channel_tile() const {
     return this->channel_tile_;
   }
 
-  PackBMicrokernelTester& channel_subtile(size_t channel_subtile) {
+  inline PackBMicrokernelTester& channel_subtile(size_t channel_subtile) {
     this->channel_subtile_ = channel_subtile;
     return *this;
   }
 
-  size_t channel_subtile() const {
+  inline size_t channel_subtile() const {
     return this->channel_subtile_;
   }
 
-  PackBMicrokernelTester& channel_round(size_t channel_round) {
+  inline PackBMicrokernelTester& channel_round(size_t channel_round) {
     this->channel_round_ = channel_round;
     return *this;
   }
 
-  size_t channel_round() const {
+  inline size_t channel_round() const {
     return this->channel_round_;
   }
 
-  PackBMicrokernelTester& channels(size_t channels) {
+  inline PackBMicrokernelTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  size_t packed_channels() const {
+  inline size_t packed_channels() const {
     return round_up(channels(), channel_subtile());
   }
 
-  PackBMicrokernelTester& kernel_tile(size_t kernel_tile) {
+  inline PackBMicrokernelTester& kernel_tile(size_t kernel_tile) {
     this->kernel_tile_ = kernel_tile;
     return *this;
   }
 
-  size_t kernel_tile() const {
+  inline size_t kernel_tile() const {
     return this->kernel_tile_;
   }
 

@@ -8,61 +8,57 @@
 
 #pragma once
 
-#include <xnnpack/microfnptr.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <limits>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <xnnpack/microfnptr.h>
+
 
 class LUTNormMicrokernelTester {
  public:
-  LUTNormMicrokernelTester& n(size_t n) {
+  inline LUTNormMicrokernelTester& n(size_t n) {
     assert(n != 0);
     this->n_ = n;
     return *this;
   }
 
-  size_t n() const {
+  inline size_t n() const {
     return this->n_;
   }
 
-  LUTNormMicrokernelTester& inplace(bool inplace) {
+  inline LUTNormMicrokernelTester& inplace(bool inplace) {
     this->inplace_ = inplace;
     return *this;
   }
 
-  bool inplace() const {
+  inline bool inplace() const {
     return this->inplace_;
   }
 
-  LUTNormMicrokernelTester& iterations(size_t iterations) {
+  inline LUTNormMicrokernelTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void Test(xnn_u8_lut32norm_ukernel_fn lutnorm) const {
-    xnnpack::ReplicableRandomDevice rng;
-    auto u8rng = [&rng]() {
-      return std::uniform_int_distribution<uint32_t>(
-          0, std::numeric_limits<uint8_t>::max())(rng);
-    };
-    auto u32rng = [&]() {
-      return std::uniform_int_distribution<uint32_t>(
-          1, std::numeric_limits<uint32_t>::max() / (257 * n()))(rng);
-    };
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
+    auto u8rng = std::bind(std::uniform_int_distribution<uint32_t>(0, std::numeric_limits<uint8_t>::max()), rng);
+    auto u32rng = std::bind(
+      std::uniform_int_distribution<uint32_t>(1, std::numeric_limits<uint32_t>::max() / (257 * n())),
+      rng);
 
     std::vector<uint8_t> x(n());
     std::vector<uint32_t> t(256);

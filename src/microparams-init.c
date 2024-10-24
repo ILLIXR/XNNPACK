@@ -930,45 +930,6 @@ void xnn_init_qs8_to_qs8_qc8w_scale_fp32_params(
   }
 }
 
-void xnn_init_qs8_qb8w_scale_fp32_params(
-  size_t channels,
-  size_t channels_tile,
-  size_t channels_subtile,
-  size_t stride,
-  size_t substride,
-  size_t num_blocks,
-  size_t block_stride,
-  size_t stride_offset,
-  const float scale[XNN_MIN_ELEMENTS(1)],
-  void* packed_w)
-{
-  void* packed_w_saved = packed_w;
-  for (size_t block_start = 0; block_start < num_blocks; block_start++) {
-    packed_w = (void*)((uintptr_t) packed_w_saved + block_start * block_stride);
-    const size_t tiled_channels = round_down_po2(channels, channels_tile);
-    size_t tile_start = 0;
-    for (; tile_start < tiled_channels; tile_start += channels_tile) {
-      const size_t tile_size = channels_tile;
-      for (size_t tile_offset = 0; tile_offset < tile_size; tile_offset++) {
-        size_t scale_index = (tile_start + tile_offset) * num_blocks + block_start;
-        unaligned_indexed_store_f32(packed_w, tile_offset, scale[scale_index]);
-      }
-      packed_w = (void*) ((uintptr_t) packed_w + stride);
-    }
-
-    packed_w = (void*) ((uintptr_t) packed_w - stride_offset);
-
-    for (; tile_start < channels; tile_start += channels_subtile) {
-      const size_t tile_size = min(channels - tile_start, channels_subtile);
-      for (size_t tile_offset = 0; tile_offset < tile_size; tile_offset++) {
-        size_t scale_index = (tile_start + tile_offset) * num_blocks + block_start;
-        unaligned_indexed_store_f32(packed_w, tile_offset, scale[scale_index]);
-      }
-      packed_w = (void*) ((uintptr_t) packed_w + substride);
-    }
-  }
-}
-
 size_t xnn_init_qs8_avgpool_minmax_fp32_scalar_fmagic_params(
   union xnn_qs8_avgpool_minmax_params params[XNN_MIN_ELEMENTS(1)],
   int32_t init_bias,
@@ -1120,55 +1081,15 @@ size_t xnn_init_qs8_avgpool_minmax_fp32_sse4_params(
   for (uint32_t i = 0; i < 4; i++) {
     params->fp32_sse4.init_bias[i] = init_bias;
     params->fp32_sse4.scale[i] = scale;
-    params->fp32_sse4.magic_bias[i] = 12582912.0f;
-    params->fp32_sse4.magic_bias_less_output_zero_point[i] = INT32_C(0x4B400000) - (int32_t) output_zero_point;
     params->fp32_sse4.output_max_less_zero_point[i] = output_max_less_zero_point;
-    params->fp32_sse4.magic_bias_less_output_zero_point[i] = INT32_C(0x4B400000) - (int32_t) output_zero_point;
   }
   for (uint32_t i = 0; i < 8; i++) {
     params->fp32_sse4.output_zero_point[i] = (int16_t) output_zero_point;
   }
   for (uint32_t i = 0; i < 16; i++) {
     params->fp32_sse4.output_min[i] = output_min;
-    params->fp32_sse4.output_max[i] = output_max;
-  }
-  for (uint32_t i = 0; i < 7; i++) {
-    params->fp32_sse4.mask_table[i] = -1;
-  }
-  for (uint32_t i = 7; i < 14; i++) {
-    params->fp32_sse4.mask_table[i] = 0;
   }
   return sizeof(params->fp32_sse4);
-}
-
-size_t xnn_init_qs8_avgpool_minmax_fp32_avx2_params(
-  union xnn_qs8_avgpool_minmax_params params[XNN_MIN_ELEMENTS(1)],
-  int32_t init_bias,
-  float scale,
-  int8_t output_zero_point,
-  int8_t output_min,
-  int8_t output_max)
-{
-  assert(scale >= 0x1.0p-32f);
-  assert(scale < 256.0f);
-
-  for (uint32_t i = 0; i < 8; i++) {
-    params->fp32_avx2.init_bias[i] = init_bias;
-    params->fp32_avx2.scale[i] = scale;
-    params->fp32_avx2.magic_bias[i] = 12582912.0f;
-    params->fp32_avx2.magic_bias_less_output_zero_point[i] = INT32_C(0x4B400000) - (int32_t) output_zero_point;
-  }
-  for (uint32_t i = 0; i < 32; i++) {
-    params->fp32_avx2.output_min[i] = output_min;
-    params->fp32_avx2.output_max[i] = output_max;
-  }
-  for (uint32_t i = 0; i < 15; i++) {
-    params->fp32_avx2.mask_table[i] = -1;
-  }
-  for (uint32_t i = 15; i < 30; i++) {
-    params->fp32_avx2.mask_table[i] = 0;
-  }
-  return sizeof(params->fp32_avx2);
 }
 
 void xnn_update_qs8_avgpool_minmax_fp32_sse4_params(
@@ -1204,12 +1125,6 @@ size_t xnn_init_qs8_avgpool_minmax_fp32_neon_params(
   params->fp32_neon.magic_bias_less_output_zero_point = INT32_C(0x4B400000) - (int32_t) output_zero_point;
   params->fp32_neon.output_min = output_min;
   params->fp32_neon.output_max = output_max;
-  for (uint32_t i = 0; i < 15; i++) {
-    params->fp32_neon.mask_table[i] = 1;
-  }
-  for (uint32_t i = 15; i < 30; i++) {
-    params->fp32_neon.mask_table[i] = 0;
-  }
   return sizeof(params->fp32_neon);
 }
 
@@ -1725,6 +1640,7 @@ void xnn_update_qu8_avgpool_minmax_fp32_wasmsimd_params(
 }
 #endif  // XNN_ARCH_WASMSIMD || XNN_ARCH_WASMRELAXEDSIMD
 
+#if XNN_ARCH_ARM || XNN_ARCH_ARM64
 size_t xnn_init_f16_scale_fp16arith_params(
   union xnn_f16_scale_params params[XNN_MIN_ELEMENTS(1)],
   uint16_t scale)
@@ -1732,6 +1648,7 @@ size_t xnn_init_f16_scale_fp16arith_params(
   params->fp16arith.scale = scale;
   return sizeof(params->fp16arith);
 }
+#endif  // XNN_ARCH_ARM || XNN_ARCH_ARM64
 
 size_t xnn_init_f16_f32acc_scale_scalar_params(
   union xnn_f16_f32acc_scale_params params[XNN_MIN_ELEMENTS(1)],
@@ -1764,18 +1681,6 @@ size_t xnn_init_f32_scale_scalar_params(
   params->scalar.scale = scale;
   return sizeof(params->scalar);
 }
-
-#if XNN_ARCH_X86 || XNN_ARCH_X86_64
-size_t xnn_init_f32_scale_sse_params(
-  union xnn_f32_scale_params params[XNN_MIN_ELEMENTS(1)],
-  float scale)
-{
-  for (uint32_t i = 0; i < 4; i++) {
-    params->sse.scale[i] = scale;
-  }
-  return sizeof(params->sse);
-}
-#endif  // XNN_ARCH_X86 || XNN_ARCH_X86_64
 
 #if XNN_ARCH_X86 || XNN_ARCH_X86_64
 size_t xnn_init_f32_scale_avx_params(
@@ -2081,18 +1986,6 @@ size_t xnn_init_f16_minmax_avxvnni_params(
   params->avxvnni.max = max_f32;
   params->avxvnni.sign_mask = 0x80;
   return sizeof(params->avxvnni);
-}
-
-size_t xnn_init_f16_minmax_scalar_params(
-  union xnn_f16_minmax_params params[XNN_MIN_ELEMENTS(1)],
-  uint16_t min,
-  uint16_t max)
-{
-  const float min_f32 = fp16_ieee_to_fp32_value(min);
-  const float max_f32 = fp16_ieee_to_fp32_value(max);
-  params->scalar.min = min_f32;
-  params->scalar.max = max_f32;
-  return sizeof(params->scalar);
 }
 #endif  // XNN_ARCH_X86 || XNN_ARCH_X86_64
 
@@ -3290,85 +3183,6 @@ size_t xnn_init_f32_tanh_avx_expm1minus_rr1_p6h5_params(
   return sizeof(params->avx_expm1minus_rr1_p6h5);
 }
 
-size_t xnn_init_f32_tanh_sse_rational_9_6_params(
-    union xnn_f32_tanh_params params[XNN_MIN_ELEMENTS(1)]) {
-  for (uint32_t i = 0; i < 4; i++) {
-    params->sse_rational_9_6.max_x[i] = 7.623543739319f;
-    params->sse_rational_9_6.min_x[i] = -7.623543739319f;
-    params->sse_rational_9_6.alpha_1[i] = -9.022999554873e-03f;
-    params->sse_rational_9_6.alpha_3[i] = -1.146968104877e-03f;
-    params->sse_rational_9_6.alpha_5[i] = -2.432360815874e-05f;
-    params->sse_rational_9_6.alpha_7[i] = -6.458659385089e-08f;
-    params->sse_rational_9_6.alpha_9[i] = 5.535878699892e-11f;
-    params->sse_rational_9_6.beta_0[i] = -9.023001417518e-03f;
-    params->sse_rational_9_6.beta_2[i] = -4.154618829489e-03f;
-    params->sse_rational_9_6.beta_4[i] = -2.061512641376e-04f;
-    params->sse_rational_9_6.beta_6[i] = -1.774490101525e-06f;
-    params->sse_rational_9_6.two[i] = 2.0f;
-  }
-  return sizeof(params->sse_rational_9_6);
-}
-
-size_t xnn_init_f32_tanh_avx_rational_9_6_params(
-    union xnn_f32_tanh_params params[XNN_MIN_ELEMENTS(1)]) {
-  params->avx_rational_9_6.max_abs_x = 7.623543739319f;
-  params->avx_rational_9_6.alpha_1 = -9.022999554873e-03f;
-  params->avx_rational_9_6.alpha_3 = -1.146968104877e-03f;
-  params->avx_rational_9_6.alpha_5 = -2.432360815874e-05f;
-  params->avx_rational_9_6.alpha_7 = -6.458659385089e-08f;
-  params->avx_rational_9_6.alpha_9 = 5.535878699892e-11f;
-  params->avx_rational_9_6.beta_0 = -9.023001417518e-03f;
-  params->avx_rational_9_6.beta_2 = -4.154618829489e-03f;
-  params->avx_rational_9_6.beta_4 = -2.061512641376e-04f;
-  params->avx_rational_9_6.beta_6 = -1.774490101525e-06f;
-  params->avx_rational_9_6.two = 2.0f;
-  for (uint32_t i = 0; i < 7; i++) {
-    params->avx_rational_9_6.mask_table[i] = -1;
-  }
-  for (uint32_t i = 7; i < 14; i++) {
-    params->avx_rational_9_6.mask_table[i] = 0;
-  }
-  return sizeof(params->avx_rational_9_6);
-}
-
-size_t xnn_init_f32_tanh_fma3_rational_9_6_params(
-    union xnn_f32_tanh_params params[XNN_MIN_ELEMENTS(1)]) {
-  params->fma3_rational_9_6.max_abs_x = 7.646893501282f;
-  params->fma3_rational_9_6.alpha_1 = -9.022999554873e-03f;
-  params->fma3_rational_9_6.alpha_3 = -1.146968104877e-03f;
-  params->fma3_rational_9_6.alpha_5 = -2.432360815874e-05f;
-  params->fma3_rational_9_6.alpha_7 = -6.458659385089e-08f;
-  params->fma3_rational_9_6.alpha_9 = 5.535878699892e-11f;
-  params->fma3_rational_9_6.beta_0 = -9.023001417518e-03f;
-  params->fma3_rational_9_6.beta_2 = -4.154618829489e-03f;
-  params->fma3_rational_9_6.beta_4 = -2.061512641376e-04f;
-  params->fma3_rational_9_6.beta_6 = -1.774490101525e-06f;
-  params->fma3_rational_9_6.two = 2.0f;
-  for (uint32_t i = 0; i < 7; i++) {
-    params->fma3_rational_9_6.mask_table[i] = -1;
-  }
-  for (uint32_t i = 7; i < 14; i++) {
-    params->fma3_rational_9_6.mask_table[i] = 0;
-  }
-  return sizeof(params->fma3_rational_9_6);
-}
-
-size_t xnn_init_f32_tanh_avx512_rational_9_6_params(
-    union xnn_f32_tanh_params params[XNN_MIN_ELEMENTS(1)]) {
-  params->avx512_rational_9_6.max_abs_x = 7.646893501282f;
-  params->avx512_rational_9_6.alpha_1 = -9.022999554873e-03f;
-  params->avx512_rational_9_6.alpha_3 = -1.146968104877e-03f;
-  params->avx512_rational_9_6.alpha_5 = -2.432360815874e-05f;
-  params->avx512_rational_9_6.alpha_7 = -6.458659385089e-08f;
-  params->avx512_rational_9_6.alpha_9 = 5.535878699892e-11f;
-  params->avx512_rational_9_6.beta_0 = -9.023001417518e-03f;
-  params->avx512_rational_9_6.beta_2 = -4.154618829489e-03f;
-  params->avx512_rational_9_6.beta_4 = -2.061512641376e-04f;
-  params->avx512_rational_9_6.beta_6 = -1.774490101525e-06f;
-  params->avx512_rational_9_6.two = 2.0f;
-  return sizeof(params->avx512_rational_9_6);
-}
-
 size_t xnn_init_f32_tanh_avx512_expm1minus_rr1_lut4_p4h3_perm_params(
   union xnn_f32_tanh_params params[XNN_MIN_ELEMENTS(1)])
 {
@@ -3576,17 +3390,6 @@ size_t xnn_init_f32_tanh_neon_expm1minus_rr1_p6h5_params(
   params->neon_expm1minus_rr1_p6h5.c3 = -0x1.5554B0p+0f;
   params->neon_expm1minus_rr1_p6h5.c2 = 0x1.FFFFFEp+0f;
   return sizeof(params->neon_expm1minus_rr1_p6h5);
-}
-#endif  // XNN_ARCH_ARM || XNN_ARCH_ARM64
-
-#if XNN_ARCH_ARM || XNN_ARCH_ARM64
-size_t xnn_init_bf16_abs_neon_params(
-  union xnn_bf16_abs_params params[XNN_MIN_ELEMENTS(1)])
-{
-  for (uint32_t i = 0; i < 8; i++) {
-    params->neon.nonsign_mask[i] = UINT16_C(0x7FFF);
-  }
-  return sizeof(params->neon);
 }
 #endif  // XNN_ARCH_ARM || XNN_ARCH_ARM64
 
@@ -5084,26 +4887,9 @@ size_t xnn_init_qu8_lrelu_wasmsimd_x86_params(
 #endif  // XNN_ARCH_WASMSIMD || XNN_ARCH_WASMRELAXEDSIMD
 
 #if XNN_ARCH_X86 || XNN_ARCH_X86_64
-size_t xnn_init_f32_sqrt_sse_params(
-    union xnn_f32_sqrt_params params[XNN_MIN_ELEMENTS(1)]) {
-  for (uint32_t i = 0; i < 4; i++) {
-    params->sse.three[i] = 3.0f;
-  }
-  for (uint32_t i = 0; i < 4; i++) {
-    params->sse.half[i] = 0.5f;
-  }
-  return sizeof(params->sse);
-}
-
 size_t xnn_init_f32_sqrt_avx_params(
   union xnn_f32_sqrt_params params[XNN_MIN_ELEMENTS(1)])
 {
-  for (uint32_t i = 0; i < 8; i++) {
-    params->avx.three[i] = 3.0f;
-  }
-  for (uint32_t i = 0; i < 8; i++) {
-    params->avx.half[i] = 0.5f;
-  }
   for (uint32_t i = 0; i < 7; i++) {
     params->avx.mask_table[i] = -1;
   }
@@ -5117,28 +4903,20 @@ size_t xnn_init_f32_sqrt_fma_params(
   union xnn_f32_sqrt_params params[XNN_MIN_ELEMENTS(1)])
 {
   for (uint32_t i = 0; i < 8; i++) {
-    params->fma3.three[i] = 3.0f;
-  }
-  for (uint32_t i = 0; i < 8; i++) {
-    params->fma3.neg_half[i] = -0.5f;
-  }
-  for (uint32_t i = 0; i < 8; i++) {
-    params->fma3.half[i] = 0.5f;
+    params->fma.half[i] = 0.5f;
   }
   for (uint32_t i = 0; i < 7; i++) {
-    params->fma3.mask_table[i] = -1;
+    params->fma.mask_table[i] = -1;
   }
   for (uint32_t i = 7; i < 14; i++) {
-    params->fma3.mask_table[i] = 0;
+    params->fma.mask_table[i] = 0;
   }
-  return sizeof(params->fma3);
+  return sizeof(params->fma);
 }
 
 size_t xnn_init_f32_sqrt_avx512_params(
   union xnn_f32_sqrt_params params[XNN_MIN_ELEMENTS(1)])
 {
-  params->avx512.neg_three = -3.0f;
-  params->avx512.neg_half = -0.5f;
   params->avx512.half = 0.5f;
   return sizeof(params->avx512);
 }

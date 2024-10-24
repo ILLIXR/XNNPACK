@@ -5,82 +5,80 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/aligned-allocator.h>
-#include <xnnpack/common.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <cmath>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
-#include <functional>
+#include <cstdint>
 #include <initializer_list>
 #include <memory>
 #include <numeric>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
-#include "pthreadpool.h"
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/aligned-allocator.h>
+#include <xnnpack/common.h>
+
 
 class MeanOperatorTester {
  public:
-  MeanOperatorTester& input_shape(std::initializer_list<size_t> input_shape) {
+  inline MeanOperatorTester& input_shape(std::initializer_list<size_t> input_shape) {
     assert(input_shape.size() <= XNN_MAX_TENSOR_DIMS);
     this->input_shape_ = std::vector<size_t>(input_shape);
     return *this;
   }
 
-  MeanOperatorTester& input_shape(const std::vector<size_t>& input_shape) {
+  inline MeanOperatorTester& input_shape(const std::vector<size_t>& input_shape) {
     assert(input_shape.size() <= XNN_MAX_TENSOR_DIMS);
     this->input_shape_ = std::vector<size_t>(input_shape);
     return *this;
   }
 
-  const std::vector<size_t>& input_shape() const {
+  inline const std::vector<size_t>& input_shape() const {
     return this->input_shape_;
   }
 
-  size_t num_input_dims() const {
+  inline size_t num_input_dims() const {
     return this->input_shape_.size();
   }
 
-  size_t num_input_elements() const {
+  inline size_t num_input_elements() const {
     return std::accumulate(
       this->input_shape_.begin(), this->input_shape_.end(), size_t(1), std::multiplies<size_t>());
   }
 
-  MeanOperatorTester& reduction_axes(std::initializer_list<size_t> reduction_axes) {
+  inline MeanOperatorTester& reduction_axes(std::initializer_list<size_t> reduction_axes) {
     assert(reduction_axes.size() <= XNN_MAX_TENSOR_DIMS);
     this->reduction_axes_ = std::vector<size_t>(reduction_axes);
     return *this;
   }
 
-  MeanOperatorTester& reduction_axes(const std::vector<size_t> reduction_axes) {
+  inline MeanOperatorTester& reduction_axes(const std::vector<size_t> reduction_axes) {
     assert(reduction_axes.size() <= XNN_MAX_TENSOR_DIMS);
     this->reduction_axes_ = reduction_axes;
     return *this;
   }
 
-  const std::vector<size_t>& reduction_axes() const {
+  inline const std::vector<size_t>& reduction_axes() const {
     return this->reduction_axes_;
   }
 
-  size_t num_reduction_axes() const {
+  inline size_t num_reduction_axes() const {
     return this->reduction_axes_.size();
   }
 
-  MeanOperatorTester& multithreaded(size_t multithreaded) {
+  inline MeanOperatorTester& multithreaded(size_t multithreaded) {
     this->multithreaded_ = multithreaded;
     return *this;
   }
 
-  size_t multithreaded() const {
+  inline size_t multithreaded() const {
     return this->multithreaded_;
   }
 
@@ -89,17 +87,18 @@ class MeanOperatorTester {
     return multithreaded() ? 5 : 1;
   }
 
-  MeanOperatorTester& iterations(size_t iterations) {
+  inline MeanOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void TestF16() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.01f, 1.0f);
 
     // Compute generalized shapes.
@@ -179,6 +178,8 @@ class MeanOperatorTester {
       // Smart pointer to automatically delete mean_op.
       std::unique_ptr<xnn_operator, decltype(&xnn_delete_operator)> auto_mean_op(mean_op, xnn_delete_operator);
 
+      size_t workspace_size = SIZE_MAX;
+      size_t workspace_alignment = SIZE_MAX;
       ASSERT_EQ(xnn_status_success,
         xnn_reshape_mean_nd_f16(
           mean_op,
@@ -186,11 +187,17 @@ class MeanOperatorTester {
           reduction_axes().data(),
           num_input_dims(),
           input_shape().data(),
+          &workspace_size, &workspace_alignment,
           auto_threadpool.get()));
+
+      ASSERT_NE(workspace_size, SIZE_MAX);
+      ASSERT_LE(workspace_alignment, XNN_ALLOCATION_ALIGNMENT);
+      std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(workspace_size);
 
       ASSERT_EQ(xnn_status_success,
         xnn_setup_mean_nd_f16(
           mean_op,
+          workspace.data(),
           input.data(), output.data()));
 
       ASSERT_EQ(xnn_status_success,
@@ -217,7 +224,8 @@ class MeanOperatorTester {
   }
 
   void TestF32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_real_distribution<float> f32dist(0.01f, 1.0f);
 
     // Compute generalized shapes.
@@ -297,6 +305,8 @@ class MeanOperatorTester {
       // Smart pointer to automatically delete mean_op.
       std::unique_ptr<xnn_operator, decltype(&xnn_delete_operator)> auto_mean_op(mean_op, xnn_delete_operator);
 
+      size_t workspace_size = SIZE_MAX;
+      size_t workspace_alignment = SIZE_MAX;
       ASSERT_EQ(xnn_status_success,
         xnn_reshape_mean_nd_f32(
           mean_op,
@@ -304,11 +314,17 @@ class MeanOperatorTester {
           reduction_axes().data(),
           num_input_dims(),
           input_shape().data(),
+          &workspace_size, &workspace_alignment,
           auto_threadpool.get()));
+
+      ASSERT_NE(workspace_size, SIZE_MAX);
+      ASSERT_LE(workspace_alignment, XNN_ALLOCATION_ALIGNMENT);
+      std::vector<char, AlignedAllocator<char, XNN_ALLOCATION_ALIGNMENT>> workspace(workspace_size);
 
       ASSERT_EQ(xnn_status_success,
         xnn_setup_mean_nd_f32(
           mean_op,
+          workspace.data(),
           input.data(), output.data()));
 
       ASSERT_EQ(xnn_status_success,

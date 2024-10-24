@@ -3,10 +3,6 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/reshape-helpers.h>
-#include <xnnpack/subgraph.h>
-
 #include <algorithm>
 #include <array>
 #include <cstddef>
@@ -19,7 +15,10 @@
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
+#include <tfl-xnnpack.h>
+#include <xnnpack/reshape-helpers.h>
+#include <xnnpack/subgraph.h>
+
 #include <gtest/gtest.h>
 
 xnn_runtime_t SetupUnary(const std::vector<size_t> &dims) {
@@ -238,7 +237,8 @@ TEST(ReshapeHelpersTest, BinaryScalarLHS3DRHS) {
   std::vector<float> input1(num_input1_elements);
   std::vector<float> output(num_output_elements);
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_real_distribution<float> f32dist(-1.f, 1.f);
   std::generate(input0.begin(), input0.end(), [&]() { return f32dist(rng); });
   std::generate(input1.begin(), input1.end(), [&]() { return f32dist(rng); });
@@ -287,7 +287,8 @@ TEST(ReshapeHelpersTest, Binary3DLHSScalarRHS) {
   std::vector<float> input1(num_input1_elements);
   std::vector<float> output(num_output_elements);
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_real_distribution<float> f32dist(-1.f, 1.f);
   std::generate(input0.begin(), input0.end(), [&]() { return f32dist(rng); });
   std::generate(input1.begin(), input1.end(), [&]() { return f32dist(rng); });

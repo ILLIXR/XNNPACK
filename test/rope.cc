@@ -3,27 +3,31 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/node-type.h>
-#include <xnnpack/operator.h>
-#include <xnnpack/subgraph.h>
-
 #include <algorithm>  // For std::generate, std::min.
 #include <array>      // For std::array.
 #include <cmath>      // For std::lrintf.
 #include <cstddef>    // For size_t.
 #include <cstdint>    // For uint32_t.
+#include <limits>     // For std::numeric_limits.
 #include <memory>     // For std::unique_ptr.
-#include <random>     // For std::uniform_real_distribution.
+#include <numeric>    // For std::accumulate.
+#include <random>     // For std::random_device, std::mt19937, std::uniform_real_distribution.
 #include <vector>     // For std::vector.
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+#include <gtest/gtest.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/operator.h>
+#include <xnnpack/requantization.h>
+#include <xnnpack/subgraph.h>
 
 template <class T> class RoPETestBase : public ::testing::Test {
- protected:
-  RoPETestBase() {
+protected:
+  RoPETestBase()
+  {
+    random_device = std::make_unique<std::random_device>();
+    rng = std::mt19937((*random_device)());
     f32dist = std::uniform_real_distribution<float>(0.1f, 1.0f);
     dim_dist = std::uniform_int_distribution<size_t>(5, 15);
 
@@ -35,15 +39,14 @@ template <class T> class RoPETestBase : public ::testing::Test {
     heads = dim_dist(rng);
     channels = dim_dist(rng) * 2;  // ensure the number of channels is even
 
-    input = std::vector<T>(XNN_EXTRA_BYTES / sizeof(T) +
-                           batch_size * tokens * heads * channels);
-    weights =
-        std::vector<T>(XNN_EXTRA_BYTES / sizeof(T) + max_tokens * channels);
+    input = std::vector<T>(XNN_EXTRA_BYTES / sizeof(T) + batch_size * tokens * heads * channels);
+    weights = std::vector<T>(XNN_EXTRA_BYTES / sizeof(T) + max_tokens * channels);
     operator_output = std::vector<T>(batch_size * tokens * heads * channels);
     subgraph_output = std::vector<T>(operator_output.size());
   }
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_real_distribution<float> f32dist;
   std::uniform_int_distribution<size_t> dim_dist;
 

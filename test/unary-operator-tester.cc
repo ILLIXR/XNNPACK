@@ -5,7 +5,6 @@
 
 #include "unary-operator-tester.h"
 
-#include <stdint.h>
 #include <tfl-xnnpack.h>
 
 #include <algorithm>
@@ -19,14 +18,14 @@
 #include <utility>
 #include <vector>
 
-#include "replicable_random_device.h"
 #include <gtest/gtest.h>
 #include <fp16/fp16.h>
 
 namespace xnnpack {
 
 void UnaryOperatorTester::TestF16() {
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_real_distribution<float> f32dist(range_f16_.first,
                                                 range_f16_.second);
 
@@ -81,7 +80,8 @@ void UnaryOperatorTester::TestF16() {
 }
 
 void UnaryOperatorTester::TestF32() {
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_real_distribution<float> f32dist(range_f32_.first,
                                                 range_f32_.second);
 
@@ -129,7 +129,8 @@ void UnaryOperatorTester::TestF32() {
 }
 
 void UnaryOperatorTester::TestRunF32() {
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   std::uniform_real_distribution<float> f32dist(range_f32_.first,
                                                 range_f32_.second);
 
@@ -168,7 +169,8 @@ void UnaryOperatorTester::TestRunF32() {
 }
 
 void UnaryOperatorTester::TestQS8() {
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   auto i8rng = [&]() -> int8_t {
     return std::uniform_int_distribution<int32_t>(range_qs8_.first,
                                                   range_qs8_.second)(rng);
@@ -226,7 +228,8 @@ void UnaryOperatorTester::TestQS8() {
 }
 
 void UnaryOperatorTester::TestQU8() {
-  xnnpack::ReplicableRandomDevice rng;
+  std::random_device random_device;
+  auto rng = std::mt19937(random_device());
   auto u8rng = [&]() -> uint8_t {
     return std::uniform_int_distribution<uint32_t>(range_qu8_.first,
                                                    range_qu8_.second)(rng);

@@ -6,13 +6,12 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
 #include <xnnpack/common.h>
 
-#include <cstddef>
+#include <gtest/gtest.h>
 
 #include "convolution-operator-tester.h"
-#include <gtest/gtest.h>
+
 
 TEST(CONVOLUTION_NHWC_QC8, kernel_1x1) {
   ConvolutionOperatorTester()

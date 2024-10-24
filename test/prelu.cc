@@ -3,46 +3,42 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-#include <tfl-xnnpack.h>
-#include <xnnpack/node-type.h>
-#include <xnnpack/operator.h>
-#include <xnnpack/subgraph.h>
-
 #include <algorithm>
 #include <array>
-#include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <functional>
+#include <limits>
 #include <memory>
 #include <numeric>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
 #include <fp16/fp16.h>
+#include <gtest/gtest.h>
+
+#include <tfl-xnnpack.h>
+#include <xnnpack/node-type.h>
+#include <xnnpack/operator.h>
+#include <xnnpack/subgraph.h>
 
 template <
   typename InputType,
   typename WeightType = InputType,
   typename OutputType = InputType>
 class PreluTest : public ::testing::Test {
- protected:
-  void SetUp() override {
+protected:
+  void SetUp() override
+  {
+    random_device = std::make_unique<std::random_device>();
+    rng = std::mt19937((*random_device)());
     dim_dist = std::uniform_int_distribution<size_t>(1, 9);
     input_dims = RandomShape(4);
     output_dims = input_dims;
     batch_size = input_dims[0] * input_dims[1] * input_dims[2];
-    input_channels = input_dims[3];
-    slope_channels = input_dims[3];
-    // Randomly broadcast slope.
-    if (dim_dist(rng) < 3) {
-      slope_channels = 1;
-    }
-    slope_dims = {slope_channels};
+    channels = input_dims[3];
+    slope_dims = {channels};
     input = std::vector<InputType>(XNN_EXTRA_BYTES / sizeof(InputType) + NumElements(input_dims));
-    slope = std::vector<WeightType>(slope_channels);
+    slope = std::vector<WeightType>(channels);
     operator_output = std::vector<OutputType>(NumElements(output_dims));
     subgraph_output = std::vector<OutputType>(operator_output.size());
   }
@@ -59,7 +55,8 @@ class PreluTest : public ::testing::Test {
     return std::accumulate(dims.begin(), dims.end(), size_t(1), std::multiplies<size_t>());
   }
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_int_distribution<size_t> dim_dist;
 
   std::vector<size_t> output_dims;
@@ -69,8 +66,7 @@ class PreluTest : public ::testing::Test {
   std::vector<WeightType> slope;
   std::vector<OutputType> operator_output;
   std::vector<OutputType> subgraph_output;
-  size_t input_channels;
-  size_t slope_channels;
+  size_t channels;
   size_t batch_size;
 };
 
@@ -177,7 +173,7 @@ TEST_F(PreluTestF16, matches_operator_api)
   // Call operator API.
   xnn_operator_t op = nullptr;
   const xnn_status status =
-    xnn_create_prelu_nc_f16(input_channels, slope_channels, input_channels, input_channels, slope.data(), XNN_FLAG_FP32_STATIC_WEIGHTS, nullptr, nullptr, &op);
+    xnn_create_prelu_nc_f16(channels, channels, channels, slope.data(), XNN_FLAG_FP32_STATIC_WEIGHTS, nullptr, nullptr, &op);
   if (status == xnn_status_unsupported_hardware) {
     GTEST_SKIP();
   }
@@ -250,7 +246,7 @@ TEST_F(PreluTestF32, matches_operator_api)
   // Call operator API.
   xnn_operator_t op = nullptr;
   const xnn_status status =
-    xnn_create_prelu_nc_f32(input_channels, slope_channels, input_channels, input_channels, slope.data(), /*flags=*/0, nullptr, nullptr, &op);
+    xnn_create_prelu_nc_f32(channels, channels, channels, slope.data(), /*flags=*/0, nullptr, nullptr, &op);
   if (status == xnn_status_unsupported_hardware) {
     GTEST_SKIP();
   }

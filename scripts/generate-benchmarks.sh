@@ -13,7 +13,6 @@ tools/generate-vunary-benchmark.py --spec test/f16-vrndd.yaml  --output bench/f1
 tools/generate-vunary-benchmark.py --spec test/f16-vrndne.yaml --output bench/f16-vrndne.cc &
 tools/generate-vunary-benchmark.py --spec test/f16-vrndu.yaml  --output bench/f16-vrndu.cc &
 tools/generate-vunary-benchmark.py --spec test/f16-vrndz.yaml  --output bench/f16-vrndz.cc &
-tools/generate-vunary-benchmark.py --spec test/f16-vrsqrt.yaml --output bench/f16-vrsqrt.cc &
 tools/generate-vunary-benchmark.py --spec test/f16-vsigmoid.yaml --output bench/f16-vsigmoid.cc &
 tools/generate-vunary-benchmark.py --spec test/f16-vsqr.yaml --output bench/f16-vsqr.cc &
 tools/generate-vunary-benchmark.py --spec test/f16-vsqrt.yaml --output bench/f16-vsqrt.cc &
@@ -42,12 +41,4 @@ tools/generate-vunary-benchmark.py --spec test/f32-vlrelu.yaml --output bench/f3
 tools/generate-vunary-benchmark.py --spec test/f16-vhswish.yaml --output bench/f16-vhswish.cc &
 tools/generate-vunary-benchmark.py --spec test/f32-vhswish.yaml --output bench/f32-vhswish.cc &
 
-### Tests for Rsum micro-kernels
-tools/generate-rdsum-benchmark.py  --spec test/f32-rdsum.yaml --output bench/f32-rdsum.cc
-tools/generate-rdsum-benchmark.py  --spec test/f16-f32acc-rdsum.yaml --output bench/f16-f32acc-rdsum.cc
-
-tools/generate-rdsum-benchmark.py  --spec test/f16-rsum.yaml --output bench/f16-rsum.cc
-tools/generate-rdsum-benchmark.py  --spec test/f16-f32acc-rsum.yaml --output bench/f16-f32acc-rsum.cc
-tools/generate-rdsum-benchmark.py  --spec test/f32-rsum.yaml --output bench/f32-rsum.cc
-tools/generate-rdsum-benchmark.py  --spec test/qs8-rsum-minmax-fp32.yaml --output bench/qs8-rsum-minmax-fp32.cc
 wait

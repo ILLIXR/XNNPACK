@@ -10,6 +10,9 @@
 
 #include <stddef.h>
 #include <stdint.h>
+
+#include <pthreadpool.h>
+
 #include <xnnpack/allocator.h>
 #include <xnnpack/cache.h>
 #include <xnnpack/compute.h>
@@ -18,7 +21,6 @@
 #include <xnnpack/operator-type.h>
 #include <xnnpack/params.h>
 
-#include "pthreadpool.h"
 
 // Maximum number of pthreadpool parallelization invocations per operator.
 #define XNN_MAX_COMPUTE_INVOCATIONS 3
@@ -338,8 +340,7 @@ struct xnn_operator {
       const struct xnn_avgpool_config* avgpool_config;
       const struct xnn_gavgpool_config* gavgpool_config;
       const struct xnn_pavgpool_config* pavgpool_config;
-      const struct xnn_reduce_config* rdsum_config;
-      const struct xnn_reduce_config* rsum_config;
+      const struct xnn_reduce_config* reduce_config;
     };
     const struct xnn_gavgpool_cw_config* gavgpool_cw_config;
     const struct xnn_ibilinear_chw_config* ibilinear_chw_config;

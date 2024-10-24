@@ -51,18 +51,14 @@ def split_ukernel_name(name):
     kr = int(kr)
   else:
     kr = 1
-  if "v" in param_spec:
-    vector_tile = True
-    param_spec, _ = param_spec.split("v", 1)
-  else:
-    vector_tile = False
   mr, nr = map(int, param_spec.split("x"))
   arch, isa, assembly = xnncommon.parse_target_name(target_name)
 
   requantization = common_parts[-3]
   if requantization not in ["fp32", "rndnu"]:
     requantization = None
-  return mr, nr, kr, sr, xw, vector_tile, requantization, arch, isa, assembly
+
+  return mr, nr, kr, sr, xw, requantization, arch, isa, assembly
 
 
 GEMM_BENCH_CODE_XW = """\
@@ -73,7 +69,7 @@ static void ${UKERNEL_NAME}(benchmark::State& state, const char* net) {
       ${INIT_PARAMS},
     $if PACK_FN is not None:
       ${PACK_FN},
-    /*mr=*/${MR}, /*nr=*/${NR}${NR_SCALE}, /*kr=*/${KR}, /*sr=*/${SR},
+    /*mr=*/${MR}, /*nr=*/${NR}, /*kr=*/${KR}, /*sr=*/${SR},
     $if ISA_CHECK:
       benchmark::utils::${ISA_CHECK},
     $else:
@@ -91,7 +87,7 @@ static void ${UKERNEL_NAME}(benchmark::State& state, const char* net) {
       ${INIT_PARAMS},
     $if PACK_FN is not None:
       ${PACK_FN},
-    /*mr=*/${MR}, /*nr=*/${NR}${NR_SCALE}, /*kr=*/${KR}, /*sr=*/${SR},
+    /*mr=*/${MR}, /*nr=*/${NR}, /*kr=*/${KR}, /*sr=*/${SR},
     $if ISA_CHECK:
       benchmark::utils::${ISA_CHECK});
     $else:
@@ -110,8 +106,6 @@ std::vector<GemmTestParams> CreateTests(
   std::string kbs = std::to_string(k_block);
   std::string kb2s = std::to_string(k_block * 2);
   std::string akbs = std::to_string(adj_k_block);
-  $if NR_SCALE != "":
-    nr = nr${NR_SCALE};
   std::string nrs = std::to_string(nr);
 
   std::vector<GemmTestParams> gemm_tests;
@@ -258,7 +252,7 @@ std::vector<GemmTestParams> CreateTests(
           $if KERNELTYPE == 'qc4w':
             .b_zero_point(8)
       , test_func, isa_check)
-      .loop_k(adj_k_block + 1, adj_k_block * 2 - 1, k_block));
+      .loop_k(adj_k_block + 1, adj_k_block * (adj_k_block == 1 ? 10 : 2) - 1));
   if (is_igemm) {
     gemm_tests.push_back(GemmTestParams(
         "k_gt_" + akbs + "_strided_a",
@@ -266,11 +260,11 @@ std::vector<GemmTestParams> CreateTests(
             $if EXTENDED_WEIGHTS:
               .extended_weights(true)
             .mr(mr).nr(nr).kr(kr).sr(sr).m(mr).n(nr)
-            .a_stride(NextPrime(adj_k_block * 2 + 1))
+            .a_stride(NextPrime(adj_k_block == 1 ? 10 : adj_k_block * 2 + 1))
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
       , test_func, isa_check)
-      .loop_k(adj_k_block + 1, adj_k_block * 2 - 1, k_block));
+      .loop_k(adj_k_block + 1, adj_k_block * (adj_k_block == 1 ? 10 : 2) - 1));
   }
   gemm_tests.push_back(GemmTestParams(
       "k_gt_" + akbs + "_subtile",
@@ -281,7 +275,7 @@ std::vector<GemmTestParams> CreateTests(
           $if KERNELTYPE == 'qc4w':
             .b_zero_point(8)
       , test_func, isa_check)
-      .loop_k(adj_k_block + 1, adj_k_block * 2 - 1, k_block)
+      .loop_k(adj_k_block + 1, adj_k_block * (adj_k_block == 1 ? 10 : 2) - 1)
       .loop_n(1, nr)
       .loop_m(1, mr));
   if (k_block > 1) {
@@ -294,7 +288,7 @@ std::vector<GemmTestParams> CreateTests(
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
-        .loop_k(adj_k_block + k_block, k_block * 5, k_block));
+        .loop_k(adj_k_block + k_block, k_block * 10, k_block));
     if (is_igemm) {
       gemm_tests.push_back(GemmTestParams(
           "k_div_" + kbs + "_strided_a",
@@ -302,11 +296,11 @@ std::vector<GemmTestParams> CreateTests(
               $if EXTENDED_WEIGHTS:
                 .extended_weights(true)
               .mr(mr).nr(nr).kr(kr).sr(sr).m(mr).n(nr)
-              .a_stride(NextPrime(k_block * 3 + 1))
+              .a_stride(NextPrime(k_block * 10 + 1))
               $if KERNELTYPE == 'qc4w':
                 .b_zero_point(8)
           , test_func, isa_check)
-          .loop_k(adj_k_block + k_block, k_block * 3, k_block));
+          .loop_k(adj_k_block + k_block, k_block * 10, k_block));
     }
     gemm_tests.push_back(GemmTestParams(
         "k_div_" + kbs + "_subtile",
@@ -317,7 +311,7 @@ std::vector<GemmTestParams> CreateTests(
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
-        .loop_k(adj_k_block + k_block, k_block * 5, k_block)
+        .loop_k(adj_k_block + k_block, k_block * 10, k_block)
         .loop_n(1, nr)
         .loop_m(1, mr));
   }
@@ -330,11 +324,8 @@ std::vector<GemmTestParams> CreateTests(
           $if KERNELTYPE == 'qc4w':
             .b_zero_point(8)
       , test_func, isa_check)
-      $if NR_SCALE != "":
-        .loop_n(nr + 1, nr * 2 - 1, 4)
-      $else:
-        .loop_n(nr + 1, nr * 2 - 1)
-      .loop_k(1, k_block * 3, k_block + 1));
+      .loop_n(nr + 1, nr * 2 - 1)
+      .loop_k(1, k_block * 5, k_block + 1));
   $if JIT:
     gemm_tests.push_back(GemmTestParams(
         "unknown_nc_mod_nr",
@@ -345,11 +336,8 @@ std::vector<GemmTestParams> CreateTests(
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
-        $if NR_SCALE != "":
-          .loop_n(1, nr * 2 - 1, 4)
-        $else:
-          .loop_n(1, nr * 2 - 1)
-        .loop_k(1, k_block * 3, k_block + 1));
+        .loop_n(1, nr * 2 - 1)
+        .loop_k(1, k_block * 5, k_block + 1));
     gemm_tests.push_back(GemmTestParams(
         "relu",
         GemmMicrokernelTester()
@@ -369,11 +357,8 @@ std::vector<GemmTestParams> CreateTests(
           $if KERNELTYPE == 'qc4w':
             .b_zero_point(8)
       , test_func, isa_check)
-      $if NR_SCALE != "":
-        .loop_n(nr + 1, nr * 2 - 1, 4)
-      $else:
-        .loop_n(nr + 1, nr * 2 - 1)
-      .loop_k(1, k_block * 3, k_block + 1));
+      .loop_n(nr + 1, nr * 2 - 1)
+      .loop_k(1, k_block * 5, k_block + 1));
   if (!is_igemm) {
     gemm_tests.push_back(GemmTestParams(
         "n_gt_" + nrs + "_strided_a",
@@ -381,15 +366,12 @@ std::vector<GemmTestParams> CreateTests(
             $if EXTENDED_WEIGHTS:
               .extended_weights(true)
             .mr(mr).nr(nr).kr(kr).sr(sr).m(mr)
-            .a_stride(NextPrime(k_block * 3 + 1))
+            .a_stride(NextPrime(k_block * 5 + 1))
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
-        $if NR_SCALE != "":
-          .loop_n(nr + 1, nr * 2 - 1, 4)
-        $else:
-          .loop_n(nr + 1, nr * 2 - 1)
-        .loop_k(1, k_block * 3, k_block));
+        .loop_n(nr + 1, nr * 2 - 1)
+        .loop_k(1, k_block * 5, k_block + 1));
   }
   gemm_tests.push_back(GemmTestParams(
       "n_gt_" + nrs + "_subtile",
@@ -400,11 +382,8 @@ std::vector<GemmTestParams> CreateTests(
           $if KERNELTYPE == 'qc4w':
             .b_zero_point(8)
       , test_func, isa_check)
-      $if NR_SCALE != "":
-        .loop_n(nr + 1, nr * 2 - 1, 4)
-      $else:
-        .loop_n(nr + 1, nr * 2 - 1)
-      .loop_k(1, k_block * 3, k_block + 1)
+      .loop_n(nr + 1, nr * 2 - 1)
+      .loop_k(1, k_block * 5, k_block + 1)
       .loop_m(1, mr));
   gemm_tests.push_back(GemmTestParams(
       "n_div_" + nrs,
@@ -416,7 +395,7 @@ std::vector<GemmTestParams> CreateTests(
             .b_zero_point(8)
       , test_func, isa_check)
       .loop_n(nr * 2, nr * 3, nr)
-      .loop_k(1, k_block * 3, k_block + 1));
+      .loop_k(1, k_block * 5, k_block + 1));
   gemm_tests.push_back(GemmTestParams(
       "n_div_" + nrs + "_strided_cn",
       GemmMicrokernelTester()
@@ -428,7 +407,7 @@ std::vector<GemmTestParams> CreateTests(
             .b_zero_point(8)
       , test_func, isa_check)
       .loop_n(nr * 2, nr * 3, nr)
-      .loop_k(1, k_block * 3, k_block + 1));
+      .loop_k(1, k_block * 5, k_block + 1));
   if (!is_igemm) {
     gemm_tests.push_back(GemmTestParams(
         "n_div_" + nrs + "_strided_a",
@@ -436,12 +415,12 @@ std::vector<GemmTestParams> CreateTests(
             $if EXTENDED_WEIGHTS:
               .extended_weights(true)
             .mr(mr).nr(nr).kr(kr).sr(sr).m(mr)
-            .a_stride(NextPrime(k_block * 3 + 1))
+            .a_stride(NextPrime(k_block * 5 + 1))
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
         .loop_n(nr * 2, nr * 3, nr)
-        .loop_k(1, k_block * 3, k_block));
+        .loop_k(1, k_block * 5, k_block + 1));
   }
   gemm_tests.push_back(GemmTestParams(
       "n_div_" + nrs + "_subtile",
@@ -453,7 +432,7 @@ std::vector<GemmTestParams> CreateTests(
             .b_zero_point(8)
       , test_func, isa_check)
       .loop_n(nr * 2, nr * 3, nr)
-      .loop_k(1, k_block * 3, k_block + 1)
+      .loop_k(1, k_block * 5, k_block + 1)
       .loop_m(1, mr));
   if (is_igemm) {
     gemm_tests.push_back(GemmTestParams(
@@ -465,7 +444,7 @@ std::vector<GemmTestParams> CreateTests(
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
-        .loop_k(1, k_block * 3, k_block + 1));
+        .loop_k(1, k_block * 5, k_block + 1));
     gemm_tests.push_back(GemmTestParams(
         "small_kernel_subtile",
         GemmMicrokernelTester()
@@ -475,7 +454,7 @@ std::vector<GemmTestParams> CreateTests(
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
-        .loop_k(1, k_block * 3, k_block + 1)
+        .loop_k(1, k_block * 5, k_block + 1)
         .loop_n(1, nr)
         .loop_m(1, mr));
     gemm_tests.push_back(GemmTestParams(
@@ -487,11 +466,8 @@ std::vector<GemmTestParams> CreateTests(
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
-        $if NR_SCALE != "":
-          .loop_n(nr + 1, nr * 2 - 1, 4)
-        $else:
-          .loop_n(nr + 1, nr * 2 - 1)
-        .loop_k(1, k_block * 3, k_block + 1));
+        .loop_n(nr + 1, nr * 2 - 1)
+        .loop_k(1, k_block * 5, k_block + 1));
     gemm_tests.push_back(GemmTestParams(
         "n_div_" + nrs + "_small_kernel",
         GemmMicrokernelTester()
@@ -502,7 +478,7 @@ std::vector<GemmTestParams> CreateTests(
               .b_zero_point(8)
         , test_func, isa_check)
         .loop_n(nr * 2, nr * 3, nr)
-        .loop_k(1, k_block * 3, k_block + 1));
+        .loop_k(1, k_block * 5, k_block + 1));
   }
   gemm_tests.push_back(GemmTestParams(
       "strided_cm_subtile",
@@ -515,7 +491,7 @@ std::vector<GemmTestParams> CreateTests(
           $if KERNELTYPE == 'qc4w':
             .b_zero_point(8)
       , test_func, isa_check)
-      .loop_k(1, k_block * 3, k_block + 1)
+      .loop_k(1, k_block * 5, k_block + 1)
       .loop_n(1, nr)
       .loop_m(1, mr));
   if (is_igemm) {
@@ -525,22 +501,22 @@ std::vector<GemmTestParams> CreateTests(
             $if EXTENDED_WEIGHTS:
               .extended_weights(true)
             .mr(mr).nr(nr).kr(kr).sr(sr).m(mr).n(nr).ks(3)
-            .a_offset(NextPrime(mr * k_block * 3 + 1))
+            .a_offset(NextPrime(mr * k_block * 5 + 1))
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
-        .loop_k(1, k_block * 3, k_block + 1));
+        .loop_k(1, k_block * 5, k_block + 1));
     gemm_tests.push_back(GemmTestParams(
         "zero",
         GemmMicrokernelTester()
             $if EXTENDED_WEIGHTS:
               .extended_weights(true)
             .mr(mr).nr(nr).kr(kr).sr(sr).m(mr).n(nr).ks(3)
-            .a_offset(NextPrime(mr * k_block * 3 + 1))
+            .a_offset(NextPrime(mr * k_block * 5 + 1))
             $if KERNELTYPE == 'qc4w':
               .b_zero_point(8)
         , test_func, isa_check)
-        .loop_k(1, k_block * 3, k_block + 1)
+        .loop_k(1, k_block * 5, k_block + 1)
         .loop_zi(0, mr - 1));
   }
   $if ACTIVATION == "MINMAX":
@@ -580,7 +556,7 @@ std::vector<GemmTestParams> CreateTests(
               .extended_weights(true)
             .mr(mr).nr(nr).kr(kr).sr(sr).m(mr).n(nr).a_zero_point(0)
         , test_func, isa_check)
-        .loop_k(1, k_block * 3, k_block + 1));
+        .loop_k(1, k_block * 5, k_block + 1));
   $if DATATYPE == "qu8":
     gemm_tests.push_back(GemmTestParams(
         "no_b_zero_point",
@@ -589,7 +565,7 @@ std::vector<GemmTestParams> CreateTests(
               .extended_weights(true)
             .mr(mr).nr(nr).kr(kr).sr(sr).m(mr).n(nr).b_zero_point(0)
         , test_func, isa_check)
-        .loop_k(1, k_block * 3, k_block + 1));
+        .loop_k(1, k_block * 5, k_block + 1));
     gemm_tests.push_back(GemmTestParams(
         "b_zero_point",
         GemmMicrokernelTester()
@@ -607,7 +583,7 @@ std::vector<GemmTestParams> CreateTests(
             .a_zero_point(0)
             .b_zero_point(0)
         , test_func, isa_check)
-        .loop_k(1, k_block * 3, k_block + 1));
+        .loop_k(1, k_block * 5, k_block + 1));
 
   return gemm_tests;
 }
@@ -743,8 +719,8 @@ $if TEST_NAME.startswith('GENERATE') and DATATYPE in ['f32', 'f16'] and PROTOTYP
 """
 
 
-def generate_test_cases(ukernel, mr, nr, kr, sr, xw, k_block, vector_tile, init_fn,
-                        pack_fn, requantization, is_pipelined, isa, jit, prototype, post_op):
+def generate_test_cases(ukernel, mr, nr, kr, sr, xw, k_block, init_fn, pack_fn,
+                        requantization, is_pipelined, isa, jit, prototype, post_op):
   """Generates all tests cases for a GEMM micro-kernel.
 
   Args:
@@ -756,8 +732,6 @@ def generate_test_cases(ukernel, mr, nr, kr, sr, xw, k_block, vector_tile, init_
     xw: boolean indicator for microkernel with extended weights.
     k_block: Number of K values processed per one iteration of the main loop of
       the micro-kernel.
-    vector_tile: Indicates if vector tile for NR is specified in vectors rather
-                 than elements.
     init_fn: C name of the function to initialize microkernel parameters.
     pack_fn: C name of the function to pack the weights.
     requantization: name of the requantization scheme used by the microkernel.
@@ -817,11 +791,6 @@ def generate_test_cases(ukernel, mr, nr, kr, sr, xw, k_block, vector_tile, init_
     if "minmax" in init_fn:
       activation = "minmax"
 
-  nr_scale = ""
-  if vector_tile:
-    ctype = {"qs8": "int8_t", "qd8":" int8_t", "qu8":" uint8_t",
-             "f16": "uint16_t", "f32": "float"}[datatype]
-    nr_scale = {"rvv": " * xnn_init_hardware_config()->vlenb / sizeof(%s)" % ctype}[isa]
   test_args = {
       "TEST_NAME": ukernel_name.upper().replace("UKERNEL_", ""),
       "TEST_ARGS": test_args,
@@ -835,7 +804,6 @@ def generate_test_cases(ukernel, mr, nr, kr, sr, xw, k_block, vector_tile, init_
       "SR": sr,
       "EXTENDED_WEIGHTS": xw,
       "KBLOCK": k_block,
-      "NR_SCALE": nr_scale,
       "ADJKBLOCK": 2 * k_block if is_pipelined else k_block,
       "IS_PIPELINED": is_pipelined,
       "ISA_CHECK": xnncommon.generate_isa_check_macro(isa),
@@ -859,7 +827,6 @@ def generate_test_cases(ukernel, mr, nr, kr, sr, xw, k_block, vector_tile, init_
           "NR": nr,
           "KR": kr,
           "SR": sr,
-          "NR_SCALE": nr_scale,
           "EXTENDED_WEIGHTS": xw,
           "ISA_CHECK": xnncommon.generate_isa_utilcheck_macro(isa),
       })
@@ -948,7 +915,7 @@ def main(args):
       jit = name.startswith("xnn_generate")
       prototype = ukernel_spec.get("prototype")
       post_op = ukernel_spec.get("post-op", True)
-      mr, nr, kr, sr, xw, vector_tile, requantization, arch, isa, assembly = \
+      mr, nr, kr, sr, xw, requantization, arch, isa, assembly = \
         split_ukernel_name(name)
 
       create_tests, test_case, bench_case = generate_test_cases(
@@ -959,7 +926,6 @@ def main(args):
           sr,
           xw,
           k_block,
-          vector_tile,
           init_fn,
           pack_fn,
           requantization,
@@ -977,9 +943,6 @@ def main(args):
         create_tests_from_idx[create_tests_idx] = create_tests.replace(
             "CreateTests(", f"CreateTests{create_tests_idx}("
         )
-        if isa == 'rvv':
-          create_tests_from_idx[create_tests_idx] = xnncommon.postprocess_test_case(
-            create_tests_from_idx[create_tests_idx], arch, isa, assembly, jit)
       test_case = test_case.replace(
           "CreateTests(", f"CreateTests{create_tests_idx}("
       )

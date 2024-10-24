@@ -5,40 +5,38 @@
 
 #pragma once
 
-#include <tfl-xnnpack.h>
+#include <gtest/gtest.h>
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <limits>
-#include <memory>
 #include <random>
 #include <vector>
 
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
+#include <tfl-xnnpack.h>
+
 
 class CopyOperatorTester {
  public:
-  CopyOperatorTester& channels(size_t channels) {
+  inline CopyOperatorTester& channels(size_t channels) {
     assert(channels != 0);
     this->channels_ = channels;
     return *this;
   }
 
-  size_t channels() const {
+  inline size_t channels() const {
     return this->channels_;
   }
 
-  CopyOperatorTester& input_stride(size_t input_stride) {
+  inline CopyOperatorTester& input_stride(size_t input_stride) {
     assert(input_stride != 0);
     this->input_stride_ = input_stride;
     return *this;
   }
 
-  size_t input_stride() const {
+  inline size_t input_stride() const {
     if (this->input_stride_ == 0) {
       return this->channels_;
     } else {
@@ -47,13 +45,13 @@ class CopyOperatorTester {
     }
   }
 
-  CopyOperatorTester& output_stride(size_t output_stride) {
+  inline CopyOperatorTester& output_stride(size_t output_stride) {
     assert(output_stride != 0);
     this->output_stride_ = output_stride;
     return *this;
   }
 
-  size_t output_stride() const {
+  inline size_t output_stride() const {
     if (this->output_stride_ == 0) {
       return this->channels_;
     } else {
@@ -62,27 +60,28 @@ class CopyOperatorTester {
     }
   }
 
-  CopyOperatorTester& batch_size(size_t batch_size) {
+  inline CopyOperatorTester& batch_size(size_t batch_size) {
     assert(batch_size != 0);
     this->batch_size_ = batch_size;
     return *this;
   }
 
-  size_t batch_size() const {
+  inline size_t batch_size() const {
     return this->batch_size_;
   }
 
-  CopyOperatorTester& iterations(size_t iterations) {
+  inline CopyOperatorTester& iterations(size_t iterations) {
     this->iterations_ = iterations;
     return *this;
   }
 
-  size_t iterations() const {
+  inline size_t iterations() const {
     return this->iterations_;
   }
 
   void TestX8() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<uint32_t> u8dist(
       std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max());
 
@@ -129,7 +128,8 @@ class CopyOperatorTester {
   }
 
   void TestX16() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<uint16_t> u16dist;
 
     std::vector<uint16_t> input(XNN_EXTRA_BYTES / sizeof(uint16_t) +
@@ -175,7 +175,8 @@ class CopyOperatorTester {
   }
 
   void TestX32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<uint32_t> u32dist;
 
     std::vector<uint32_t> input(XNN_EXTRA_BYTES / sizeof(uint32_t) +
@@ -221,7 +222,8 @@ class CopyOperatorTester {
   }
 
   void TestRunX32() const {
-    xnnpack::ReplicableRandomDevice rng;
+    std::random_device random_device;
+    auto rng = std::mt19937(random_device());
     std::uniform_int_distribution<uint32_t> u32dist;
 
     std::vector<uint32_t> input(XNN_EXTRA_BYTES / sizeof(uint32_t) +

@@ -5,54 +5,51 @@
 
 #pragma once
 
+#include <gtest/gtest.h>
+
 #include <tfl-xnnpack.h>
 #include <xnnpack/normalization.h>
 
-#include <cassert>
-#include <cstddef>
-#include <vector>
-
-#include <gtest/gtest.h>
 
 class ReduceNormalizationTester {
  public:
-  ReduceNormalizationTester& axes(const std::vector<size_t>& axes) {
+  inline ReduceNormalizationTester& axes(const std::vector<size_t>& axes) {
     assert(axes.size() <= XNN_MAX_TENSOR_DIMS);
     this->axes_ = axes;
     return *this;
   }
 
-  const std::vector<size_t>& axes() const {
+  inline const std::vector<size_t>& axes() const {
     return this->axes_;
   }
 
-  ReduceNormalizationTester& shape(const std::vector<size_t>& shape) {
+  inline ReduceNormalizationTester& shape(const std::vector<size_t>& shape) {
     assert(shape.size() <= XNN_MAX_TENSOR_DIMS);
     this->shape_ = shape;
     return *this;
   }
 
-  const std::vector<size_t>& shape() const {
+  inline const std::vector<size_t>& shape() const {
     return this->shape_;
   }
 
-  ReduceNormalizationTester& expected_axes(const std::vector<size_t>& expected_axes) {
+  inline ReduceNormalizationTester& expected_axes(const std::vector<size_t>& expected_axes) {
     assert(expected_axes.size() <= XNN_MAX_TENSOR_DIMS);
     this->expected_axes_ = expected_axes;
     return *this;
   }
 
-  const std::vector<size_t>& expected_axes() const {
+  inline const std::vector<size_t>& expected_axes() const {
     return this->expected_axes_;
   }
 
-  ReduceNormalizationTester& expected_shape(const std::vector<size_t>& expected_shape) {
+  inline ReduceNormalizationTester& expected_shape(const std::vector<size_t>& expected_shape) {
     assert(expected_shape.size() <= XNN_MAX_TENSOR_DIMS);
     this->expected_shape_ = expected_shape;
     return *this;
   }
 
-  const std::vector<size_t>& expected_shape() const {
+  inline const std::vector<size_t>& expected_shape() const {
     return this->expected_shape_;
   }
 

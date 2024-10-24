@@ -3,31 +3,30 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <limits>
+#include <memory>
+#include <numeric>
+#include <random>
+
+#include <fp16/fp16.h>
+#include <gtest/gtest.h>
+
 #include <tfl-xnnpack.h>
 #include <xnnpack/node-type.h>
 #include <xnnpack/operator.h>
 #include <xnnpack/subgraph.h>
 
-#include <algorithm>
-#include <array>
-#include <cassert>
-#include <cmath>
-#include <cstddef>
-#include <cstdint>
-#include <functional>
-#include <limits>
-#include <memory>
-#include <numeric>
-#include <random>
-#include <vector>
-
-#include "replicable_random_device.h"
-#include <gtest/gtest.h>
-#include <fp16/fp16.h>
-
 template <typename T> class DepthToSpaceTest : public ::testing::Test {
- protected:
-  DepthToSpaceTest() {
+protected:
+  DepthToSpaceTest()
+  {
+    random_device = std::make_unique<std::random_device>();
+    rng = std::mt19937((*random_device)());
     dim_dist = std::uniform_int_distribution<size_t>(1, 9);
     i8dist =
       std::uniform_int_distribution<int32_t>(std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max());
@@ -71,7 +70,8 @@ template <typename T> class DepthToSpaceTest : public ::testing::Test {
   size_t input_channel() { return input_dims[3]; }
   size_t output_channel() { return output_dims[3]; }
 
-  xnnpack::ReplicableRandomDevice rng;
+  std::unique_ptr<std::random_device> random_device;
+  std::mt19937 rng;
   std::uniform_int_distribution<size_t> dim_dist;
   std::uniform_real_distribution<float> scale_dist;
   std::uniform_int_distribution<int32_t> i8dist;
