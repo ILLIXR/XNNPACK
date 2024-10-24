@@ -15,7 +15,7 @@
 #include "bench/utils.h"
 #include <benchmark/benchmark.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/config.h>
 #include <xnnpack/dwconv.h>
 #include <xnnpack/microfnptr.h>

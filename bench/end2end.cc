@@ -14,7 +14,7 @@
 
 #include "bench/utils.h"
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/models.h>
 
 

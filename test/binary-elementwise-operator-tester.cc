@@ -6,7 +6,7 @@
 #include "binary-elementwise-operator-tester.h"
 
 #include <stdint.h>
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 
 #include <algorithm>
 #include <array>

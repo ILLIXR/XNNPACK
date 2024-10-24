@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <limits>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/math.h>
 #include <xnnpack/microfnptr.h>
 #include <xnnpack/microparams-init.h>

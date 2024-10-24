@@ -11,7 +11,7 @@
 
 #include <gtest/gtest.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/node-type.h>
 #include <xnnpack/subgraph.h>
 

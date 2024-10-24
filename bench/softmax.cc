@@ -11,9 +11,7 @@
 #include <random>
 #include <vector>
 
-#include <fp16/fp16.h>
-
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 
 #include <benchmark/benchmark.h>
 #include "bench/utils.h"

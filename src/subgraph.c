@@ -10,8 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <xnnpack.h>
-#include <xnnpack/allocation-type.h>
+#include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
 #include <xnnpack/common.h>
 #include <xnnpack/config.h>

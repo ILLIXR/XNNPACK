@@ -15,7 +15,7 @@
 #include "bench/utils.h"
 #include <benchmark/benchmark.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/config.h>
 #include <xnnpack/gemm.h>
 #include <xnnpack/igemm.h>

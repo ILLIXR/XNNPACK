@@ -1,7 +1,7 @@
 #include "gemm-microkernel-tester.h"
 
 #include <stdint.h>
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/aligned-allocator.h>
 #include <xnnpack/common.h>
 #include <xnnpack/math.h>

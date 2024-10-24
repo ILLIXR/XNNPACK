@@ -9,7 +9,7 @@
 
 #include <gtest/gtest.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/cache.h>
 
 static void* cache_end(const xnn_code_cache* cache) {

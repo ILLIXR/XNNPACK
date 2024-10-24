@@ -11,7 +11,7 @@
 #include <cstdint>
 #include <cstdlib>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/microfnptr.h>
 #include <xnnpack/microparams-init.h>
 #include <xnnpack/requantization.h>

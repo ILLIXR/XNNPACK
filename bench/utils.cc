@@ -24,7 +24,7 @@
   #include <cpuinfo.h>
 #endif  // XNN_ENABLE_CPUINFO
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
 #include <xnnpack/config.h>
 

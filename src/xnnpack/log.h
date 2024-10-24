@@ -12,7 +12,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/node-type.h>
 #include <xnnpack/common.h>
 

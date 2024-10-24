@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/subgraph.h>
 
 enum xnn_status resize_unary_elementwise_output_tensor(

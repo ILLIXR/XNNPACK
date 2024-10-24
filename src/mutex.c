@@ -5,7 +5,7 @@
 
 #include <string.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/common.h>
 #include <xnnpack/log.h>
 #include <xnnpack/mutex.h>

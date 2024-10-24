@@ -12,9 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <xnnpack.h>
-#include <xnnpack/allocation-type.h>
-#include <xnnpack/common.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/allocator.h>
 #include <xnnpack/log.h>
 #include <xnnpack/math.h>
 #include <xnnpack/params.h>

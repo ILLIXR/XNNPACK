@@ -9,8 +9,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <xnnpack.h>
-#include <xnnpack/common.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/log.h>
 #include <xnnpack/node-type.h>
 #include <xnnpack/operator-type.h>

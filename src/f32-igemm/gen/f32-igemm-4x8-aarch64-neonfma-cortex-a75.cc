@@ -7,7 +7,7 @@
 #include <cstddef>
 #include <limits>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/aarch64-assembler.h>
 #include <xnnpack/igemm.h>
 #include <xnnpack/log.h>

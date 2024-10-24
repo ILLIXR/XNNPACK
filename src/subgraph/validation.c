@@ -9,7 +9,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/log.h>
 #include <xnnpack/node-type.h>
 #include <xnnpack/params.h>

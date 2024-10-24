@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 
 #include <algorithm>
 #include <array>

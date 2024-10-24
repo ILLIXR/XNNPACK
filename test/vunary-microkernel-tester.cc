@@ -5,6 +5,12 @@
 
 #include "vunary-microkernel-tester.h"
 
+#include <stdint.h>
+#include <tfl-xnnpack.h>
+#include <xnnpack/common.h>
+#include <xnnpack/microfnptr.h>
+#include <xnnpack/microparams.h>
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>

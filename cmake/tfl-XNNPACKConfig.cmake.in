@@ -1,0 +1,13 @@
+
+@PACKAGE_INIT@
+
+include(FindPackageHandleStandardArgs)
+find_path(xnn_ROOT_DIR NAMES include/tfl-xnnpack.h)
+set(tfl-XNNPACK_ROOT_DIR ${xnn_ROOT_DIR})
+find_library(xnn_lib NAMES tfl-XNNPACK PATHS ${tfl-XNNPACK_ROOT_DIR}/lib ${tfl-XNNPACK_LIB_PATH} @CMAKE_INSTALL_PREFIX@/lib)
+set(tfl-XNNPACK_LIBRARIES ${xnn_lib})
+find_path(include_dirs NAMES tfl-xnnpack.h PATHS ${tfl-XNNPACK_ROOT_DIR}/include @CMAKE_INSTALL_PREFIX@/include)
+set(tfl-XNNPACK_INCLUDE_DIRS ${include_dirs})
+find_package_handle_standard_args(tfl-XNNPACK DEFAULT_MSG tfl-XNNPACK_LIBRARIES tfl-XNNPACK_INCLUDE_DIRS)
+
+include(${CMAKE_CURRENT_LIST_DIR}/tfl-XNNPACKTargets.cmake)

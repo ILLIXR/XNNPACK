@@ -8,10 +8,9 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <xnnpack.h>  // For xnn_operator_t.
-#include <xnnpack/allocator.h>
-#include <xnnpack/common.h>  // For XNN_ALLOCATION_ALIGNMENT.
-#include <xnnpack/config.h>
+#include <tfl-xnnpack.h>           // For xnn_operator_t.
+#include <xnnpack/common.h>    // For XNN_ALLOCATION_ALIGNMENT.
+#include <xnnpack/cache.h>     // For xnn_code_cache.
 #include <xnnpack/log.h>
 #include <xnnpack/math.h>
 #include <xnnpack/operator-utils.h>

@@ -5,7 +5,7 @@
 //
 // Auto-generated file. Do not edit!
 
-#include <xnnpack.h>
+#include <tfl-xnnpack.h>
 
 #include <array>
 #include <algorithm>

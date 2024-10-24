@@ -8,9 +8,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <xnnpack.h>
-#include <xnnpack/allocation-type.h>
-#include <xnnpack/common.h>
+#include <tfl-xnnpack.h>
 #include <xnnpack/log.h>
 #include <xnnpack/node-type.h>
 #include <xnnpack/operator-type.h>

@@ -12,7 +12,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <xnnpack.h>
+#include <fp16/fp16.h>
+
+#include <tfl-xnnpack.h>
 #include <xnnpack/allocator.h>
 #include <xnnpack/cache.h>
 #include <xnnpack/common.h>
