@@ -193,30 +193,6 @@ IF(CMAKE_SYSTEM_NAME MATCHES "Windows")
     ADD_COMPILE_DEFINITIONS("NOMINMAX")
 ENDIF()
 
-# ---[ Download deps
-IF(NOT XNNPACK_USE_SYSTEM_LIBS)
-
-    IF(XNNPACK_BUILD_TESTS AND NOT DEFINED GOOGLETEST_SOURCE_DIR)
-        MESSAGE(STATUS "Downloading Google Test to ${CMAKE_BINARY_DIR}/googletest-source (define GOOGLETEST_SOURCE_DIR to avoid it)")
-        CONFIGURE_FILE(cmake/DownloadGoogleTest.cmake "${CMAKE_BINARY_DIR}/googletest-download/CMakeLists.txt")
-        EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
-                        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download")
-        EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}" --build .
-                        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download")
-        SET(GOOGLETEST_SOURCE_DIR "${CMAKE_BINARY_DIR}/googletest-source" CACHE STRING "Google Test source directory")
-    ENDIF()
-
-    IF(XNNPACK_BUILD_BENCHMARKS AND NOT DEFINED GOOGLEBENCHMARK_SOURCE_DIR)
-        MESSAGE(STATUS "Downloading Google Benchmark to ${CMAKE_BINARY_DIR}/googlebenchmark-source (define GOOGLEBENCHMARK_SOURCE_DIR to avoid it)")
-        CONFIGURE_FILE(cmake/DownloadGoogleBenchmark.cmake "${CMAKE_BINARY_DIR}/googlebenchmark-download/CMakeLists.txt")
-        EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
-                        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googlebenchmark-download")
-        EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}" --build .
-                        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googlebenchmark-download")
-        SET(GOOGLEBENCHMARK_SOURCE_DIR "${CMAKE_BINARY_DIR}/googlebenchmark-source" CACHE STRING "Google Benchmark source directory")
-    ENDIF()
-ENDIF()
-
 foreach(FLAG IN ITEMS CMAKE_ASM_FLAGS CMAKE_ASM_COMPILER_ARG1 CMAKE_C_FLAGS CMAKE_C_COMPILER_ARG1 CMAKE_CXX_FLAGS CMAKE_CXX_COMPILER_ARG1)
     if(${FLAG})
         string(REGEX REPLACE "-mcpu=[-a-zA-Z0-9_.^$*+?]*" "" _tmp ${${FLAG}})
@@ -885,4 +861,6 @@ install(
         COMPONENT Devel
 )
 
+include(cmake/testing.cmake)
+include(cmake/benchmark.cmake)
 message("Will be building ${LIBRARY_NAME}")
