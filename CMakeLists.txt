@@ -213,7 +213,7 @@ foreach(FLAG IN ITEMS CMAKE_ASM_FLAGS CMAKE_ASM_COMPILER_ARG1 CMAKE_C_FLAGS CMAK
 endforeach()
 
 # ---[ XNNPACK library
-INCLUDE(cmake/gen/microkernels.cmake)
+INCLUDE(cmake/microkernels.cmake)
 
 SET(OPERATOR_SRCS
     src/operator-delete.c
@@ -298,6 +298,8 @@ SET(SUBGRAPH_SRCS
     src/subgraph/tanh.c
     src/subgraph/unpooling-2d.c
     src/subgraph/validation.c
+    src/subgraph/reshape-2d.c
+    src/subgraph/rope.c
     src/tensor.c)
 
 SET(LOGGING_SRCS
@@ -387,7 +389,6 @@ SET(PROD_AVX512VBMI_MICROKERNEL_SRCS src/amalgam/gen/avx512vbmi.c)
 SET(PROD_AVX512VNNI_MICROKERNEL_SRCS src/amalgam/gen/avx512vnni.c)
 SET(PROD_AVX512VNNIGFNI_MICROKERNEL_SRCS src/amalgam/gen/avx512vnnigfni.c)
 SET(PROD_AVX512AMX_MICROKERNEL_SRCS src/amalgam/gen/avx512amx.c)
-SET(PROD_AVX512FP16_MICROKERNEL_SRCS src/amalgam/gen/avx512fp16.c)
 SET(PROD_RVV_MICROKERNEL_SRCS src/amalgam/gen/rvv.c)
 SET(PROD_RVVFP16ARITH_MICROKERNEL_SRCS src/amalgam/gen/rvvfp16arith.c)
 SET(PROD_AVXVNNI_MICROKERNEL_SRCS src/amalgam/gen/avxvnni.c)
