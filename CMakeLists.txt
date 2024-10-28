@@ -608,6 +608,7 @@ TARGET_LINK_LIBRARIES(${LIBRARY_NAME} PUBLIC
                       fp16
 )
 TARGET_INCLUDE_DIRECTORIES(${LIBRARY_NAME} PRIVATE
+                           ${CMAKE_SOURCE_DIR}/include
                            src
                            ${libcpuinfo_INCLUDE_DIRS})
 
