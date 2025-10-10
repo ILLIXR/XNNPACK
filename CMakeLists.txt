@@ -13,6 +13,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.15 FATAL_ERROR)
 
 # Allow specifying -D<PackageName>_ROOT.
 CMAKE_POLICY(SET CMP0074 NEW)
+if (POLICY CMP0126)
+    cmake_policy(SET CMP0126 NEW)
+endif()
 
 # MSVC runtime library flags are selected by an abstraction.
 CMAKE_POLICY(SET CMP0091 NEW)
