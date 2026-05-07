@@ -1,13 +1,67 @@
-
 @PACKAGE_INIT@
 
-include(FindPackageHandleStandardArgs)
-find_path(xnn_ROOT_DIR NAMES include/tfl-xnnpack.h)
-set(tfl-XNNPACK_ROOT_DIR ${xnn_ROOT_DIR})
-find_library(xnn_lib NAMES tfl-XNNPACK@LIBRARY_POSTFIX@ PATHS ${tfl-XNNPACK_ROOT_DIR}/lib ${tfl-XNNPACK_LIB_PATH} @CMAKE_INSTALL_PREFIX@/lib)
-set(tfl-XNNPACK_LIBRARIES ${xnn_lib})
-find_path(include_dirs NAMES tfl-xnnpack.h PATHS ${tfl-XNNPACK_ROOT_DIR}/include @CMAKE_INSTALL_PREFIX@/include)
-set(tfl-XNNPACK_INCLUDE_DIRS ${include_dirs})
-find_package_handle_standard_args(tfl-XNNPACK@LIBRARY_POSTFIX@ DEFAULT_MSG tfl-XNNPACK_LIBRARIES tfl-XNNPACK_INCLUDE_DIRS)
+# ---------------------------------------------------------------
+# FetchContent / add_subdirectory mode
+# If the target was already populated into the build tree by
+# FetchContent_MakeAvailable(), skip all filesystem searches.
+# ---------------------------------------------------------------
+if(TARGET tfl-XNNPACK@LIBRARY_POSTFIX@)
+    # Create the namespaced alias if it doesn't already exist
+    if(NOT TARGET tfl-XNNPACK::tfl-XNNPACK@LIBRARY_POSTFIX@)
+        add_library(tfl-XNNPACK::tfl-XNNPACK@LIBRARY_POSTFIX@ ALIAS tfl-XNNPACK@LIBRARY_POSTFIX@)
+    endif()
 
-include(${CMAKE_CURRENT_LIST_DIR}/tfl-XNNPACK@LIBRARY_POSTFIX@Targets.cmake)
+    set(tfl-XNNPACK_FOUND TRUE)
+    set(tfl-XNNPACK_LIBRARIES tfl-XNNPACK::tfl-XNNPACK@LIBRARY_POSTFIX@)
+
+    get_target_property(_xnn_inc tfl-XNNPACK@LIBRARY_POSTFIX@ INTERFACE_INCLUDE_DIRECTORIES)
+    set(tfl-XNNPACK_INCLUDE_DIRS "${_xnn_inc}")
+
+    return()  # Nothing more to do
+endif()
+
+# ---------------------------------------------------------------
+# Installed-package mode (ExternalProject / system install)
+# ---------------------------------------------------------------
+include(FindPackageHandleStandardArgs)
+
+find_path(xnn_ROOT_DIR
+    NAMES include/tfl-xnnpack.h
+    PATHS ${tfl-XNNPACK_ROOT_DIR} @CMAKE_INSTALL_PREFIX@
+)
+set(tfl-XNNPACK_ROOT_DIR ${xnn_ROOT_DIR})
+
+find_library(xnn_lib
+    NAMES tfl-XNNPACK@LIBRARY_POSTFIX@
+    PATHS ${tfl-XNNPACK_ROOT_DIR}/lib ${tfl-XNNPACK_LIB_PATH} @CMAKE_INSTALL_PREFIX@/lib
+    NO_DEFAULT_PATH
+)
+set(tfl-XNNPACK_LIBRARIES ${xnn_lib})
+
+find_path(include_dirs
+    NAMES tfl-xnnpack.h
+    PATHS ${tfl-XNNPACK_ROOT_DIR}/include @CMAKE_INSTALL_PREFIX@/include
+    NO_DEFAULT_PATH
+)
+set(tfl-XNNPACK_INCLUDE_DIRS ${include_dirs})
+
+find_package_handle_standard_args(tfl-XNNPACK@LIBRARY_POSTFIX@
+    DEFAULT_MSG tfl-XNNPACK_LIBRARIES tfl-XNNPACK_INCLUDE_DIRS
+)
+
+if(tfl-XNNPACK_FOUND)
+    set(_targets_file "${CMAKE_CURRENT_LIST_DIR}/tfl-XNNPACK@LIBRARY_POSTFIX@Targets.cmake")
+    if(EXISTS "${_targets_file}")
+        include("${_targets_file}")
+    else()
+        # Targets file absent — define a minimal IMPORTED target from the found paths
+        if(NOT TARGET tfl-XNNPACK::tfl-XNNPACK@LIBRARY_POSTFIX@)
+            add_library(tfl-XNNPACK::tfl-XNNPACK@LIBRARY_POSTFIX@ STATIC IMPORTED)
+            set_target_properties(tfl-XNNPACK::tfl-XNNPACK@LIBRARY_POSTFIX@ PROPERTIES
+                IMPORTED_LOCATION             "${xnn_lib}"
+                INTERFACE_INCLUDE_DIRECTORIES "${include_dirs}"
+            )
+        endif()
+    endif()
+    set(tfl-XNNPACK_LIBRARIES tfl-XNNPACK::tfl-XNNPACK@LIBRARY_POSTFIX@)
+endif()
