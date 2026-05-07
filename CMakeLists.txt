@@ -560,7 +560,29 @@ TARGET_INCLUDE_DIRECTORIES(fp16 INTERFACE ${FP16_HDR})
 SET_PROPERTY(TARGET fp16 PROPERTY LINKER_LANGUAGE C)
 
 # ---[ Configure pthreadpool
-find_package(pthreadpool REQUIRED CONFIG)
+# In FetchContent mode the 'pthreadpool' target is already live in the build
+# tree — find_package would only search for an installed copy and won't create
+# the namespaced aliases that TARGET_LINK_LIBRARIES below expects.
+if(NOT TARGET pthreadpool)
+    find_package(pthreadpool REQUIRED CONFIG)
+endif()
+
+# Create namespaced aliases expected by TARGET_LINK_LIBRARIES.
+# These are normally produced by an installed Targets.cmake; in FetchContent
+# mode we must create them ourselves.
+if(NOT TARGET pthreadpool::pthreadpool)
+    add_library(pthreadpool::pthreadpool ALIAS pthreadpool)
+endif()
+
+if(NOT TARGET pthreadpool::fxdiv)
+    if(TARGET fxdiv)
+        add_library(pthreadpool::fxdiv ALIAS fxdiv)
+    else()
+        message(FATAL_ERROR
+                "pthreadpool::fxdiv alias cannot be created: no 'fxdiv' target found. "
+                "Ensure fxdiv is fetched before tfl-xnnpack in the parent project.")
+    endif()
+endif()
 
 set(LIBRARY_NAME tfl-XNNPACK${LIBRARY_POSTFIX})
 IF(XNNPACK_LIBRARY_TYPE STREQUAL "default")
